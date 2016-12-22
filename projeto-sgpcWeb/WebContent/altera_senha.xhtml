@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+  <h:head>
+	<title>#{messages.APLICACAO_TITULO}</title>
+  </h:head>
+   <h:body style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
+                  background-color:transparent;
+                  background-repeat: no-repeat;
+                  background-size: cover"> 
+                  
+    <div>   
+    
+ 
+      <ui:composition template="templates/template_base.xhtml">
+        <ui:define name="page_content">
+          <h:form>
+           <!-- <p:growl id="growl" showDetail="true" sticky="true"/> -->
+           <!-- <p:growl id="growl" /> -->        
+            
+			<p:panel header="ALTERAR SENHA">
+				<p:panelGrid columns="2" styleClass="semBorda">
+				
+					<h:outputLabel value="#{messages.SENHA_ANTIGA}" styleClass="crud_labels" />
+					<p:password value="#{mbAlterarSenha.senhaAntiga}" maxlength="20"  id="campo_senha_antiga"
+						         feedback="False" size="45" required="true" requiredMessage="Campo Obrigatório: 'Senha'"/>
+
+					<h:outputLabel value="#{messages.SENHA_NOVA}" styleClass="crud_labels" />
+					<p:password value="#{mbAlterarSenha.usuario.senha}" 
+					             goodLabel="#{messages.SENHA_SENHA_MEDIA}" maxlength="20"
+						         weakLabel="#{messages.SENHA_SENHA_FRACA}"
+						         strongLabel="#{messages.SENHA_SENHA_FORTE}" id="campo_senha_nova"
+						         feedback="true" size="45" required="true" requiredMessage="Campo Obrigatório: 'Senha Nova'"/>	
+					
+					<h:outputLabel value="#{messages.SENHA_CONFIRMA_NOVA}" styleClass="crud_labels" />
+					<p:password value="#{mbAlterarSenha.confirmaSenha}" size="45" id="campo_senha_confirma" required="true" requiredMessage="Campo Obrigatório: 'Confirmar Senha'"/>						
+						
+				</p:panelGrid>
+				<p:commandButton ajax="false"
+					value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos"
+					action="#{mbAlterarSenha.AlterarSenha()}" update="form" icon="ui-icon-check"/>
+	
+				<p:commandButton ajax="false"
+					value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos"
+					action="#{mbAlterarSenha.limparTela()}" update="campo_senha_antiga campo_senha_nova campo_senha_confirma"  icon="ui-icon-cancel"/>
+			</p:panel>	
+          </h:form>
+        </ui:define>
+      </ui:composition>
+    </div> 
+         
+   </h:body>
+</html>

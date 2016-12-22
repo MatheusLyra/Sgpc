@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<system-libraries>
+    <library path="C:/servidores/glassfish4/glassfish/modules/javax.faces.jar" source="C:/Users/Matheus/.m2/repository/org/glassfish/javax.faces/2.2.0/javax.faces-2.2.0-sources.jar"/>
+</system-libraries>

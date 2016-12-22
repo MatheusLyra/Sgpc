@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>#{messages.APLICACAO_TITULO}</title>
+        
+    </h:head>
+    <h:body style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
+                   background-color:transparent;
+                   background-repeat: no-repeat;
+                   background-size: cover">
+       
+       <ui:composition template="./templates/template_base.xhtml">
+       <ui:define name="page_content"> 
+       <h:form id="form" >
+       <p:panel header="CADASTRAR USUÁRIO">
+
+         <h:panelGrid columns="2">
+            <h:outputLabel for="nome" value="#{messages.LOGIN_USERNAME}" styleClass="crud_labels" />
+            <p:inputText id="nome" label="nome" value="#{mbMantemUsuario.usuario.userName}" maxlength="14" size="40"  disabled="#{mbMantemUsuario.modoEdicao}"/>
+            
+            <h:outputLabel for="email" value="#{messages.LOGIN_EMAIL}" styleClass="crud_labels" />
+            <p:inputText id="email" label="email" value="#{mbMantemUsuario.usuario.email}" maxlength="40" size="40" />                    
+  			
+  			<h:outputLabel value="#{messages.LOGIN_SENHA}" styleClass="crud_labels" />
+			<p:password value="#{mbMantemUsuario.usuario.senha}"
+						goodLabel="#{messages.LOGIN_SENHA_MEDIA}" maxlength="20"
+						weakLabel="#{messages.LOGIN_SENHA_FRACA}"
+						strongLabel="#{messages.LOGIN_SENHA_FORTE}" id="campo_senha"
+						feedback="false" size="40" disabled="#{mbMantemUsuario.modoEdicao}"/>
+						
+ 			<h:outputLabel value="#{messages.SENHA_CONFIRMA_NOVA}" styleClass="crud_labels" />
+			<p:password value="#{mbMantemUsuario.confirmaSenha}"
+                        maxlength="20"
+                        id="campo_confirma_senha"
+					    size="40" disabled="#{mbMantemUsuario.modoEdicao}" />
+						
+            <h:outputLabel for="tipo" value="#{messages.LOGIN_PERMISSAO}" styleClass="crud_labels" />
+            <p:selectOneMenu id="tipo" value="#{mbMantemUsuario.usuario.tipoUsuario}" style="width:150px">
+               <f:selectItem itemLabel="#{mbMantemUsuario.usuario.tipo_Adm}" itemValue="#{mbMantemUsuario.usuario.tipo_Adm}" />
+               <f:selectItem itemLabel="#{mbMantemUsuario.usuario.tipo_Func}" itemValue="#{mbMantemUsuario.usuario.tipo_Func}" />
+               <f:selectItem itemLabel="#{mbMantemUsuario.usuario.tipo_Con}" itemValue="#{mbMantemUsuario.usuario.tipo_Con}" />   
+            </p:selectOneMenu>        
+            
+          </h:panelGrid>
+
+            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" action="#{mbMantemUsuario.cadastrar()}" update="template_content:form" ajax="false" icon="ui-icon-check"/>
+          
+		    <p:commandButton ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" action="#{mbMantemUsuario.limpar}" update="campo_senha campo_confirma_senha username email" icon="ui-icon-cancel"/>             
+ 
+            <p:dataTable id="tabela" value="#{mbMantemUsuario.usuarios}" var="usu" emptyMessage="Nenhum registro incluido." paginator="true" rows="10">
+                <f:facet name="header">  
+                    Lista de Usuários 
+                </f:facet>
+                <p:column headerText="#{messages.LOGIN_USERNAME}" style="text-align: center">
+                    <h:outputText value="#{usu.userName}" />
+                </p:column>
+                <p:column headerText="#{messages.LOGIN_EMAIL}" style="text-align: center">
+                    <h:outputText value="#{usu.email}" />
+                </p:column>
+                <p:column headerText="#{messages.LOGIN_PERMISSAO}" style="text-align: center">
+                   <h:outputText value="#{usu.tipoUsuario}" />
+                </p:column>  
+                <p:column headerText="Ações" style="text-align: center">
+                    <p:commandButton action="#{mbMantemUsuario.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"  >
+                        <f:setPropertyActionListener value="#{usu}" target="#{mbMantemUsuario.usuario}" update="template_content:form" />
+                    </p:commandButton>   
+
+ 
+    				<p:commandButton icon="ui-icon-trash" actionListener="#{mbMantemUsuario.excluir(usu)}" process="@form" update="template_content:form:tabela" title="#{messages.CAD_EXCLUIR}">
+        				<p:confirm header="Confirmação" message="Deseja realmente excluir este registro?" icon="ui-icon-alert" />
+    				</p:commandButton>
+ 
+    				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        				<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        				<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    				</p:confirmDialog>        
+                </p:column> 
+            </p:dataTable>
+        </p:panel>
+        </h:form>
+  
+        
+       </ui:define>
+     </ui:composition>          
+    </h:body>
+</html>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence">
+	<persistence-unit name="pu" transaction-type="JTA">
+		<jta-data-source>jdbc/SgpcDS</jta-data-source>
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    	<exclude-unlisted-classes>false</exclude-unlisted-classes>
+	</persistence-unit>
+</persistence>

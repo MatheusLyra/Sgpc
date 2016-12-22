@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+     <h:outputStylesheet name="estilos.css" library="css" /> 
+
+</h:head>
+
+
+<h:body style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
+          background-color:transparent;
+          background-repeat: no-repeat;
+          background-size: cover">
+
+    <p:layout fullPage="true">
+        <p:layoutUnit position="north" size="87" id="north" 
+                      resizable="false" collapsible="false" closable="false" >
+            <ui:include src="cabecalho.xhtml" />
+        </p:layoutUnit>
+
+        <p:layoutUnit position="west" id="west" header="Menu Lateral" size="200" 
+                      resizable="false" closable="false" collapsible="false" style="font-size: 95% !important;">
+            <ui:include src="menu.xhtml" /> 
+        </p:layoutUnit> 
+
+        <p:layoutUnit styleClass="layoutUnitCenter" position="center"  style="font-size: 80% !important;">
+            <h:form id="template_content">
+                <p:messages autoUpdate="false" id="msgs" showDetail="true" showSummary="false" /> <!-- Componente messages de mensagem para usuário -->
+                <ui:insert name="page_content" />
+            </h:form>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="south" id="south" size="30" resizable="false" 
+                      closable="false" collapsible="false" style="font-size: 95% !important;">
+            <ui:include src="rodape.xhtml" />
+        </p:layoutUnit>
+    </p:layout>
+
+<!--     <p:dialog modal="true" widgetVar="statusDialog" showHeader="false" draggable="false" 
+              closable="false" resizable="false" visible="false" position="center" 
+              maximizable="false" minimizable="false" >
+         <p:graphicImage value="#{resource['images/ajax-loader.gif']}" />  
+    </p:dialog>   -->
+</h:body>
+</html>

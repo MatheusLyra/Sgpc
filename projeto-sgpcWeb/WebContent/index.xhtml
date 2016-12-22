@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title>#{messages.APLICACAO_TITULO}</title>
+
+	<h:outputStylesheet name="estilos.css" library="css" />
+	<style type="text/css">
+		.ui-widget {
+		font-size: 90% !important;
+	}
+    </style>
+</h:head>
+
+<h:body style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
+               background-color:transparent;
+               background-repeat: no-repeat;
+               background-size: cover;">	  
+ 	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />                                    
+ 	<div id="tudo" align="center">
+		<h:form id="form">
+			<p:panel header="LOGIN" > 		
+				<p:panelGrid columns="2" styleClass="semBorda" >
+					<h:outputLabel value="#{messages.LOGIN_USERNAME}"
+						styleClass="required_labels" />
+					<p:inputText value="#{mbLogin.usuario.userName}" size="45"
+						id="campo_usuario" />
+
+					<h:outputLabel value="#{messages.LOGIN_SENHA}"
+						styleClass="required_labels" />
+					<p:password value="#{mbLogin.usuario.senha}"
+						goodLabel="#{messages.LOGIN_SENHA_MEDIA}" maxlength="20"
+						weakLabel="#{messages.LOGIN_SENHA_FRACA}"
+						strongLabel="#{messages.LOGIN_SENHA_FORTE}" id="campo_senha"
+						feedback="false" size="40" />
+						
+				</p:panelGrid>
+				<p:commandButton 
+					value="#{messages.LOGIN_COMANDO_ENTRAR}" styleClass="comandos"
+					action="#{mbLogin.doLogin}" update="form" ajax="false" />
+<!-- problema: mensagem aparece quando actionlistiner porem não faz o login -->
+				<p:commandButton ajax="true"
+					value="#{messages.LOGIN_COMANDO_LIMPAR}" styleClass="comandos"
+					action="#{mbLogin.limparTela()}" update="campo_usuario campo_senha" />
+			</p:panel>	
+
+		</h:form>	
+	</div> 
+
+</h:body>
+</html>
+
