@@ -20,11 +20,11 @@
 <h:body style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
                background-color:transparent;
                background-repeat: no-repeat;
-               background-size: cover;">	  
- 	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />                                    
- 	<div id="tudo" align="center">
+               background-size: cover;">	
+    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />                                        
+ 	<div id="tudo" align="center"> 
 		<h:form id="form">
-			<p:panel header="LOGIN" > 		
+			<p:panel header="LOGIN"> 		
 				<p:panelGrid columns="2" styleClass="semBorda" >
 					<h:outputLabel value="#{messages.LOGIN_USERNAME}"
 						styleClass="required_labels" />
@@ -48,10 +48,7 @@
 					value="#{messages.LOGIN_COMANDO_LIMPAR}" styleClass="comandos"
 					action="#{mbLogin.limparTela()}" update="campo_usuario campo_senha" />
 			</p:panel>	
-
 		</h:form>	
 	</div> 
-
 </h:body>
 </html>
-
