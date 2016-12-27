@@ -16,22 +16,39 @@
 <h:body>
   <h:form id="form"> 
     
-    <!-- <p:growl id="messages" showDetail="false"/>  -->
       <p:menu toggleable="true" >
-        <p:submenu label="Cadastro">            
+      
+        <p:submenu label="Cadastro" expanded="false"> 
+            <p:menuitem value="#{messages.TEMPLATE_MENU_FORNECEDOR}" action="/cadastrar_fornecedor.xhtml?faces-redirect=true" 
+                        rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}"/>           
+            <p:menuitem value="#{messages.TEMPLATE_MENU_ETAPA}" action="/cadastrar_etapa.xhtml?faces-redirect=true" 
+                        rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}"/>          
+            <p:menuitem value="#{messages.TEMPLATE_MENU_AREA}" action="/cadastrar_area.xhtml?faces-redirect=true" 
+                        rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}"/>   
+            <p:menuitem value="#{messages.TEMPLATE_MENU_STATUS}" action="/cadastrar_status.xhtml?faces-redirect=true" 
+                        rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}"/>     
+            <p:menuitem value="#{messages.TEMPLATE_MENU_TMP}" action="/cadastrar_tmp.xhtml?faces-redirect=true" 
+                        rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}"/>    
+            <p:menuitem value="#{messages.TEMPLATE_MENU_TIPOCONTRATO}" action="/cadastrar_tipocontrato.xhtml?faces-redirect=true" 
+                        rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}"/>                                                      
         </p:submenu>
-        <p:submenu label="Controle de Acesso">
+        
+        <p:submenu label="Controle de Acesso" expanded="true">
             <p:menuitem value="#{messages.TEMPLATE_MENU_USUARIO}" action="/cadastra_usuario.xhtml?faces-redirect=true"
                         rendered="#{mbLogin.controladorAcesso.permissaoAdministrador}"/>
             <p:menuitem value="#{messages.TEMPLATE_MENU_ALTERASENHA}" action="/altera_senha.xhtml?faces-redirect=true" 
                         rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}"/>
-        </p:submenu>     
-        <p:submenu label="Relatório">
-        </p:submenu> 
+        </p:submenu>   
+          
+        <p:submenu label="Relatório" expanded="false">
+        
+        </p:submenu>
+         
         <p:submenu>
              <p:menuitem value="#{messages.TEMPLATE_MENU_PRINCIPAL}" action="/home.xhtml?faces-redirect=true" update="form" icon="ui-icon-home" />
              <p:menuitem action="#{mbLogin.doLogout()}" value="#{messages.TEMPLATE_MENU_LOGOUT}"  ajax="false"   icon="ui-icon-close"/>
-        </p:submenu>               
+        </p:submenu>    
+        
      </p:menu> 
     
   </h:form>     

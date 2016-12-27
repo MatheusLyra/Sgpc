@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>#{messages.APLICACAO_TITULO}</title>
+        
+    </h:head>
+    <h:body style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
+                   background-color:transparent;
+                   background-repeat: no-repeat;
+                   background-size: cover">
+       
+       <ui:composition template="./templates/template_base.xhtml">
+       <ui:define name="page_content"> 
+       <h:form id="form" >
+       <p:panel header="CADASTRAR STATUS">
+
+         <h:panelGrid columns="2">
+
+            <h:outputLabel for="descricao" value="#{messages.CAD_CAMPO_DESCRICAO}" styleClass="crud_labels" />
+            <p:inputText id="descricao" label="descricao" value="#{mbMantemStatus.status.descricao}" maxlength="60" size="60" />                    
+      
+          </h:panelGrid>
+
+            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" action="#{mbMantemStatus.cadastrar()}" update="template_content:form" ajax="false" icon="ui-icon-check"/>
+          
+		    <p:commandButton ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" action="#{mbMantemStatus.limpar}" update="descricao" icon="ui-icon-cancel"/>             
+ 
+            <p:dataTable id="tabela" value="#{mbMantemStatus.listaStatus}" var="stat" emptyMessage="Nenhum registro incluido." paginator="true" rows="10">
+                <f:facet name="header">  
+                    Lista de Status 
+                </f:facet>
+                
+                <p:column headerText="#{messages.CAD_CAMPO_DESCRICAO}" style="text-align: center">
+                    <h:outputText value="#{stat.descricao}" />
+                </p:column>
+    
+                <p:column headerText="Ações" style="text-align: center">
+                    <p:commandButton action="#{mbMantemStatus.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"  >
+                        <f:setPropertyActionListener value="#{stat}" target="#{mbMantemStatus.status}" update="template_content:form" />
+                    </p:commandButton>   
+
+ 
+    				<p:commandButton icon="ui-icon-trash" actionListener="#{mbMantemStatus.excluir(stat)}" process="@form" update="template_content:form:tabela" title="#{messages.CAD_EXCLUIR}">
+        				<p:confirm header="Confirmação" message="Deseja realmente excluir este registro?" icon="ui-icon-alert" />
+    				</p:commandButton>
+ 
+    				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        				<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        				<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    				</p:confirmDialog>        
+                </p:column> 
+            </p:dataTable>
+        </p:panel>
+        </h:form>
+  
+        
+       </ui:define>
+     </ui:composition>          
+    </h:body>
+</html>

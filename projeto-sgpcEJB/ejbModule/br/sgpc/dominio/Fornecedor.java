@@ -24,7 +24,7 @@ public class Fornecedor implements java.io.Serializable {
 	private String descricao;
 	
 	@Column(name = "Cnpj")
-	private Integer cnpj;
+	private Long cnpj;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fornecedor")
 	private List<Dadosconsolidados> dadosconsolidadoses;
@@ -46,11 +46,11 @@ public class Fornecedor implements java.io.Serializable {
 		this.descricao = descricao;
 	}
 
-	public Integer getCnpj() {
+	public Long getCnpj() {
 		return this.cnpj;
 	}
 
-	public void setCnpj(Integer cnpj) {
+	public void setCnpj(Long cnpj) {
 		this.cnpj = cnpj;
 	}
 

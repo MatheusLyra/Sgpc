@@ -83,4 +83,6 @@
  <lifecycle>
    <phase-listener>br.sgpc.controller.ListenerAutenticacao</phase-listener>
  </lifecycle>
+ 
+ 
 </faces-config>
