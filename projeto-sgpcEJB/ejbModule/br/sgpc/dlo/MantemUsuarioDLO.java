@@ -1,6 +1,7 @@
 package br.sgpc.dlo;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Remote;
@@ -36,5 +37,13 @@ public class MantemUsuarioDLO implements Serializable {
 		if (usu != null) {
 			this.dao.excluirUsuario(usu);
 		}
+	}
+	
+	public List<Usuario> carregarDados(){
+		return this.dao.consultarUsuarios();
+	}
+	
+	public Usuario obter(Integer id){
+		return this.dao.obter(id);
 	}
 }

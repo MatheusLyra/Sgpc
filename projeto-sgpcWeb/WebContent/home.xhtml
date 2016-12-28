@@ -3,18 +3,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui" 
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
   <h:head>
-    <title>#{messages.APLICACAO_TITULO}</title>
+    <title>#{messages.APLICACAO_TITULO}</title>	
   </h:head>
   <h:body style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
                  background-color:transparent;
                  background-repeat: no-repeat;
                  background-size: cover">
-    <h:form>
-      <ui:composition template="templates/template_base.xhtml">
+                 
+    <ui:composition template="templates/template_base.xhtml">
         <ui:define name="page_content">
-        
+         
          <div>
           <h:panelGrid columns="2" style="width:200px">
           
@@ -42,30 +43,93 @@
              
           </h:panelGrid>
          </div>
-        
- <!--           <p:accordionPanel>  
-            <p:tab title="#{messages.HOME_INFO_CHALES_TITULO}">  
-                <h:panelGrid columns="1" cellpadding="10">
-                  <h:outputText value="#{messages.HOME_INFO_CHALES_PARAGRAFO1}" /> <br />
-                  <h:outputText value="#{messages.HOME_INFO_CHALES_PARAGRAFO2}" />
-                </h:panelGrid>  
-              </p:tab>  
-            <p:tab title="#{messages.HOME_INFO_PRAIA_TITULO1}">  
-                <h:panelGrid columns="1" cellpadding="10">
-                  <h:outputText value="#{messages.HOME_INFO_PRAIA_PARAGRAFO1}" />  <br />
-                  <h:outputText value="#{messages.HOME_INFO_PRAIA_PARAGRAFO2}" />  <br />
-                  <h:outputText value="#{messages.HOME_INFO_PRAIA_PARAGRAFO3}" />
-                </h:panelGrid>  
-              </p:tab>
-              <p:tab title="#{messages.HOME_INFO_PRAIA_TITULO2}">  
-                <h:panelGrid columns="2" cellpadding="10">
-                  <h:outputText value="#{messages.HOME_INFO_PRAIA_PARAGRAFO4}" />" /> <br />
-                  <h:outputText value="#{messages.HOME_INFO_PRAIA_PARAGRAFO5}" />
-                </h:panelGrid>
-              </p:tab>  
-            </p:accordionPanel> -->  
+         
+    <br/><br/>       
+    <h:outputScript name="programajavascript.js" library="js"/>               
+    <h:form id="notificacaoForm">            
+          
+    <p:fieldset id="availableNotificacoesField" legend="Notificações Avaliadas">
+        <p:dataTable id="availableNotificacoes" var="notificacao" value="#{mbNotificacaoHome.notificacoes}" emptyMessage="Nenhum registro incluido." paginator="true" rows="10">
+            <p:column style="width:20px">
+                <h:outputText id="dragIcon" styleClass="ui-icon ui-icon-arrow-4" />
+                <p:draggable for="dragIcon" revert="true" helper="clone"/>
+            </p:column>
+ 
+                <p:column headerText="Data Aviso" style="text-align: center">
+                    <h:outputText value="#{notificacao.data_aviso}"><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText> 
+                </p:column>
+                
+                <p:column headerText="Assunto" style="text-align: center">
+                    <h:outputText value="#{notificacao.assunto}" />
+                </p:column>
+                
+                <p:column headerText="De quem" style="text-align: center">
+                    <h:outputText value="#{notificacao.de_quem}" />
+                </p:column>
+                
+                <p:column headerText="Para quem" style="text-align: center">
+                    <h:outputText value="#{notificacao.usuario.userName}" />
+                </p:column> 
+                
+        </p:dataTable>
+    </p:fieldset>
+ 
+    <p:fieldset id="selectedNotificacoes" legend="Notificações Selecionadas" style="margin-top:20px">
+        <p:outputPanel id="dropArea">
+            <h:outputText value="Largue aqui para vizualizar o aviso." rendered="#{empty mbNotificacaoHome.droppedNotificacoes}" style="font-size:15px;" />
+            <p:dataTable id="selectedNotificacoesTable" var="notificacao" value="#{mbNotificacaoHome.droppedNotificacoes}" rendered="#{not empty mbNotificacaoHome.droppedNotificacoes}">
+                
+                <p:column headerText="Data Aviso" style="text-align: center">
+                    <h:outputText value="#{notificacao.data_aviso}"><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText> 
+                </p:column>
+                
+                <p:column headerText="Assunto" style="text-align: center">
+                    <h:outputText value="#{notificacao.assunto}" />
+                </p:column>
+                
+                <p:column headerText="De quem" style="text-align: center">
+                    <h:outputText value="#{notificacao.de_quem}" />
+                </p:column>
+                
+                <p:column headerText="Para quem" style="text-align: center">
+                    <h:outputText value="#{notificacao.usuario.userName}" />
+                </p:column> 
+ 
+                <p:column style="width:32px">
+                    <p:commandButton update="template_content:notificacaoForm:display" oncomplete="PF('notificacaoDialog').show()" icon="ui-icon-search">
+                        <f:setPropertyActionListener value="#{notificacao}" target="#{mbNotificacaoHome.selectedNotificacao}" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </p:outputPanel>
+    </p:fieldset>
+ 
+    <p:droppable for="selectedNotificacoes" tolerance="touch" activeStyleClass="ui-state-highlight" datasource="availableNotificacoes" onDrop="handleDrop">
+        <p:ajax listener="#{mbNotificacaoHome.onNotificacaoDrop}" update="dropArea availableNotificacoes" />
+    </p:droppable>
+ 
+    <p:dialog header="Detalhe Notificação" widgetVar="notificacaoDialog" resizable="false" draggable="false"
+                showEffect="fade" hideEffect="fade" modal="false" closable="true" closeOnEscape="true">
+        <p:outputPanel id="display" style="width:800px; height:250px">
+            <h:panelGrid columns="2" cellpadding="4" rendered="#{not empty mbNotificacaoHome.selectedNotificacao}">
+                <f:facet name="header">
+                    Lista de Notificação
+                </f:facet>
+                
+                <h:outputText value="Aviso:" />
+                <h:outputText value="#{mbNotificacaoHome.selectedNotificacao.aviso}" style="word-wrap: break-word; font-weight:bold"/>
+             
+            </h:panelGrid>
+        </p:outputPanel>
+       <!--  <p:commandButton  value="Fechar" oncomplete="PF('notificacaoDialog').hide()" process="@this"  /> -->
+    </p:dialog>
+    
+      
+      
+      
+         </h:form>     
         </ui:define>
       </ui:composition>
-    </h:form>
+   
   </h:body>
 </html>

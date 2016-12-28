@@ -87,26 +87,6 @@ public class Usuario implements java.io.Serializable {
 	public String getTipo_Con() {
 		return TipoUsuarioEnum.TIPO_CONVIDADO.getValue();
 	}
-	
-	/*public static Integer getTipo_AdmB() {
-		return TipoUsuarioEnum.ADMINISTRADOR.getValuei();
-	}
-	
-	public static Integer getTipo_FuncB() {
-		return TipoUsuarioEnum.FUNCIONARIO.getValuei();
-	}
-	
-	public static Integer getTipo_ConB() {
-		return TipoUsuarioEnum.CONVIDADO.getValuei();
-	}
-	
-	public static int getAtivo() {
-		return StatusEnum.ATIVO.getValue();
-	}
-	
-	public static int getInativo() {
-		return StatusEnum.INATIVO.getValue();
-	}	*/
 
 	public Integer getIdUsuario() {
 		return idUsuario;

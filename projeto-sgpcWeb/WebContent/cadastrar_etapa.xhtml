@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
@@ -40,19 +40,19 @@
                     <h:outputText value="#{etap.descricao}" />
                 </p:column>
     
-                <p:column headerText="Ações" style="text-align: center">
+                <p:column headerText="AÃ§Ãµes" style="text-align: center">
                     <p:commandButton action="#{mbMantemEtapa.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"  >
                         <f:setPropertyActionListener value="#{etap}" target="#{mbMantemEtapa.etapa}" update="template_content:form" />
                     </p:commandButton>   
 
  
     				<p:commandButton icon="ui-icon-trash" actionListener="#{mbMantemEtapa.excluir(etap)}" process="@form" update="template_content:form:tabela" title="#{messages.CAD_EXCLUIR}">
-        				<p:confirm header="Confirmação" message="Deseja realmente excluir este registro?" icon="ui-icon-alert" />
+        				<p:confirm header="ConfirmaÃ§Ã£o" message="Deseja realmente excluir este registro?" icon="ui-icon-alert" />
     				</p:commandButton>
  
     				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
         				<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-        				<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        				<p:commandButton value="NÃ£o" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
     				</p:confirmDialog>        
                 </p:column> 
             </p:dataTable>
