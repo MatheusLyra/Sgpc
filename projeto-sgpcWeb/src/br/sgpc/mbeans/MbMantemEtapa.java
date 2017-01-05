@@ -120,5 +120,8 @@ public class MbMantemEtapa implements Serializable{
 		this.modoEdicao = modoEdicao;
 	}
 	
+    public String getNomeArquivo() {
+        return "Etapa";
+    }	
 	
 }

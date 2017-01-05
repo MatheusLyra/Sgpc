@@ -69,4 +69,18 @@ body {
   font-size: 12px;
   font-weight: bolder;
 }		
-		
+
+.csv {
+	background-image: url("../resources/images/csv.png") !important;
+	width:300px; 
+	height:300px
+}
+.xml {
+	background-image: url("../resources/images/xml.png") !important;
+}
+.excel {
+	background-image: url("../resources/images/excel.png") !important;
+}
+.pdf {
+	background-image: url("../resources/images/pdf.png") !important;
+}		

@@ -57,13 +57,16 @@
                 <f:facet name="header">  
                     Lista de Usuários 
                 </f:facet>
-                <p:column headerText="#{messages.LOGIN_USERNAME}" style="text-align: center">
+                <p:column headerText="#{messages.LOGIN_USERNAME}" style="text-align: center"
+                          filterBy="#{usu.userName}">
                     <h:outputText value="#{usu.userName}" />
                 </p:column>
-                <p:column headerText="#{messages.LOGIN_EMAIL}" style="text-align: center">
+                <p:column headerText="#{messages.LOGIN_EMAIL}" style="text-align: center"
+                          filterBy="#{usu.email}">
                     <h:outputText value="#{usu.email}" />
                 </p:column>
-                <p:column headerText="#{messages.LOGIN_PERMISSAO}" style="text-align: center">
+                <p:column headerText="#{messages.LOGIN_PERMISSAO}" style="text-align: center"
+                          filterBy="#{usu.tipoUsuario}">
                    <h:outputText value="#{usu.tipoUsuario}" />
                 </p:column>  
                 <p:column headerText="Ações" style="text-align: center">

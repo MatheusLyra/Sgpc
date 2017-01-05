@@ -155,4 +155,7 @@ public class MbMantemNotificacao implements Serializable{
 		this.listaUsuario = listaUsuario;
 	}
 	
+    public String getNomeArquivo() {
+        return "Notificação";
+    }		
 }

@@ -41,32 +41,40 @@
           
 		    <p:commandButton ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" action="#{mbMantemNotificacao.limpar}" update="descricao" icon="ui-icon-cancel"/>             
  
-            <p:dataTable id="tabela" value="#{mbMantemNotificacao.listaNotificacao}" var="noti" emptyMessage="Nenhum registro incluido." paginator="true" rows="10">
+            <p:dataTable id="tabela" value="#{mbMantemNotificacao.listaNotificacao}" var="noti" 
+            emptyMessage="Nenhum registro incluido." 
+            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"            
+            paginator="true" rows="10">
                 <f:facet name="header">  
                     Lista de Notificação 
                 </f:facet>
                 
-                <p:column headerText="Data Aviso" style="text-align: center">
+                <p:column headerText="Data Aviso" style="text-align: center"
+                          filterBy="#{noti.data_aviso}">
                     <h:outputText value="#{noti.data_aviso}"><f:convertDateTime pattern="dd/MM/yyyy"/></h:outputText> 
                 </p:column>
                 
-                <p:column headerText="Assunto" style="text-align: center">
+                <p:column headerText="Assunto" style="text-align: center"
+                          filterBy="#{noti.assunto}">
                     <h:outputText value="#{noti.assunto}" />
                 </p:column>
                                 
-                <p:column headerText="De quem" style="text-align: center">
+                <p:column headerText="De quem" style="text-align: center"
+                          filterBy="#{noti.de_quem}">
                     <h:outputText value="#{noti.de_quem}" />
                 </p:column>
                 
-                <p:column headerText="Para quem" style="text-align: center">
+                <p:column headerText="Para quem" style="text-align: center"
+                          filterBy="#{noti.usuario.userName}">
                     <h:outputText value="#{noti.usuario.userName}" />
                 </p:column> 
  
-                <p:column headerText="Aviso" style="width:300px">
+                <p:column headerText="Aviso" style="width:300px"
+                          filterBy="#{noti.aviso}">
                     <h:outputText value="#{noti.aviso}" style="word-wrap: break-word"/>
                 </p:column> 
                                  
-                <p:column headerText="Ações" style="text-align: center">
+                <p:column headerText="Ações" style="text-align: center" exportable="false">
                     <p:commandButton action="#{mbMantemNotificacao.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"  >
                         <f:setPropertyActionListener value="#{noti}" target="#{mbMantemNotificacao.notificacao}" update="template_content:form" />
                     </p:commandButton>   
@@ -83,6 +91,21 @@
                 </p:column> 
             </p:dataTable>
         </p:panel>
+        
+        <h3>Exportar Dados</h3>
+        <p:commandButton value="CSV" ajax="false" styleClass="btn" image="csv" width="30">  
+              <p:dataExporter type="csv" target="tabela" fileName="#{mbMantemNotificacao.nomeArquivo}"/>  
+        </p:commandButton>
+        <p:commandButton value="EXCEL" ajax="false" styleClass="btn" image="excel" width="30">  
+              <p:dataExporter type="xls" target="tabela" fileName="#{mbMantemNotificacao.nomeArquivo}"/>  
+        </p:commandButton>
+        <p:commandButton value="XML" ajax="false" styleClass="btn" image="xml" width="30">  
+              <p:dataExporter type="xml" target="tabela" fileName="#{mbMantemNotificacao.nomeArquivo}"/>  
+        </p:commandButton>  
+        <p:commandButton value="PDF" ajax="false" styleClass="btn" image="pdf" width="30">  
+              <p:dataExporter type="pdf" target="tabela" fileName="#{mbMantemNotificacao.nomeArquivo}"/>  
+        </p:commandButton>  
+        
         </h:form>
   
         

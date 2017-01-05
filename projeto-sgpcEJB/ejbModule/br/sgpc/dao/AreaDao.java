@@ -1,6 +1,7 @@
 package br.sgpc.dao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -57,5 +58,16 @@ public class AreaDao implements Serializable{
 		CriteriaQuery<Area> cq = this.entityManager.getCriteriaBuilder().createQuery(Area.class);
 		cq.select(cq.from(Area.class));
 		return this.entityManager.createQuery(cq).getResultList();
+	}
+	
+	public List<Area> consultarArea(String... criterios) {
+
+		List<Area> areas = new ArrayList<Area>();
+
+		if (criterios.length == 2) {
+			areas = this.entityManager.createQuery("select area from Area area where area.descricao like ?1", Area.class)
+					.setParameter(1, "%"+criterios[0]+"%").getResultList();
+		}
+		return areas;
 	}
 }

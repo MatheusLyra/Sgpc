@@ -120,5 +120,7 @@ public class MbMantemStatus  implements Serializable{
 		this.modoEdicao = modoEdicao;
 	}
 	
-	
+    public String getNomeArquivo() {
+        return "Status";
+    }		
 }

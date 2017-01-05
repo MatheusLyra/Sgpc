@@ -120,5 +120,7 @@ public class MbMantemTipoContrato implements Serializable{
 			this.modoEdicao = modoEdicao;
 		}
 		
-		
+	    public String getNomeArquivo() {
+	        return "TipoContrato";
+	    }				
 }

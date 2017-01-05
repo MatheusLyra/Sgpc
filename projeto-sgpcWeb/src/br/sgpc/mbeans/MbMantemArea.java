@@ -2,6 +2,7 @@ package br.sgpc.mbeans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -41,7 +42,7 @@ public class MbMantemArea implements Serializable{
 		
 		modoEdicao = false;
 	}
-	
+	 
 	private void carregarArea(){
 		listaArea = mantemAreaDLO.carregarDados();
 	}
@@ -119,6 +120,9 @@ public class MbMantemArea implements Serializable{
 	public void setModoEdicao(Boolean modoEdicao) {
 		this.modoEdicao = modoEdicao;
 	}
-	
+
+    public String getNomeArquivo() {
+        return "Area";
+    }
 	
 }

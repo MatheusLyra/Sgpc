@@ -1,6 +1,7 @@
 package br.sgpc.dlo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -40,5 +41,16 @@ public class MantemAreaDLO implements Serializable{
 	
 	public List<Area> carregarDados(){
 		return this.dao.consultarArea();
+	}
+	
+	public List<Area> carregarDados(String... criterios) {
+
+		List<Area> areas = new ArrayList<Area>();
+
+		if (criterios != null && criterios.length == 1) {
+
+			areas = this.dao.consultarArea(criterios[0]);
+		}
+		return areas;
 	}
 }

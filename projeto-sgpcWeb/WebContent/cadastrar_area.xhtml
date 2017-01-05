@@ -17,6 +17,7 @@
        
        <ui:composition template="./templates/template_base.xhtml">
        <ui:define name="page_content"> 
+
        <h:form id="form" >
        <p:panel header="CADASTRAR ÁREA">
 
@@ -27,20 +28,27 @@
       
           </h:panelGrid>
 
-            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" action="#{mbMantemArea.cadastrar()}" update="template_content:form" ajax="false" icon="ui-icon-check"/>
+            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" action="#{mbMantemArea.cadastrar()}" update="template_content:form" 
+                             ajax="false" icon="ui-icon-check" />
           
 		    <p:commandButton ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" action="#{mbMantemArea.limpar}" update="descricao" icon="ui-icon-cancel"/>             
  
-            <p:dataTable id="tabela" value="#{mbMantemArea.listaArea}" var="are" emptyMessage="Nenhum registro incluido." paginator="true" rows="10">
+            <p:dataTable id="tabela" value="#{mbMantemArea.listaArea}" var="are" emptyMessage="Nenhum registro incluido." 
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                         paginator="true" rows="10">
+            
                 <f:facet name="header">  
-                    Lista de Área 
-                </f:facet>
+                    Lista de Área           
+                </f:facet>           
+                         
                 
-                <p:column headerText="#{messages.CAD_CAMPO_DESCRICAO}" style="text-align: center">
+                <p:column headerText="#{messages.CAD_CAMPO_DESCRICAO}" style="text-align: center"
+                          filterStyle="max-width: 40px; min-width: 300px;" sortBy="#{are.descricao}" 
+                          filterBy="#{are.descricao}" >      
                     <h:outputText value="#{are.descricao}" />
                 </p:column>
     
-                <p:column headerText="Ações" style="text-align: center">
+                <p:column headerText="Ações" style="text-align: center" exportable="false">
                     <p:commandButton action="#{mbMantemArea.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"  >
                         <f:setPropertyActionListener value="#{are}" target="#{mbMantemArea.area}" update="template_content:form" />
                     </p:commandButton>   
@@ -55,8 +63,25 @@
         				<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
     				</p:confirmDialog>        
                 </p:column> 
+                
             </p:dataTable>
         </p:panel>
+        
+        <h3>Exportar Dados</h3>
+        <p:commandButton value="CSV" ajax="false" styleClass="btn" image="csv" width="30">  
+              <p:dataExporter type="csv" target="tabela" fileName="#{mbMantemArea.nomeArquivo}"/>  
+        </p:commandButton>
+        <p:commandButton value="EXCEL" ajax="false" styleClass="btn" image="excel" width="30">  
+              <p:dataExporter type="xls" target="tabela" fileName="#{mbMantemArea.nomeArquivo}"/>  
+        </p:commandButton>
+        <p:commandButton value="XML" ajax="false" styleClass="btn" image="xml" width="30">  
+              <p:dataExporter type="xml" target="tabela" fileName="#{mbMantemArea.nomeArquivo}"/>  
+        </p:commandButton>  
+        <p:commandButton value="PDF" ajax="false" styleClass="btn" image="pdf" width="30">  
+              <p:dataExporter type="pdf" target="tabela" fileName="#{mbMantemArea.nomeArquivo}"/>  
+        </p:commandButton>                                                   
+                    
+    
         </h:form>
   
         

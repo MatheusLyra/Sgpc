@@ -120,4 +120,8 @@ public class MbMantemTmp implements Serializable{
 		this.modoEdicao = modoEdicao;
 	}
 	
+    public String getNomeArquivo() {
+        return "TMP";
+    }		
+	
 }

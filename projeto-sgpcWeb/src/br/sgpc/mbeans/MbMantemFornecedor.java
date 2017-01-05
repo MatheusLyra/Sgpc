@@ -138,6 +138,9 @@ public class MbMantemFornecedor implements Serializable{
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
 	}
-
+	
+    public String getNomeArquivo() {
+        return "Fornecedor";
+    }	
 	
 }

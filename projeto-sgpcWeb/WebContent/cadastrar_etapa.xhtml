@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
@@ -31,32 +31,51 @@
           
 		    <p:commandButton ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" action="#{mbMantemEtapa.limpar}" update="descricao" icon="ui-icon-cancel"/>             
  
-            <p:dataTable id="tabela" value="#{mbMantemEtapa.listaEtapa}" var="etap" emptyMessage="Nenhum registro incluido." paginator="true" rows="10">
+            <p:dataTable id="tabela" value="#{mbMantemEtapa.listaEtapa}" var="etap" 
+                         emptyMessage="Nenhum registro incluido." 
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                         paginator="true" rows="10">
                 <f:facet name="header">  
                     Lista de Etapa 
                 </f:facet>
                 
-                <p:column headerText="#{messages.CAD_CAMPO_DESCRICAO}" style="text-align: center">
+                <p:column headerText="#{messages.CAD_CAMPO_DESCRICAO}" style="text-align: center"
+                          filterBy="#{etap.descricao}">
                     <h:outputText value="#{etap.descricao}" />
                 </p:column>
     
-                <p:column headerText="AÃ§Ãµes" style="text-align: center">
+                <p:column headerText="Ações" style="text-align: center" exportable="false">
                     <p:commandButton action="#{mbMantemEtapa.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"  >
                         <f:setPropertyActionListener value="#{etap}" target="#{mbMantemEtapa.etapa}" update="template_content:form" />
                     </p:commandButton>   
 
  
     				<p:commandButton icon="ui-icon-trash" actionListener="#{mbMantemEtapa.excluir(etap)}" process="@form" update="template_content:form:tabela" title="#{messages.CAD_EXCLUIR}">
-        				<p:confirm header="ConfirmaÃ§Ã£o" message="Deseja realmente excluir este registro?" icon="ui-icon-alert" />
+        				<p:confirm header="Confirmação" message="Deseja realmente excluir este registro?" icon="ui-icon-alert" />
     				</p:commandButton>
  
     				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
         				<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-        				<p:commandButton value="NÃ£o" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+        				<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
     				</p:confirmDialog>        
                 </p:column> 
             </p:dataTable>
         </p:panel>
+        
+        <h3>Exportar Dados</h3>
+        <p:commandButton value="CSV" ajax="false" styleClass="btn" image="csv" width="30">  
+              <p:dataExporter type="csv" target="tabela" fileName="#{mbMantemEtapa.nomeArquivo}"/>  
+        </p:commandButton>
+        <p:commandButton value="EXCEL" ajax="false" styleClass="btn" image="excel" width="30">  
+              <p:dataExporter type="xls" target="tabela" fileName="#{mbMantemEtapa.nomeArquivo}"/>  
+        </p:commandButton>
+        <p:commandButton value="XML" ajax="false" styleClass="btn" image="xml" width="30">  
+              <p:dataExporter type="xml" target="tabela" fileName="#{mbMantemEtapa.nomeArquivo}"/>  
+        </p:commandButton>  
+        <p:commandButton value="PDF" ajax="false" styleClass="btn" image="pdf" width="30">  
+              <p:dataExporter type="pdf" target="tabela" fileName="#{mbMantemEtapa.nomeArquivo}"/>  
+        </p:commandButton>         
+        
         </h:form>
   
         
