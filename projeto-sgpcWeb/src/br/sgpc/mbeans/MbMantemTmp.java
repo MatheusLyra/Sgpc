@@ -6,12 +6,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 
 import br.sgpc.dlo.MantemTmpDLO;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Tmp;
 
 /**
@@ -20,7 +19,7 @@ import br.sgpc.dominio.Tmp;
  */
 @ManagedBean(name = "mbMantemTmp")
 @SessionScoped
-public class MbMantemTmp implements Serializable{
+public class MbMantemTmp extends Funcoes implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -52,25 +51,19 @@ public class MbMantemTmp implements Serializable{
 				mantemTmpDLO.alterar(tmp);
 				carregarTmp();
 
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Registro alterado com sucesso."));
-
+				msgInfo("Registro alterado com sucesso.");
 			} catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-						"Erro ao alterar dados com a seguinte mensagem: " + e.getMessage()));
-				
+				msgErro("Erro ao alterar dados com a seguinte mensagem: " + e.getMessage());
 			}
 			modoEdicao = false;
 			limpar();
 		} else {
 			try {
 				mantemTmpDLO.cadastrar(tmp);
-				carregarTmp();
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Registro cadastrado com sucesso!"));
+				carregarTmp();	
+				msgInfo("Registro cadastrado com sucesso!");
 			} catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-						"Erro ao cadastrar registro com a seguinte mensagem: " + e.getMessage()));
+				msgErro("Erro ao cadastrar dados com a seguinte mensagem: " + e.getMessage());
 			}
 			limpar();
 		}
@@ -91,8 +84,7 @@ public class MbMantemTmp implements Serializable{
 			mantemTmpDLO.excluir(tmp);
 			carregarTmp();
 		} catch (Exception e) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Erro ao deletar registro com a seguinte mensagem: "+e.getMessage()));
+			msgErro("Erro ao deletar registro com a seguinte mensagem: "+e.getMessage());
 		}		
 	}
 

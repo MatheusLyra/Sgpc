@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -15,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import br.sgpc.dlo.MantemNotificacaoDLO;
 import br.sgpc.dlo.MantemUsuarioDLO;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Notificacao;
 import br.sgpc.dominio.Usuario;
 
@@ -24,7 +24,7 @@ import br.sgpc.dominio.Usuario;
  */
 @ManagedBean(name = "mbMantemNotificacao")
 @SessionScoped
-public class MbMantemNotificacao implements Serializable{
+public class MbMantemNotificacao extends Funcoes implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -78,13 +78,9 @@ public class MbMantemNotificacao implements Serializable{
 				mantemNotificacaoDLO.alterar(notificacao);
 				carregarNotificacao();
 
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Registro alterado com sucesso."));
-
+				msgInfo("Registro alterado com sucesso.");
 			} catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-						"Erro ao alterar dados com a seguinte mensagem: " + e.getMessage()));
-				
+				msgErro("Erro ao alterar dados com a seguinte mensagem: " + e.getMessage());
 			}
 			modoEdicao = false;
 			limpar();
@@ -93,11 +89,10 @@ public class MbMantemNotificacao implements Serializable{
 				preencherDados();
 				mantemNotificacaoDLO.cadastrar(notificacao);
 				carregarNotificacao();
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Registro cadastrado com sucesso!"));
+				
+				msgInfo("Registro cadastrado com sucesso!");
 			} catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-						"Erro ao cadastrar dados com a seguinte mensagem: " + e.getMessage()));
+				msgErro("Erro ao cadastrar dados com a seguinte mensagem: " + e.getMessage());
 			}
 			limpar();
 		}
@@ -118,8 +113,7 @@ public class MbMantemNotificacao implements Serializable{
 			mantemNotificacaoDLO.excluir(notificacao);
 			carregarNotificacao();
 		} catch (Exception e) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Erro ao deletar registro com a seguinte mensagem: "+e.getMessage()));
+			msgErro("Erro ao deletar registro com a seguinte mensagem: "+e.getMessage());
 		}		
 	}
 

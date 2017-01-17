@@ -6,12 +6,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 
 import br.sgpc.dlo.MantemTipoContratoDLO;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Tipocontrato;
 
 /**
@@ -20,7 +19,7 @@ import br.sgpc.dominio.Tipocontrato;
  */
 @ManagedBean(name = "mbMantemTipoContrato")
 @SessionScoped
-public class MbMantemTipoContrato implements Serializable{
+public class MbMantemTipoContrato extends Funcoes implements Serializable{
 
 		private static final long serialVersionUID = 1L;
 		
@@ -52,13 +51,10 @@ public class MbMantemTipoContrato implements Serializable{
 					mantemTipoContratoDLO.alterar(tipoContrato);
 					carregarTipoContrato();
 
-					FacesContext.getCurrentInstance().addMessage(null,
-							new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Registro alterado com sucesso."));
-
-				} catch (Exception e) {
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-							"Erro ao alterar dados com a seguinte mensagem: " + e.getMessage()));
+					msgInfo("Registro alterado com sucesso.");
 					
+				} catch (Exception e) {
+					msgErro("Erro ao alterar dados com a seguinte mensagem: " + e.getMessage());
 				}
 				modoEdicao = false;
 				limpar();
@@ -66,11 +62,9 @@ public class MbMantemTipoContrato implements Serializable{
 				try {
 					mantemTipoContratoDLO.cadastrar(tipoContrato);
 					carregarTipoContrato();
-					FacesContext.getCurrentInstance().addMessage(null,
-							new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Registro cadastrado com sucesso!"));
+					msgInfo("Registro cadastrado com sucesso!");
 				} catch (Exception e) {
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-							"Erro ao cadastrar dados com a seguinte mensagem: " + e.getMessage()));
+					msgErro("Erro ao cadastrar dados com a seguinte mensagem: " + e.getMessage());
 				}
 				limpar();
 			}
@@ -91,8 +85,7 @@ public class MbMantemTipoContrato implements Serializable{
 				mantemTipoContratoDLO.excluir(tipoContrato);
 				carregarTipoContrato();
 			} catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Erro ao deletar registro com a seguinte mensagem: "+e.getMessage()));
+				msgErro("Erro ao deletar registro com a seguinte mensagem: "+e.getMessage());
 			}		
 		}
 

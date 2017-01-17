@@ -9,10 +9,10 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.application.FacesMessage;
 import javax.servlet.http.HttpSession;
 
 import br.sgpc.dlo.AlterarSenhaDLO;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Usuario;
 
 /**
@@ -21,7 +21,7 @@ import br.sgpc.dominio.Usuario;
  */
 @ManagedBean(name = "mbAlterarSenha")
 @SessionScoped
-public class MbAlterarSenha implements Serializable {
+public class MbAlterarSenha extends Funcoes implements Serializable {
 
 	private static final long serialVersionUID = -1527245200931483533L;
 
@@ -60,18 +60,13 @@ public class MbAlterarSenha implements Serializable {
 				alterarSenhaDLO.alterar(usuario);
 				usuarioSessao.setSenha(usuario.getSenha());
 
-				FacesContext context = FacesContext.getCurrentInstance();
-				context.addMessage(null, new FacesMessage(null, "Senha alterada com sucesso."));
+				msgInfo("Senha alterada com sucesso.");
 				limparTela();
 			} catch (Exception e) {
-				FacesContext context = FacesContext.getCurrentInstance();
-				context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, null,
-						"Erro ao alterar senha com a seguinte mensagem: " + e.getMessage()));
+				msgErro("Erro ao alterar senha com a seguinte mensagem: " + e.getMessage());
 			}
 		} else {
-			FacesContext context = FacesContext.getCurrentInstance();
-			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "", "Por favor, verifique os dados digitados."));
+			msgInfo("Por favor, verifique os dados digitados.");
 		}
 	}
 	

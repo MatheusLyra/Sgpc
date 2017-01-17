@@ -3,20 +3,17 @@ package br.sgpc.mbeans;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 
 import br.sgpc.dlo.CarregarUsuarioDLO;
 import br.sgpc.dlo.MantemUsuarioDLO;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Usuario;
 
-import javax.faces.application.FacesMessage;
 
 /**
  * Bean responsável por cadastrar um novo usuário, alterar, excluir e visualizar
@@ -24,7 +21,7 @@ import javax.faces.application.FacesMessage;
  */
 @ManagedBean(name = "mbMantemUsuario")
 @SessionScoped
-public class MbMantemUsuario implements Serializable {
+public class MbMantemUsuario extends Funcoes implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -57,12 +54,10 @@ public class MbMantemUsuario implements Serializable {
 				try {
 					mantemUsuarioDLO.alterar(usuario);
 					carregaUsuario();
-					FacesContext.getCurrentInstance().addMessage(null,
-							new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Alterado com sucesso."));
-				} catch (Exception e) {
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Erro", "Erro ao alterar dados do usuário, com a seguinte mensagem: " + e.getMessage()));
 
+					msgInfo("Alterado com sucesso.");
+				} catch (Exception e) {
+					msgErro("Erro ao alterar dados do usuário, com a seguinte mensagem: " + e.getMessage());
 				}
 				modoEdicao = false;
 				limpar();
@@ -71,22 +66,18 @@ public class MbMantemUsuario implements Serializable {
 					try {
 						mantemUsuarioDLO.cadastrar(usuario);
 						carregaUsuario();
-						FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-								"Info", "Usuário cadastrado com sucesso!"));
-					} catch (Exception e) {
-						FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-								"Erro", "Erro ao cadastrar usuário, com a seguinte mensagem: " + e.getMessage()));
 
+						msgInfo("Usuário cadastrado com sucesso!");
+					} catch (Exception e) {
+						msgErro("Erro ao cadastrar usuário, com a seguinte mensagem: " + e.getMessage());
 					}
 					limpar();
 				} else {
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Erro", "Todos os campos devem ser preenchidos e a senha deve ser confirmada exatamente."));
+					msgErro("Todos os campos devem ser preenchidos e a senha deve ser confirmada exatamente.");
 				}
 			}
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Email inválido."));
+			msgErro("Email inválido.");
 		}
 	}
 
@@ -114,8 +105,7 @@ public class MbMantemUsuario implements Serializable {
 			mantemUsuarioDLO.excluir(usu);
 			carregaUsuario();
 		} catch (Exception e) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Erro ao deletar usuário."));
+			msgErro("Erro ao deletar usuário.");
 		}
 	}
 	
@@ -139,25 +129,6 @@ public class MbMantemUsuario implements Serializable {
 		} else {
 			return false;
 		}
-	}
-	
-	/**
-	 * Utilizado para verificar se o email está de acordo com o padrão.
-	 * 
-	 * @return <code>true</code> se o email cadastrado está conforme padrão.
-	 *         <code>false</code> caso contrário.
-	 */
-	public static boolean validarEmail(String email) {
-		boolean isEmailIdValid = false;
-		if (email != null && email.length() > 0) {
-			String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-			Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-			Matcher matcher = pattern.matcher(email);
-			if (matcher.matches()) {
-				isEmailIdValid = true;
-			}
-		}
-		return isEmailIdValid;
 	}
 
 	public Usuario getUsuario() {

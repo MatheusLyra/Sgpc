@@ -6,12 +6,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 
 import br.sgpc.dlo.MantemEtapaDLO;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Etapa;
 
 /**
@@ -20,7 +19,7 @@ import br.sgpc.dominio.Etapa;
  */
 @ManagedBean(name = "mbMantemEtapa")
 @SessionScoped
-public class MbMantemEtapa implements Serializable{
+public class MbMantemEtapa extends Funcoes implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -52,13 +51,10 @@ public class MbMantemEtapa implements Serializable{
 				mantemEtapaDLO.alterar(etapa);
 				carregarEtapa();
 
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Registro alterado com sucesso."));
+				msgInfo("Registro alterado com sucesso.");
 
 			} catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-						"Erro ao alterar dados com a seguinte mensagem: " + e.getMessage()));
-				
+				msgErro("Erro ao alterar dados com a seguinte mensagem: " + e.getMessage());		
 			}
 			modoEdicao = false;
 			limpar();
@@ -66,11 +62,10 @@ public class MbMantemEtapa implements Serializable{
 			try {
 				mantemEtapaDLO.cadastrar(etapa);
 				carregarEtapa();
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Registro cadastrado com sucesso!"));
+				
+				msgInfo("Registro cadastrado com sucesso!");
 			} catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-						"Erro ao cadastrar dados com a seguinte mensagem: " + e.getMessage()));
+				msgErro("Erro ao cadastrar dados com a seguinte mensagem: " + e.getMessage());
 			}
 			limpar();
 		}
@@ -91,8 +86,7 @@ public class MbMantemEtapa implements Serializable{
 			mantemEtapaDLO.excluir(etapa);
 			carregarEtapa();
 		} catch (Exception e) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Erro ao deletar registro com a seguinte mensagem: "+e.getMessage()));
+			msgErro("Erro ao deletar registro com a seguinte mensagem: "+e.getMessage());
 		}		
 	}
 

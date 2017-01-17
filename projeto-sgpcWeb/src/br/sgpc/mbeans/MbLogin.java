@@ -6,6 +6,7 @@ import br.sgpc.dlo.CarregarUsuarioDLO;
 import br.sgpc.dlo.ControleSessaoDLO;
 import br.sgpc.dlo.DesativarUsuarioDLO;
 import br.sgpc.dlo.LoginDLO;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Usuario;
 
 import com.sun.istack.internal.logging.Logger;
@@ -13,7 +14,6 @@ import java.io.Serializable;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -27,7 +27,7 @@ import br.sgpc.dominio.enumerador.StatusEnum;
  */
 @ManagedBean(name="mbLogin")
 @SessionScoped
-public class MbLogin implements Serializable {
+public class MbLogin extends Funcoes implements Serializable {
 
   private static final long serialVersionUID = -8462448134504214299L;
   
@@ -87,18 +87,14 @@ public class MbLogin implements Serializable {
 				try {
 					ativarUsuarioDLO.alterar(usuarioLogado);
 				} catch (Exception e) {
-					FacesContext.getCurrentInstance().addMessage(null,
-							new FacesMessage(FacesMessage.SEVERITY_INFO, "Erro", "Erro com a seguinte mensagem: "+e.getMessage()));						
-
+					msgErro("Erro com a seguinte mensagem: "+e.getMessage());
 				}
 				return LOGIN_SUCESSO;
 			}else {
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Informação", "Usuário não localizado, por favor verifique a senha e o usuário."));						
+				msgInfo("Usuário não localizado, por favor verifique a senha e o usuário.");
 			}
 		}else {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Informação", "Todos os campos devem ser preenchidos."));		
+			msgInfo("Todos os campos devem ser preenchidos.");
 		}
 		return LOGIN_FALHA;
 	}
@@ -119,8 +115,7 @@ public class MbLogin implements Serializable {
 			try {
 				desativarUsuarioDLO.alterar(usuarioSessao);
 			} catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Erro",
-						"Erro ao desativar o usuário com a seguinte mensagem: " + e.getMessage()));
+				msgErro("Erro ao desativar o usuário com a seguinte mensagem: " + e.getMessage());
 			}
 		}
 		context.getExternalContext().invalidateSession();

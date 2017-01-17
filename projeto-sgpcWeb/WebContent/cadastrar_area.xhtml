@@ -18,7 +18,7 @@
        <ui:composition template="./templates/template_base.xhtml">
        <ui:define name="page_content"> 
 
-       <h:form id="form" >
+       <h:form id="form">
        <p:panel header="CADASTRAR ÁREA">
 
          <h:panelGrid columns="2">
@@ -28,38 +28,56 @@
       
           </h:panelGrid>
 
-            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" action="#{mbMantemArea.cadastrar()}" update="template_content:form" 
-                             ajax="false" icon="ui-icon-check" />
+            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" 
+                             action="#{mbMantemArea.cadastrar()}" 
+                             icon="ui-icon-check" 
+                             onclick="$('#form:tabela:globalFilter').val('').keyup(); return false;"
+                             ajax="false"
+                             update="template_content:form"/>                                
           
-		    <p:commandButton ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" action="#{mbMantemArea.limpar}" update="descricao" icon="ui-icon-cancel"/>             
- 
+		    <p:commandButton id="btnCancelar" ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" 
+		                     action="#{mbMantemArea.limpar}" update="descricao" icon="ui-icon-cancel"/>             
+           
+            
             <p:dataTable id="tabela" value="#{mbMantemArea.listaArea}" var="are" emptyMessage="Nenhum registro incluido." 
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-                         paginator="true" rows="10">
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                         paginator="true" rows="10" widgetVar="mainGrid"  filteredValue="#{mbMantemArea.listaAreaFiltrada}">
             
                 <f:facet name="header">  
-                    Lista de Área           
+                    Lista de Área 
+               
+             		<p:outputPanel>
+                
+                		<h:outputText value="Procurar em todos os campos:" />
+                		<p:inputText id="globalFilter" onkeyup="PF('mainGrid').filter()" style="width:150px" placeholder="Inserir palavra-chave"/>	 		  
+								              
+              		</p:outputPanel>  
+ 
                 </f:facet>           
                          
                 
                 <p:column headerText="#{messages.CAD_CAMPO_DESCRICAO}" style="text-align: center"
-                          filterStyle="max-width: 40px; min-width: 300px;" sortBy="#{are.descricao}" 
-                          filterBy="#{are.descricao}" >      
+                          filterStyle="max-width: 40px; min-width: 300px;"
+                          filterBy="#{are.descricao}" filterMatchMode="contains">      
                     <h:outputText value="#{are.descricao}" />
                 </p:column>
     
                 <p:column headerText="Ações" style="text-align: center" exportable="false">
-                    <p:commandButton action="#{mbMantemArea.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"  >
-                        <f:setPropertyActionListener value="#{are}" target="#{mbMantemArea.area}" update="template_content:form" />
-                    </p:commandButton>   
-
- 
-    				<p:commandButton icon="ui-icon-trash" actionListener="#{mbMantemArea.excluir(are)}" process="@form" update="template_content:form:tabela" title="#{messages.CAD_EXCLUIR}">
-        				<p:confirm header="Confirmação" message="Deseja realmente excluir este registro?" icon="ui-icon-alert" />
+                    <p:commandButton action="#{mbMantemArea.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false" 
+                                     onclick="$('#form:tabela:globalFilter').val('').keyup(); return false;">
+                        <f:setPropertyActionListener value="#{are}" target="#{mbMantemArea.area}" update="template_content:form"/>
+                    </p:commandButton> 
+                    
+    				<p:commandButton icon="ui-icon-trash" actionListener="#{mbMantemArea.excluir(are)}" process="@form" 
+    				                 title="#{messages.CAD_EXCLUIR}"
+    				                 update="template_content:form:tabela">
+        				<p:confirm header="Confirmação" message="Deseja realmente excluir este registro?" icon="ui-icon-alert"/>
     				</p:commandButton>
  
     				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-        				<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        				<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" 
+    				                 onclick="$('#form:tabela:globalFilter').val('').keyup(); return false;"/>
+        				                 
         				<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
     				</p:confirmDialog>        
                 </p:column> 
@@ -84,7 +102,6 @@
     
         </h:form>
   
-        
        </ui:define>
      </ui:composition>          
     </h:body>

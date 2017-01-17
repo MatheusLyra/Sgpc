@@ -6,12 +6,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 
 import br.sgpc.dlo.MantemFornecedorDLO;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Fornecedor;
 
 /**
@@ -20,7 +19,7 @@ import br.sgpc.dominio.Fornecedor;
  */
 @ManagedBean(name = "mbMantemFornecedor")
 @SessionScoped
-public class MbMantemFornecedor implements Serializable{
+public class MbMantemFornecedor extends Funcoes implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -60,13 +59,10 @@ public class MbMantemFornecedor implements Serializable{
 				mantemFornecedorDLO.alterar(fornecedor);
 				carregarFornecedor();
 
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Registro alterado com sucesso."));
-
-			} catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-						"Erro ao alterar dados com a seguinte mensagem: " + e.getMessage()));
+				msgInfo("Registro alterado com sucesso.");
 				
+			} catch (Exception e) {
+				msgErro("Erro ao alterar dados com a seguinte mensagem: " + e.getMessage());
 			}
 			modoEdicao = false;
 			limpar();
@@ -74,11 +70,10 @@ public class MbMantemFornecedor implements Serializable{
 			try {
 				mantemFornecedorDLO.cadastrar(fornecedor);
 				carregarFornecedor();
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Registro cadastrado com sucesso!"));
+
+				msgInfo("Registro cadastrado com sucesso!");
 			} catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-						"Erro ao cadastrar dados com a seguinte mensagem: " + e.getMessage()));
+				msgErro("Erro ao cadastrar dados com a seguinte mensagem: " + e.getMessage());
 			}
 			limpar();
 		}
@@ -102,9 +97,7 @@ public class MbMantemFornecedor implements Serializable{
 			mantemFornecedorDLO.excluir(fornecedor);
 			carregarFornecedor();
 		} catch (Exception e) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Erro ao deletar registro com a seguinte mensagem: "+e.getMessage()));
-		}		
+			msgErro("Erro ao deletar registro com a seguinte mensagem: "+e.getMessage());		}		
 	}
 
 	public Fornecedor getFornecedor() {

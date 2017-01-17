@@ -7,12 +7,11 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 
 import br.sgpc.dlo.MantemAreaDLO;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Area;
 
 /**
@@ -21,7 +20,7 @@ import br.sgpc.dominio.Area;
  */
 @ManagedBean(name = "mbMantemArea")
 @SessionScoped
-public class MbMantemArea implements Serializable{
+public class MbMantemArea extends Funcoes implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -32,17 +31,19 @@ public class MbMantemArea implements Serializable{
 	
 	private List<Area> listaArea;
 	
+	private List<Area> listaAreaFiltrada;
+	
 	private Boolean modoEdicao;
     
 	@PostConstruct
 	public void inicializar(){
-		area = new Area();
+        area = new Area();		
 		listaArea = new ArrayList<Area>();
 		carregarArea();
 		
 		modoEdicao = false;
 	}
-	 
+	
 	private void carregarArea(){
 		listaArea = mantemAreaDLO.carregarDados();
 	}
@@ -52,14 +53,11 @@ public class MbMantemArea implements Serializable{
 			try {
 				mantemAreaDLO.alterar(area);
 				carregarArea();
-
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Registro alterado com sucesso."));
-
-			} catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-						"Erro ao alterar dados com a seguinte mensagem: " + e.getMessage()));
 				
+				msgInfo("Registro alterado com sucesso.");
+				
+			} catch (Exception e) {
+				msgErro("Erro ao alterar dados com a seguinte mensagem: " + e.getMessage());				
 			}
 			modoEdicao = false;
 			limpar();
@@ -67,11 +65,9 @@ public class MbMantemArea implements Serializable{
 			try {
 				mantemAreaDLO.cadastrar(area);
 				carregarArea();
-				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Registro cadastrado com sucesso!"));
+				msgInfo("Registro cadastrado com sucesso!");
 			} catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-						"Erro ao cadastrar dados com a seguinte mensagem: " + e.getMessage()));
+				msgErro("Erro ao cadastrar dados com a seguinte mensagem: " + e.getMessage());
 			}
 			limpar();
 		}
@@ -92,8 +88,7 @@ public class MbMantemArea implements Serializable{
 			mantemAreaDLO.excluir(area);
 			carregarArea();
 		} catch (Exception e) {
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Erro ao deletar registro com a seguinte mensagem: "+e.getMessage()));
+			msgErro("Erro ao deletar registro com a seguinte mensagem: "+e.getMessage());
 		}		
 	}
 
@@ -124,5 +119,15 @@ public class MbMantemArea implements Serializable{
     public String getNomeArquivo() {
         return "Area";
     }
+
+	public List<Area> getListaAreaFiltrada() {
+		return listaAreaFiltrada;
+	}
+
+	public void setListaAreaFiltrada(List<Area> listaAreaFiltrada) {
+		this.listaAreaFiltrada = listaAreaFiltrada;
+	}
 	
+    
+    
 }
