@@ -38,6 +38,10 @@ public class MantemTipoContratoDLO implements Serializable{
 		}
 	}
 	
+	public Tipocontrato obterDados(Integer id){
+		return this.dao.obter(id);
+	}
+	
 	public List<Tipocontrato> carregarDados(){
 		return this.dao.consultarTipoContratos();
 	}

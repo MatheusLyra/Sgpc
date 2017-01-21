@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>#{messages.APLICACAO_TITULO}</title>
+        
+    </h:head>
+    <h:body style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
+                   background-color:transparent;
+                   background-repeat: no-repeat;
+                   background-size: cover">
+       
+       <ui:composition template="./templates/template_base.xhtml">
+       <ui:define name="page_content"> 
+       <h:form id="form" >
+       <p:panel header="CADASTRAR DADOS CONSOLIDADOS">
+
+         <h:panelGrid columns="2" > 
+            
+            <h:outputLabel for="numProcesso" value="Número do Processo" styleClass="crud_labels" /> 
+            <p:inputText id="numProcesso" label="numProcesso" value="#{mbMantemDadosConsolidados.dadosConsolidados.numProcesso}" maxlength="27" size="27" disabled="true"/>                  
+      
+            <h:outputLabel for="tipoDado" value="Tipo de Dados" styleClass="crud_labels" />
+            <p:selectOneMenu id="tipoDado" value="#{mbMantemDadosConsolidados.dadosConsolidados.tipoDado}" style="width:150px" >
+               <f:selectItem itemLabel="Selecione..."/>
+               <f:selectItem itemLabel="Novo Contrato" itemValue="C"/>
+               <f:selectItem itemLabel="Aditivo"       itemValue="A"/>  
+               <f:ajax render="@form" /> 
+            </p:selectOneMenu>        
+              
+          </h:panelGrid>
+          <br/>
+          <p:panel header="Dados consolidados do Aditivo">
+          	<h:panelGrid columns="6">
+          
+            	<h:outputLabel for="numContrato" value="Número do Contrato" styleClass="crud_labels" />
+            	<p:inputText id="numContrato" label="numContrato" value="#{mbMantemDadosConsolidados.dadosConsolidados.numContrato}" maxlength="20" size="20" disabled="#{mbMantemDadosConsolidados.dadosConsolidados.tipoDado != 'A'}"/>           	
+          
+            	<h:outputLabel for="termoAditivo" value="Termo Aditivo (TAC)" styleClass="crud_labels" />
+            	<p:inputText id="termoAditivo" label="termoAditivo" value="#{mbMantemDadosConsolidados.dadosConsolidados.tac}" maxlength="10" size="10" disabled="#{mbMantemDadosConsolidados.dadosConsolidados.tipoDado != 'A'}"/>           	
+          
+				<p:outputLabel value="Fornecedor" styleClass="crud_labels" />
+				<p:selectOneMenu id="fornecedor" value="#{mbMantemDadosConsolidados.dadosConsolidados.fornecedor}" converter="fornecedorConverter" style="width:200px" disabled="#{mbMantemDadosConsolidados.dadosConsolidados.tipoDado != 'A'}">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{mbMantemDadosConsolidados.listaFornecedor}" var="fornecedor" 
+				               	   itemLabel="#{fornecedor.descricao}" itemValue="#{fornecedor}"/>
+				</p:selectOneMenu>	
+          
+          	</h:panelGrid>
+		  </p:panel>
+		  <br/>
+          <p:panel header="Dados consolidados de Contratação">
+          	<h:panelGrid columns="6">
+          
+				<p:outputLabel value="Tipo de Contratação" styleClass="crud_labels" />
+				<p:selectOneMenu id="tpContratacao" value="#{mbMantemDadosConsolidados.dadosConsolidados.tipocontrato}" converter="tipoContratoConverter" style="width:200px" disabled="#{mbMantemDadosConsolidados.dadosConsolidados.tipoDado != 'C'}">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{mbMantemDadosConsolidados.listaTipoContrato}" var="tpContratacao" 
+				               	   itemLabel="#{tpContratacao.descricao}" itemValue="#{tpContratacao}"/>
+				</p:selectOneMenu>	
+          
+          		<p:outputLabel value="Proposta Inicial" styleClass="crud_labels" />
+				<p:inputText maxlength="15" size="20" id="propIni" required="true" value="#{mbMantemDadosConsolidados.dadosConsolidados.vlPropostaIni}"  requiredMessage="Preencha este campo com o valor da proposta inicial" disabled="#{mbMantemDadosConsolidados.dadosConsolidados.tipoDado != 'C'}">
+					<f:convertNumber pattern="#,##0.00"></f:convertNumber>
+					<p:ajax update="propIni" process="propIni" event="change" />
+				</p:inputText> 
+				
+				<p:outputLabel value="Proposta Final" styleClass="crud_labels" />
+				<p:inputText maxlength="15" size="20" id="propFim" value="#{mbMantemDadosConsolidados.dadosConsolidados.vlPropostaFim}" disabled="#{mbMantemDadosConsolidados.dadosConsolidados.tipoDado != 'C'}">
+					<f:convertNumber pattern="#,##0.00"></f:convertNumber>
+					<p:ajax update="propFim" process="propFim" event="change" />
+				</p:inputText>         
+          
+          	</h:panelGrid>
+		  </p:panel>		  
+		  <br/>
+		  
+		  <h:panelGrid columns="2" > 
+            
+            <h:outputLabel for="descServ" value="Descrição do serviço" styleClass="crud_labels" /> 
+            <p:inputText id="descServ" label="descServ" value="#{mbMantemDadosConsolidados.dadosConsolidados.descServico}" maxlength="80" size="80" />                  
+              
+			<p:outputLabel value="Área Requisitante" styleClass="crud_labels" />
+			<p:selectOneMenu id="area" value="#{mbMantemDadosConsolidados.dadosConsolidados.area}" converter="areaConverter" style="width:200px">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{mbMantemDadosConsolidados.listaArea}" var="ar" 
+				               	   itemLabel="#{ar.descricao}" itemValue="#{ar}"/>
+			</p:selectOneMenu>  
+			
+            <h:outputLabel for="analistaResp" value="Analista Responsável" styleClass="crud_labels" /> 
+            <p:inputText id="analistaResp" label="analistaResp" value="#{mbMantemDadosConsolidados.dadosConsolidados.analistaResp}" maxlength="80" size="80" />                  
+			
+			<h:outputLabel for="status" value="Status" styleClass="crud_labels" />
+            <p:selectOneMenu id="status" value="#{mbMantemDadosConsolidados.dadosConsolidados.status}" converter="statusConverter" style="width:150px">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{mbMantemDadosConsolidados.listaStatus}" var="st" 
+				               	   itemLabel="#{st.descricao}" itemValue="#{st}"/>
+            </p:selectOneMenu>            
+          </h:panelGrid>
+          
+          <br/>
+            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" action="#{mbMantemDadosConsolidados.cadastrar()}" update="template_content:form" ajax="false" icon="ui-icon-check"/>
+          
+		    <p:commandButton ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" action="#{mbMantemDadosConsolidados.limpar}" update="descricao" icon="ui-icon-cancel"/>             
+ 
+            <p:dataTable id="tabela" value="#{mbMantemDadosConsolidados.listaDadosConsolidados}" var="dados" 
+            			 emptyMessage="Nenhum registro incluido." 
+            			 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+            			 paginator="true" rows="10">
+                <f:facet name="header">  
+                    Lista de Dados Consolidados 
+                </f:facet>
+                
+                <p:column headerText="Número do Processo" style="text-align: center">
+                    <h:outputText value="#{dados.numProcesso}" />
+                </p:column>
+                
+                <p:column headerText="Tipo de Dados" style="text-align: center">
+                    <h:outputText value="#{dados.tipoDado}" />
+                </p:column>  
+                
+                <p:column headerText="Número do Contrato" style="text-align: center">
+                    <h:outputText value="#{dados.numContrato}" />
+                </p:column>    
+                
+                <p:column headerText="Termo Aditivo (TAC)" style="text-align: center">
+                    <h:outputText value="#{dados.tac}" />
+                </p:column>   
+                
+                <p:column headerText="Fornecedor" style="text-align: center">
+                    <h:outputText value="#{dados.fornecedor.descricao}" />
+                </p:column>     
+                
+                <p:column headerText="Tipo de Contratação" style="text-align: center">
+                    <h:outputText value="#{dados.tipocontrato.descricao}" />
+                </p:column>  
+                
+                <p:column headerText="Prop. Ini" style="text-align: center">
+                    <h:outputText value="#{dados.vlPropostaIni}" />
+                </p:column>      
+                
+                <p:column headerText="Prop. Fim" style="text-align: center">
+                    <h:outputText value="#{dados.vlPropostaFim}" />
+                </p:column>       
+                
+                <p:column headerText="Desc. Serv." style="text-align: center">
+                    <h:outputText value="#{dados.descServico}" />
+                </p:column>  
+                
+                <p:column headerText="Área Req." style="text-align: center">
+                    <h:outputText value="#{dados.area.descricao}" />
+                </p:column>  
+                
+                <p:column headerText="Analista Resp." style="text-align: center">
+                    <h:outputText value="#{dados.analistaResp}" />
+                </p:column>
+                
+                <p:column headerText="Status" style="text-align: center">
+                    <h:outputText value="#{dados.status.descricao}" />
+                </p:column>                                                                                                                                           
+                                                                                                                                                           
+    
+                <p:column headerText="Ações" style="text-align: center" exportable="false">
+                    <p:commandButton action="#{mbMantemDadosConsolidados.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"  >
+                        <f:setPropertyActionListener value="#{dados}" target="#{mbMantemDadosConsolidados.dadosConsolidados}" update="template_content:form" />
+                    </p:commandButton>   
+
+ 
+    				<p:commandButton icon="ui-icon-trash" actionListener="#{mbMantemDadosConsolidados.excluir(dados)}" process="@form" update="template_content:form:tabela" title="#{messages.CAD_EXCLUIR}">
+        				<p:confirm header="Confirmação" message="Deseja realmente excluir este registro?" icon="ui-icon-alert" />
+    				</p:commandButton>
+ 
+    				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+        				<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        				<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    				</p:confirmDialog>        
+                </p:column> 
+            </p:dataTable>
+        </p:panel>
+        
+        <h3>Exportar Dados</h3>
+        <p:commandButton value="CSV" ajax="false" styleClass="btn" image="csv" width="30">  
+              <p:dataExporter type="csv" target="tabela" fileName="#{mbMantemStatus.nomeArquivo}"/>  
+        </p:commandButton>
+        <p:commandButton value="EXCEL" ajax="false" styleClass="btn" image="excel" width="30">  
+              <p:dataExporter type="xls" target="tabela" fileName="#{mbMantemStatus.nomeArquivo}"/>  
+        </p:commandButton>
+        <p:commandButton value="XML" ajax="false" styleClass="btn" image="xml" width="30">  
+              <p:dataExporter type="xml" target="tabela" fileName="#{mbMantemStatus.nomeArquivo}"/>  
+        </p:commandButton>  
+        <p:commandButton value="PDF" ajax="false" styleClass="btn" image="pdf" width="30">  
+              <p:dataExporter type="pdf" target="tabela" fileName="#{mbMantemStatus.nomeArquivo}"/>  
+        </p:commandButton>         
+        
+        </h:form>
+  
+        
+       </ui:define>
+     </ui:composition>          
+    </h:body>
+</html>

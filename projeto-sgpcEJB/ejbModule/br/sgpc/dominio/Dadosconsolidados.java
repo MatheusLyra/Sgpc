@@ -1,6 +1,6 @@
 package br.sgpc.dominio;
-// Generated 23/11/2016 03:44:08 by Hibernate Tools 4.3.1.Final
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "dadosconsolidados")
-public class Dadosconsolidados implements java.io.Serializable {
+public class Dadosconsolidados implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -24,19 +24,19 @@ public class Dadosconsolidados implements java.io.Serializable {
 	private Integer numProcesso;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idArea", nullable = false)
+	@JoinColumn(name = "idArea")
 	private Area area;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idFornecedor", nullable = false)
+	@JoinColumn(name = "idFornecedor")
 	private Fornecedor fornecedor;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idStatus", nullable = false)
+	@JoinColumn(name = "idStatus")
 	private Status status;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idTipoContrato", nullable = false)
+	@JoinColumn(name = "idTipoContrato")
 	private Tipocontrato tipocontrato;
 	
 	@Column(name = "TipoDado", length = 2)
@@ -44,6 +44,9 @@ public class Dadosconsolidados implements java.io.Serializable {
 	
 	@Column(name = "NumContrato", length = 45)
 	private String numContrato;
+	
+	@Column(name = "Tac", length = 10)
+	private String tac;
 	
 	@Column(name = "DescServico", length = 100)
 	private String descServico;
@@ -156,5 +159,15 @@ public class Dadosconsolidados implements java.io.Serializable {
 	public void setCronogramas(List<Cronograma> cronogramas) {
 		this.cronogramas = cronogramas;
 	}
+
+	public String getTac() {
+		return tac;
+	}
+
+	public void setTac(String tac) {
+		this.tac = tac;
+	}
+	
+	
 
 }

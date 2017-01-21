@@ -51,4 +51,30 @@ public class Tipocontrato implements java.io.Serializable {
 		this.dadosconsolidadoses = dadosconsolidadoses;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((idTipoContrato == null) ? 0 : idTipoContrato.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tipocontrato other = (Tipocontrato) obj;
+		if (idTipoContrato == null) {
+			if (other.idTipoContrato != null)
+				return false;
+		} else if (!idTipoContrato.equals(other.idTipoContrato))
+			return false;
+		return true;
+	}
+
+	
 }

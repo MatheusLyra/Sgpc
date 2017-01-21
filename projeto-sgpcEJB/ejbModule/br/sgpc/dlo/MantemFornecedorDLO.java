@@ -30,6 +30,10 @@ public class MantemFornecedorDLO implements Serializable{
 	public void alterar(Fornecedor fornecedor) throws Exception{
 		this.dao.atualizarFornecedor(fornecedor);
 	}
+	
+	public Fornecedor obterDados(Integer id){
+		return this.dao.obter(id);
+	}
 
 	public void excluir(Fornecedor fornecedor) throws Exception {
 		Fornecedor f = this.dao.obter(fornecedor.getIdFornecedor());

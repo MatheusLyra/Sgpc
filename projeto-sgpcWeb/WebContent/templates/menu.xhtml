@@ -30,7 +30,9 @@
             <p:menuitem value="#{messages.TEMPLATE_MENU_TMP}" action="/cadastrar_tmp.xhtml?faces-redirect=true" 
                         rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}"/>    
             <p:menuitem value="#{messages.TEMPLATE_MENU_TIPOCONTRATO}" action="/cadastrar_tipocontrato.xhtml?faces-redirect=true" 
-                        rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}"/>                                                           
+                        rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}"/>   
+            <p:menuitem value="#{messages.TEMPLATE_MENU_DADOSCONSOLIDADOS}" action="/cadastrar_dadosconsolidados.xhtml?faces-redirect=true" 
+                        rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}"/>                                                                                
         </p:submenu>
         
         <p:submenu label="Aviso">

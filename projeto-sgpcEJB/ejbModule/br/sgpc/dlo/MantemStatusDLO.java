@@ -38,6 +38,10 @@ public class MantemStatusDLO implements Serializable{
 		}
 	}
 	
+	public Status obterDados(Integer id){
+		return this.dao.obter(id);
+	}
+	
 	public List<Status> carregarDados(){
 		return this.dao.consultarStatus();
 	}

@@ -53,4 +53,31 @@ public class Area implements java.io.Serializable {
 		this.dadosconsolidadoses = dadosconsolidadoses;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((idArea == null) ? 0 : idArea.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Area other = (Area) obj;
+		if (idArea == null) {
+			if (other.idArea != null)
+				return false;
+		} else if (!idArea.equals(other.idArea))
+			return false;
+		return true;
+	}
+	
+	
+
 }
