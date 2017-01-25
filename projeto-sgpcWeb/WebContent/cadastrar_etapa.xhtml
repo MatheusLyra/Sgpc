@@ -64,16 +64,16 @@
         
         <h3>Exportar Dados</h3>
         <p:commandButton value="CSV" ajax="false" styleClass="btn" image="csv" width="30">  
-              <p:dataExporter type="csv" target="tabela" fileName="#{mbMantemEtapa.nomeArquivo}"/>  
+              <p:dataExporter type="csv" encoding="iso-8859-1" target="tabela" fileName="#{mbMantemEtapa.nomeArquivo}"/>  
         </p:commandButton>
         <p:commandButton value="EXCEL" ajax="false" styleClass="btn" image="excel" width="30">  
-              <p:dataExporter type="xls" target="tabela" fileName="#{mbMantemEtapa.nomeArquivo}"/>  
+              <p:dataExporter type="xls" encoding="iso-8859-1" target="tabela" fileName="#{mbMantemEtapa.nomeArquivo}"/>  
         </p:commandButton>
         <p:commandButton value="XML" ajax="false" styleClass="btn" image="xml" width="30">  
-              <p:dataExporter type="xml" target="tabela" fileName="#{mbMantemEtapa.nomeArquivo}"/>  
+              <p:dataExporter type="xml" encoding="iso-8859-1" target="tabela" fileName="#{mbMantemEtapa.nomeArquivo}"/>  
         </p:commandButton>  
         <p:commandButton value="PDF" ajax="false" styleClass="btn" image="pdf" width="30">  
-              <p:dataExporter type="pdf" target="tabela" fileName="#{mbMantemEtapa.nomeArquivo}"/>  
+              <p:dataExporter type="pdf" encoding="iso-8859-1" target="tabela" fileName="#{mbMantemEtapa.nomeArquivo}"/>  
         </p:commandButton>         
         
         </h:form>
