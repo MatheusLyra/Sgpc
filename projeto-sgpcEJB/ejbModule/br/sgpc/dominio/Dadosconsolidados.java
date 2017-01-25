@@ -28,6 +28,10 @@ public class Dadosconsolidados implements Serializable {
 	private Area area;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idUsuario")
+	private Usuario usuario;	
+	
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idFornecedor")
 	private Fornecedor fornecedor;
 	
@@ -56,9 +60,6 @@ public class Dadosconsolidados implements Serializable {
 	
 	@Column(name = "VlPropostaFim", precision = 22, scale = 0)
 	private Double vlPropostaFim;
-	
-	@Column(name = "AnalistaResp", length = 80)
-	private String analistaResp;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dadosconsolidados")
 	private List<Cronograma> cronogramas;
@@ -144,14 +145,6 @@ public class Dadosconsolidados implements Serializable {
 		this.vlPropostaFim = vlPropostaFim;
 	}
 
-	public String getAnalistaResp() {
-		return this.analistaResp;
-	}
-
-	public void setAnalistaResp(String analistaResp) {
-		this.analistaResp = analistaResp;
-	}
-
 	public List<Cronograma> getCronogramas() {
 		return this.cronogramas;
 	}
@@ -167,7 +160,14 @@ public class Dadosconsolidados implements Serializable {
 	public void setTac(String tac) {
 		this.tac = tac;
 	}
-	
-	
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+		
 
 }

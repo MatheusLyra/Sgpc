@@ -14,12 +14,14 @@ import br.sgpc.dlo.MantemDadosConsolidadosDLO;
 import br.sgpc.dlo.MantemFornecedorDLO;
 import br.sgpc.dlo.MantemStatusDLO;
 import br.sgpc.dlo.MantemTipoContratoDLO;
+import br.sgpc.dlo.MantemUsuarioDLO;
 import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Area;
 import br.sgpc.dominio.Dadosconsolidados;
 import br.sgpc.dominio.Fornecedor;
 import br.sgpc.dominio.Status;
 import br.sgpc.dominio.Tipocontrato;
+import br.sgpc.dominio.Usuario;
 
 /**
  * Bean responsável por cadastrar os dados consolidados, alterar, excluir e visualizar.
@@ -45,6 +47,9 @@ public class MbMantemDadosConsolidados extends Funcoes implements Serializable {
 	@EJB
 	private MantemDadosConsolidadosDLO mantemDadosConsolidadosDLO;	
 	
+	@EJB
+	private MantemUsuarioDLO mantemUsuarioDLO;
+	
 	private Dadosconsolidados dadosConsolidados;
 	
 	private List<Dadosconsolidados> listaDadosConsolidados;
@@ -52,6 +57,7 @@ public class MbMantemDadosConsolidados extends Funcoes implements Serializable {
 	private List<Fornecedor> listaFornecedor;
 	private List<Status> listaStatus;
 	private List<Tipocontrato> listaTipoContrato;
+	private List<Usuario> listaUsuario;
 	
 	private Boolean modoEdicao;
 		
@@ -64,6 +70,7 @@ public class MbMantemDadosConsolidados extends Funcoes implements Serializable {
 		listaFornecedor        = new ArrayList<Fornecedor>();
 		listaStatus            = new ArrayList<Status>();
 		listaTipoContrato      = new ArrayList<Tipocontrato>();
+		listaUsuario           = new ArrayList<Usuario>();
 		
 		carregarDados();
 		
@@ -76,6 +83,7 @@ public class MbMantemDadosConsolidados extends Funcoes implements Serializable {
 		listaFornecedor        = mantemFornecedorDLO.carregarDados();
 		listaStatus            = mantemStatusDLO.carregarDados();
 		listaTipoContrato      = mantemTipoContratoDLO.carregarDados();
+		listaUsuario           = mantemUsuarioDLO.carregarDados();
 	}
 	
 	public void cadastrar() {
@@ -175,5 +183,16 @@ public class MbMantemDadosConsolidados extends Funcoes implements Serializable {
 		this.modoEdicao = modoEdicao;
 	}
 
+	public List<Usuario> getListaUsuario() {
+		return listaUsuario;
+	}
+
+	public void setListaUsuario(List<Usuario> listaUsuario) {
+		this.listaUsuario = listaUsuario;
+	}
+	
+    public String getNomeArquivo() {
+        return "Dados Consolidados";
+    }		
 	
 }
