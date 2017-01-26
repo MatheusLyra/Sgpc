@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import br.sgpc.dao.StatusDao;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Status;
 
 /**
@@ -16,19 +17,29 @@ import br.sgpc.dominio.Status;
  */
 @Stateless
 @Remote
-public class MantemStatusDLO implements Serializable{
+public class MantemStatusDLO extends Funcoes implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
 	@EJB
 	private StatusDao dao;
 
-	public void cadastrar(Status status) throws Exception{
-	    this.dao.salvarStatus(status);
+	public void cadastrar(Status status) throws Exception {
+		if (!campoVazio(status.getDescricao())) {
+			this.dao.salvarStatus(status);
+		} else {
+			String msg = "Campo Obrigatório.";
+			throw new Exception(msg);
+		}
 	}
 
-	public void alterar(Status status) throws Exception{
-		this.dao.atualizarStatus(status);
+	public void alterar(Status status) throws Exception {
+		if (!campoVazio(status.getDescricao())) {
+			this.dao.atualizarStatus(status);
+		} else {
+			String msg = "Campo Obrigatório.";
+			throw new Exception(msg);
+		}
 	}
 
 	public void excluir(Status status) throws Exception {

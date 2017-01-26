@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import br.sgpc.dao.FornecedorDao;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Fornecedor;
 
 /**
@@ -16,19 +17,29 @@ import br.sgpc.dominio.Fornecedor;
  */
 @Stateless
 @Remote
-public class MantemFornecedorDLO implements Serializable{
+public class MantemFornecedorDLO extends Funcoes implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@EJB
 	private FornecedorDao dao;
 
-	public void cadastrar(Fornecedor fornecedor) throws Exception{
-	    this.dao.salvarFornecedor(fornecedor);
+	public void cadastrar(Fornecedor fornecedor) throws Exception {
+		if (!campoVazio(fornecedor.getDescricao())) {
+			this.dao.salvarFornecedor(fornecedor);
+		} else {
+			String msg = "Campo Obrigatório.";
+			throw new Exception(msg);
+		}
 	}
 
-	public void alterar(Fornecedor fornecedor) throws Exception{
-		this.dao.atualizarFornecedor(fornecedor);
+	public void alterar(Fornecedor fornecedor) throws Exception {
+		if (!campoVazio(fornecedor.getDescricao())) {
+			this.dao.atualizarFornecedor(fornecedor);
+		} else {
+			String msg = "Campo Obrigatório.";
+			throw new Exception(msg);
+		}
 	}
 	
 	public Fornecedor obterDados(Integer id){

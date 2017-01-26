@@ -69,34 +69,40 @@ public class MbLogin extends Funcoes implements Serializable {
    */
 	public String doLogin() {
 
-		if (camposPreenchidos() && !isUsuarioLogado()) {
-			if (loginDLO.executar(usuario)) {
-				// Descobrindo o tipo de usuário que está tentando acessar o
-				// sistema.
-				Usuario usuarioLogado = carregarUsuarioDLO.carregarDados(usuario.getUserName(), usuario.getSenha()).get(0);
-				usuarioLogado.setStatus((byte) StatusEnum.ATIVO.getValue());
+		if (camposPreenchidos()) {
+			if (!isUsuarioLogado()) {
+				if (loginDLO.executar(usuario)) {
+					// Descobrindo o tipo de usuário que está tentando acessar o
+					// sistema.
+					Usuario usuarioLogado = carregarUsuarioDLO.carregarDados(usuario.getUserName(), usuario.getSenha())
+							.get(0);
+					usuarioLogado.setStatus((byte) StatusEnum.ATIVO.getValue());
 
-				HttpSession sessao = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
-						.getSession(true);
-				sessao.setAttribute(USUARIO_SESSAO, usuarioLogado);
-				controladorAcesso.configurarAcesso();
-				// pegar o tipo de usuário para apresentar na tela
-				usuarioSessaoTipo = (Usuario) sessao.getAttribute(USUARIO_SESSAO);
-				// Atualizando sistema de informações para informar que o
-				// usuário está logado.
-				try {
-					ativarUsuarioDLO.alterar(usuarioLogado);
-				} catch (Exception e) {
-					msgErro("Erro com a seguinte mensagem: "+e.getMessage());
+					HttpSession sessao = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
+							.getSession(true);
+					sessao.setAttribute(USUARIO_SESSAO, usuarioLogado);
+					controladorAcesso.configurarAcesso();
+					// pegar o tipo de usuário para apresentar na tela
+					usuarioSessaoTipo = (Usuario) sessao.getAttribute(USUARIO_SESSAO);
+					// Atualizando sistema de informações para informar que o
+					// usuário está logado.
+					try {
+						ativarUsuarioDLO.alterar(usuarioLogado);
+					} catch (Exception e) {
+						msgErro("Erro com a seguinte mensagem: " + e.getMessage());
+					}
+					return LOGIN_SUCESSO;
+				} else {
+					msgInfo("Usuário não localizado, por favor verifique a senha e o usuário.");
 				}
-				return LOGIN_SUCESSO;
-			}else {
-				msgInfo("Usuário não localizado, por favor verifique a senha e o usuário.");
+			} else {
+				msgInfo("Usuário já logado.");
 			}
-		}else {
+		} else {
 			msgInfo("Todos os campos devem ser preenchidos.");
 		}
-		return LOGIN_FALHA;
+		// return LOGIN_FALHA;
+		return "";
 	}
 
   /**

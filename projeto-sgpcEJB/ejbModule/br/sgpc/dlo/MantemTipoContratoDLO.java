@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import br.sgpc.dao.TipoContratoDao;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Tipocontrato;
 
 /**
@@ -16,19 +17,29 @@ import br.sgpc.dominio.Tipocontrato;
  */
 @Stateless
 @Remote
-public class MantemTipoContratoDLO implements Serializable{
+public class MantemTipoContratoDLO extends Funcoes implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
 	@EJB
 	private TipoContratoDao dao;
 
-	public void cadastrar(Tipocontrato tipoContrato) throws Exception{
-	    this.dao.salvarTipoContrato(tipoContrato);
+	public void cadastrar(Tipocontrato tipoContrato) throws Exception {
+		if (!campoVazio(tipoContrato.getDescricao())) {
+			this.dao.salvarTipoContrato(tipoContrato);
+		} else {
+			String msg = "Campo Obrigatório.";
+			throw new Exception(msg);
+		}
 	}
 
 	public void alterar(Tipocontrato tipoContrato) throws Exception{
-		this.dao.atualizarTipoContrato(tipoContrato);
+		if (!campoVazio(tipoContrato.getDescricao())) {
+			this.dao.atualizarTipoContrato(tipoContrato);
+		} else {
+			String msg = "Campo Obrigatório.";
+			throw new Exception(msg);
+		}
 	}
 
 	public void excluir(Tipocontrato tipoContrato) throws Exception {

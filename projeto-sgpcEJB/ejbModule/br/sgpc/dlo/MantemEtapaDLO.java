@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import br.sgpc.dao.EtapaDao;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Etapa;
 
 /**
@@ -16,19 +17,29 @@ import br.sgpc.dominio.Etapa;
  */
 @Stateless
 @Remote
-public class MantemEtapaDLO implements Serializable{
+public class MantemEtapaDLO extends Funcoes implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@EJB
 	private EtapaDao dao;
 
-	public void cadastrar(Etapa etapa) throws Exception{
-	    this.dao.salvarEtapa(etapa);
+	public void cadastrar(Etapa etapa) throws Exception {
+		if (!campoVazio(etapa.getDescricao())) {
+			this.dao.salvarEtapa(etapa);
+		} else {
+			String msg = "Campo Obrigatório.";
+			throw new Exception(msg);
+		}
 	}
 
-	public void alterar(Etapa etapa) throws Exception{
-		this.dao.atualizarEtapa(etapa);
+	public void alterar(Etapa etapa) throws Exception {
+		if (!campoVazio(etapa.getDescricao())) {
+			this.dao.atualizarEtapa(etapa);
+		} else {
+			String msg = "Campo Obrigatório.";
+			throw new Exception(msg);
+		}
 	}
 
 	public void excluir(Etapa etapa) throws Exception {
