@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>#{messages.APLICACAO_TITULO}</title>
+        
+    </h:head>
+    <h:body style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
+                   background-color:transparent;
+                   background-repeat: no-repeat;
+                   background-size: cover">
+       
+       <ui:composition template="./templates/template_base.xhtml">
+       <ui:define name="page_content"> 
+       <h:form id="form" >
+       <p:panel header="RELATÓRIO DE DADOS CONSOLIDADOS">
+            <h:panelGrid columns="6">
+            	<h:outputLabel for="numProcesso" value="Número do Processo" styleClass="crud_labels" /> 
+            	<p:inputText id="numProcesso" label="numProcesso" value="#{mbRelatorioDadosConsolidados.numProcesso}" maxlength="27" size="27" />                  
+      
+            	<h:outputLabel for="tipoDado" value="Tipo de Dados" styleClass="crud_labels" />
+            	<p:selectOneMenu id="tipoDado" value="#{mbRelatorioDadosConsolidados.tipoDado}" style="width:150px">
+               		<f:selectItem itemLabel="Opções..."/>
+               		<f:selectItem itemLabel="Novo Contrato" itemValue="C"/>
+               		<f:selectItem itemLabel="Aditivo"       itemValue="A"/>  
+               		<f:ajax render="@form" /> 
+            	</p:selectOneMenu>        
+          
+            	<h:outputLabel for="numContrato" value="Número do Contrato" styleClass="crud_labels" />
+            	<p:inputText id="numContrato" label="numContrato" value="#{mbRelatorioDadosConsolidados.numContrato}" maxlength="20" size="20" />           		  
+           
+				<h:outputLabel value="Área Requisitante" styleClass="crud_labels" />
+				<p:selectOneMenu id="area" value="#{mbRelatorioDadosConsolidados.area}" converter="areaConverter" style="width:150px">
+					<f:selectItem itemLabel="Opções..." />
+					<f:selectItems value="#{mbRelatorioDadosConsolidados.listaArea}" var="ar" 
+				               	   itemLabel="#{ar.descricao}" itemValue="#{ar}"/>
+				</p:selectOneMenu> 
+				
+				<h:outputLabel value="Fornecedor" styleClass="crud_labels" />
+				<p:selectOneMenu id="fornecedor" value="#{mbRelatorioDadosConsolidados.fornecedor}" converter="fornecedorConverter" style="width:150px" >
+					<f:selectItem itemLabel="Opções..." />
+					<f:selectItems value="#{mbRelatorioDadosConsolidados.listaFornecedor}" var="fornecedor" 
+				               	   itemLabel="#{fornecedor.descricao}" itemValue="#{fornecedor}"/>
+				</p:selectOneMenu>					
+				
+ 				<h:outputLabel value="Analista Responsável" styleClass="crud_labels" />
+				<p:selectOneMenu id="analistaResp" value="#{mbRelatorioDadosConsolidados.usuario}" converter="usuarioConverter" style="width:150px">
+					<f:selectItem itemLabel="Opções..." />
+					<f:selectItems value="#{mbRelatorioDadosConsolidados.listaUsuario}" var="usu" 
+				               	   itemLabel="#{usu.userName}" itemValue="#{usu}"/>
+				</p:selectOneMenu>
+									          
+				<h:outputLabel for="status" value="Status" styleClass="crud_labels" />
+            	<p:selectOneMenu id="status" value="#{mbRelatorioDadosConsolidados.status}" converter="statusConverter" style="width:150px">
+					<f:selectItem itemLabel="Opções..." />
+					<f:selectItems value="#{mbRelatorioDadosConsolidados.listaStatus}" var="st" 
+				               	   itemLabel="#{st.descricao}" itemValue="#{st}"/>
+            	</p:selectOneMenu> 
+            	
+            	<h:outputLabel for="urgente" value="Urgente" styleClass="crud_labels" />
+            	<p:selectOneMenu id="urgente" value="#{mbRelatorioDadosConsolidados.flgUrgente}" style="width:150px">
+               		<f:selectItem itemLabel="Opções..." itemValue="-1"/>
+               		<f:selectItem itemLabel="Sim"       itemValue="1"/>
+               		<f:selectItem itemLabel="Não"       itemValue="0"/>  
+               		<f:ajax render="@form" /> 
+            	</p:selectOneMenu>              	
+                       
+            </h:panelGrid>
+          
+            <br/>
+            <p:commandButton id="btnPesquisar" value="#{messages.COMANDO_PESQUISAR}" styleClass="comandos" action="#{mbRelatorioDadosConsolidados.pesquisar()}" update="tabela" ajax="false" icon="ui-icon-check"/>
+          
+		    <p:commandButton ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" action="#{mbRelatorioDadosConsolidados.limpar}" update="template_content:form" icon="ui-icon-cancel"/>             
+ 
+            <p:dataTable id="tabela" value="#{mbRelatorioDadosConsolidados.listaRelatorio}" var="dados"
+            			 widgetVar="tabela" 
+            			 emptyMessage="Escolha as opções para pesquisa." 
+            			 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+            			 paginator="true" rows="10" rowStyleClass="#{dados[12] eq 1 ? 'flg_urgente' : null}" >
+                <f:facet name="header">  
+                	<h:outputText value="Relatório de Dados Consolidados" style="font-weight:bold;font-size:18px;"/> 
+                </f:facet>
+                
+                <p:column headerText="Número do Processo" styleClass="title_rel_datatable" style="width: 39px;">
+                    <h:outputText value="#{dados[0]}" styleClass="body_rel_datatable"/>
+                </p:column>
+                
+                <p:column headerText="Tipo de Dados" styleClass="title_rel_datatable" style="width: 30px;">
+                    <h:outputText value="#{dados[1]}" styleClass="body_rel_datatable"/>
+                </p:column>  
+                
+                <p:column headerText="Número do Contrato" styleClass="title_rel_datatable" style="width: 65px;" rendered="#{mbRelatorioDadosConsolidados.tipoDado != 'C'}">
+                    <h:outputText value="#{dados[2]}" styleClass="body_rel_datatable"/>
+                </p:column> 
+
+                <p:column headerText="TAC" styleClass="title_rel_datatable" style="width: 12px;" rendered="#{mbRelatorioDadosConsolidados.tipoDado != 'C'}">
+					<h:outputText value="#{dados[3]}" styleClass="body_rel_datatable"/>
+                </p:column> 
+                
+                <p:column headerText="Fornecedor" styleClass="title_rel_datatable" rendered="#{mbRelatorioDadosConsolidados.tipoDado != 'C'}">
+					<h:outputText value="#{dados[4]}" styleClass="body_rel_datatable"/>
+                </p:column>                                                                                                                            
+                
+                <p:column headerText="Desc. Serviço" styleClass="title_rel_datatable">
+                    <h:outputText value="#{dados[5]}" styleClass="body_rel_datatable"/>
+                </p:column>   
+                
+                <p:column headerText="Área Requisitante" styleClass="title_rel_datatable">
+                    <h:outputText value="#{dados[6]}" styleClass="body_rel_datatable"/>
+                </p:column>  
+                
+                <p:column headerText="Proposta Inicial(R$)" styleClass="title_rel_datatable" style="width: 43px;" rendered="#{mbRelatorioDadosConsolidados.tipoDado != 'A'}">
+                    <h:outputText value="#{dados[7]}" styleClass="body_rel_datatable">
+                    	<f:convertNumber pattern="#0.00" />
+                    </h:outputText>                    
+                </p:column> 
+                
+                <p:column headerText="Proposta Final(R$)" styleClass="title_rel_datatable" style="width: 43px;" rendered="#{mbRelatorioDadosConsolidados.tipoDado != 'A'}">
+                    <h:outputText value="#{dados[8]}" styleClass="body_rel_datatable">
+                    	<f:convertNumber pattern="#0.00" />
+                    </h:outputText>
+                </p:column>  
+                
+                <p:column headerText="Saving(%)" styleClass="title_rel_datatable" style="width: 43px;" rendered="#{mbRelatorioDadosConsolidados.tipoDado != 'A'}">
+                    <h:outputText value="#{dados[9]}" styleClass="body_rel_datatable"/>
+                </p:column> 
+
+                <p:column headerText="Analista Responsável" styleClass="title_rel_datatable" style="width: 60px;">
+                    <h:outputText value="#{dados[10]}" styleClass="body_rel_datatable"/>
+                </p:column>    
+            
+                <p:column headerText="Status" styleClass="title_rel_datatable">
+                    <h:outputText value="#{dados[11]}" styleClass="body_rel_datatable"/>
+                </p:column>  
+                
+                <p:column headerText="Tot. Dias Estimados" styleClass="title_rel_datatable" style="width: 46px;">
+                    <h:outputText value="#{dados[13]}" styleClass="body_rel_datatable"/>
+                </p:column> 
+                
+                <p:column headerText="Tot. Dias Decorridos" styleClass="title_rel_datatable" style="width: 47px;">
+                    <h:outputText value="#{dados[14]}" styleClass="body_rel_datatable"/>
+                </p:column>                                                                      
+                                                                                                                                                
+            </p:dataTable>
+            
+            <h3>Exportar Relatório</h3>
+			<h:commandLink>
+				 <p:graphicImage value="../resources/images/print-preview.png" />
+    			 <p:printer target="tabela"    />
+			</h:commandLink>    
+			        
+        </p:panel>
+
+		</h:form>    
+  
+        
+       </ui:define>
+     </ui:composition>          
+    </h:body>
+</html>

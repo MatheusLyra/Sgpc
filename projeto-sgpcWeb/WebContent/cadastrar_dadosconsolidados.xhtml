@@ -104,7 +104,11 @@
 					<f:selectItem itemLabel="Selecione..." />
 					<f:selectItems value="#{mbMantemDadosConsolidados.listaStatus}" var="st" 
 				               	   itemLabel="#{st.descricao}" itemValue="#{st}"/>
-            </p:selectOneMenu>            
+            </p:selectOneMenu> 
+            
+            <h:outputText value="Urgente?" />
+        	<p:selectBooleanCheckbox value="#{mbMantemDadosConsolidados.flgUrgente}" /> 
+        	          
           </h:panelGrid>
           
           <br/>
@@ -115,7 +119,7 @@
             <p:dataTable id="tabela" value="#{mbMantemDadosConsolidados.listaDadosConsolidados}" var="dados" 
             			 emptyMessage="Nenhum registro incluido." 
             			 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
-            			 paginator="true" rows="10">
+            			 paginator="true" rows="10" rowStyleClass="#{dados.flgUrgente eq 1 ? 'flg_urgente' : null}">
                 <f:facet name="header">  
                     Lista de Dados Consolidados 
                 </f:facet>

@@ -64,7 +64,9 @@ public class Dadosconsolidados implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dadosconsolidados")
 	private List<Cronograma> cronogramas;
 
-
+	@Column(name = "flgUrgente")
+    private Integer flgUrgente;
+	
 	public Integer getNumProcesso() {
 		return this.numProcesso;
 	}
@@ -168,6 +170,13 @@ public class Dadosconsolidados implements Serializable {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-		
 
+	public Integer getFlgUrgente() {
+		return flgUrgente;
+	}
+
+	public void setFlgUrgente(Integer flgUrgente) {
+		this.flgUrgente = flgUrgente;
+	}
+		
 }

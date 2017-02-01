@@ -60,6 +60,7 @@ public class MbMantemDadosConsolidados extends Funcoes implements Serializable {
 	private List<Usuario> listaUsuario;
 	
 	private Boolean modoEdicao;
+	private Boolean flgUrgente;
 		
 	@PostConstruct
 	public void inicializar(){
@@ -87,6 +88,12 @@ public class MbMantemDadosConsolidados extends Funcoes implements Serializable {
 	}
 	
 	public void cadastrar() {
+		if (flgUrgente) {
+			dadosConsolidados.setFlgUrgente(1);
+		}else{
+			dadosConsolidados.setFlgUrgente(0);
+		}
+		
 		if (modoEdicao) {
 			try {
 				mantemDadosConsolidadosDLO.alterar(dadosConsolidados);
@@ -112,10 +119,16 @@ public class MbMantemDadosConsolidados extends Funcoes implements Serializable {
 	public void limpar(){
 		dadosConsolidados = new Dadosconsolidados();
 		modoEdicao = false;
+		flgUrgente = false;
 	}
 	
 	public void editar(){
 		modoEdicao = true;
+		if (dadosConsolidados.getFlgUrgente().equals(1)) {
+			flgUrgente = true;
+		}else {
+			flgUrgente = false;
+		}
 	}
 	
 	public void excluir(Dadosconsolidados dadosConsolidados){
@@ -193,6 +206,14 @@ public class MbMantemDadosConsolidados extends Funcoes implements Serializable {
 	
     public String getNomeArquivo() {
         return "Dados Consolidados";
-    }		
+    }
+
+	public Boolean getFlgUrgente() {
+		return flgUrgente;
+	}
+
+	public void setFlgUrgente(Boolean flgUrgente) {
+		this.flgUrgente = flgUrgente;
+	}	
 	
 }

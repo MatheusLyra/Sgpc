@@ -61,14 +61,30 @@ body {
   color: black;
   font-family: Verdana, sans-serif;
   font-size: 1em;
+}
+
+.body_rel_datatable{
+	font-weight:bold;
+	font-size: 10px;
+	font-family: Verdana, sans-serif;
 }	
+
+.title_rel_datatable{
+	text-align: center;
+	font-size: 11px;
+}
 
 .crud_ico_labels {
   color: black;
   font-family: Verdana, sans-serif;
   font-size: 12px;
   font-weight: bolder;
-}		
+}	
+
+.ui-datatable .ui-datatable-data .flg_urgente td{
+			background-color:#EEDD82;
+			color: black;
+		}	
 
 .csv {
 	background-image: url("../resources/images/csv.png") !important;
