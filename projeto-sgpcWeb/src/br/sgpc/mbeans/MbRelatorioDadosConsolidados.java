@@ -9,6 +9,14 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+
 import br.sgpc.dlo.MantemAreaDLO;
 import br.sgpc.dlo.MantemFornecedorDLO;
 import br.sgpc.dlo.MantemStatusDLO;
@@ -55,7 +63,6 @@ public class MbRelatorioDadosConsolidados extends Funcoes implements Serializabl
 	private int flgUrgente;
 	private String tipoDado;
 	private String numContrato;
-	private boolean paginatorActive = true;
 	
 	private Area area;
 	private Fornecedor fornecedor;
@@ -121,6 +128,112 @@ public class MbRelatorioDadosConsolidados extends Funcoes implements Serializabl
 		flgUrgente = -1;
 		listaRelatorio = null;
 	}
+	
+	public void postProcessXLS(Object document) {
+		int celulas=0, linhas=2;
+ 		
+		HSSFWorkbook wb = (HSSFWorkbook) document;
+        
+     // obtendo a primeira planilha
+        HSSFSheet sheet = wb.getSheetAt(0);
+        celulas=sheet.getRow(0).getLastCellNum();
+        sheet.shiftRows(sheet.getFirstRowNum(), sheet.getLastRowNum(), linhas);
+        
+        // criar as linhas
+        for (int i = 0; i < linhas + 1; i++) {
+               sheet.createRow(i);
+               // cria as colunas
+               for (int j = 0; j < celulas + 1; j++) {
+                      sheet.getRow(i).createCell(j);
+               }
+        }
+        
+        HSSFCellStyle cellStyle = wb.createCellStyle();
+
+		cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		cellStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+		HSSFFont font = wb.createFont();
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        
+        HSSFRow  cabecalho = sheet.getRow(0);
+       	HSSFCell cellcabec = cabecalho.getCell(0);
+       	
+       	cellcabec.setCellValue("Relatório de Dados Consolidados");
+
+        cabecalho = sheet.getRow(1);
+        
+        cellcabec = cabecalho.getCell(0);
+       	cellcabec.setCellValue("Núm. do Processo");
+       	sheet.addMergedRegion(new CellRangeAddress(1, 2, 0, 0));
+    	cellcabec.setCellStyle(cellStyle); 
+    	
+        cellcabec = cabecalho.getCell(1);
+       	cellcabec.setCellValue("");
+       	sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 6));
+    	cellcabec.setCellStyle(cellStyle);
+    	
+    	cellcabec = cabecalho.getCell(7);
+       	cellcabec.setCellValue("Proposta");
+       	sheet.addMergedRegion(new CellRangeAddress(1, 1, 7, 8));
+    	cellcabec.setCellStyle(cellStyle);  
+    	
+    	cellcabec = cabecalho.getCell(9);
+       	cellcabec.setCellValue("");
+       	sheet.addMergedRegion(new CellRangeAddress(1, 1, 9, 11));
+    	cellcabec.setCellStyle(cellStyle);    
+    	
+    	cellcabec = cabecalho.getCell(12);
+       	cellcabec.setCellValue("Total de Dias");
+       	sheet.addMergedRegion(new CellRangeAddress(1, 1, 12, 13));
+    	cellcabec.setCellStyle(cellStyle);     	
+       	
+        
+        cabecalho = sheet.getRow(2);      	
+       	cellcabec = cabecalho.getCell(1);
+       	cellcabec.setCellValue("Tipo de Dados");
+    	cellcabec.setCellStyle(cellStyle);       	
+     	cellcabec = cabecalho.getCell(2);
+       	cellcabec.setCellValue("Núm. do Contrato");
+    	cellcabec.setCellStyle(cellStyle);      
+        cellcabec = cabecalho.getCell(3);
+       	cellcabec.setCellValue("TAC");
+    	cellcabec.setCellStyle(cellStyle);       	
+        cellcabec = cabecalho.getCell(4);
+       	cellcabec.setCellValue("Fornecedor");
+    	cellcabec.setCellStyle(cellStyle);       	
+        cellcabec = cabecalho.getCell(5);
+       	cellcabec.setCellValue("Desc. Serviço");
+    	cellcabec.setCellStyle(cellStyle);       	
+       	cellcabec = cabecalho.getCell(6);  
+       	cellcabec.setCellValue("Área Requisitante");
+    	cellcabec.setCellStyle(cellStyle);       	
+       	cellcabec = cabecalho.getCell(7);  
+       	cellcabec.setCellValue("Inicial(R$)");
+    	cellcabec.setCellStyle(cellStyle);       	
+       	cellcabec = cabecalho.getCell(8);  
+       	cellcabec.setCellValue("Final(R$)");
+    	cellcabec.setCellStyle(cellStyle);       	
+       	cellcabec = cabecalho.getCell(9);  
+       	cellcabec.setCellValue("Saving(%)");
+    	cellcabec.setCellStyle(cellStyle);       	
+       	cellcabec = cabecalho.getCell(10);  
+       	cellcabec.setCellValue("Analista Responsável");
+    	cellcabec.setCellStyle(cellStyle);       	
+       	cellcabec = cabecalho.getCell(11);  
+       	cellcabec.setCellValue("Status");
+    	cellcabec.setCellStyle(cellStyle);       	
+    	cellcabec = cabecalho.getCell(12);  
+       	cellcabec.setCellValue("Estimados");
+    	cellcabec.setCellStyle(cellStyle);       	
+    	cellcabec = cabecalho.getCell(13);  
+       	cellcabec.setCellValue("Decorridos");
+    	cellcabec.setCellStyle(cellStyle);       	     	
+
+       	int i = sheet.getPhysicalNumberOfRows()+2;
+    	cabecalho = sheet.createRow(i);
+    	cellcabec =   cabecalho.createCell(0);
+//        cellcabec.setCellValue(this.gerarFooterCSV().toString());
+    }
 
 	public List<Object> getListaRelatorio() {
 		return listaRelatorio;
@@ -225,17 +338,5 @@ public class MbRelatorioDadosConsolidados extends Funcoes implements Serializabl
 	public void setFlgUrgente(int flgUrgente) {
 		this.flgUrgente = flgUrgente;
 	}
-	
-	public void activatePaginator() {
-        paginatorActive = true;
-    }
-
-    public void deactivatePaginator() {
-        paginatorActive = false;
-    }
-
-    public boolean isPaginatorActive() {
-        return paginatorActive;
-    }	
 		
 }

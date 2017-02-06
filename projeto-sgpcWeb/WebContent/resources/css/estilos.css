@@ -99,4 +99,7 @@ body {
 }
 .pdf {
 	background-image: url("../resources/images/pdf.png") !important;
-}		
+}	
+.print {
+	background-image: url("../resources/images/print-preview.png") !important;
+}	
