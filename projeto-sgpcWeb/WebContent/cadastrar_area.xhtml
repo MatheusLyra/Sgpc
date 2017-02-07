@@ -18,7 +18,7 @@
        <ui:composition template="./templates/template_base.xhtml">
        <ui:define name="page_content"> 
 
-       <h:form id="form">
+       <h:form id="form" prependId="false">
        <p:panel header="CADASTRAR ÁREA">
 
          <h:panelGrid columns="2">
@@ -28,18 +28,19 @@
       
           </h:panelGrid>
 
-            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" 
-                             action="#{mbMantemArea.cadastrar()}" 
-                             icon="ui-icon-check" 
-                             onclick="$('#form:tabela:globalFilter').val('').keyup(); return false;"
-                             ajax="false"
-                             update="template_content:form"/>                                
+            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos"
+                             icon="ui-icon-check" ajax="true">
+                        <f:ajax event="click" execute="@form" listener="#{mbMantemArea.cadastrar()}" render="@form" />
+            </p:commandButton>                                                 
           
-		    <p:commandButton id="btnCancelar" ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" 
-		                     action="#{mbMantemArea.limpar}" update="descricao" icon="ui-icon-cancel"/>             
+		    <p:commandButton id="btnCancelar" ajax="true" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" 
+		                     icon="ui-icon-cancel">
+		    			<f:ajax event="click" execute="@form" listener="#{mbMantemArea.limpar}" render="descricao" />
+		    </p:commandButton>                              
            
             
             <p:dataTable id="tabela" value="#{mbMantemArea.listaArea}" var="are" emptyMessage="Nenhum registro incluido." 
+            			 tableStyle="table-layout: auto;"
                          paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
                          paginator="true" rows="10" widgetVar="mainGrid"  filteredValue="#{mbMantemArea.listaAreaFiltrada}">
             
@@ -63,15 +64,14 @@
                 </p:column>
     
                 <p:column headerText="Ações" style="text-align: center" exportable="false">
-                    <p:commandButton action="#{mbMantemArea.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false" 
-                                     onclick="$('#form:tabela:globalFilter').val('').keyup(); return false;">
-                        <f:setPropertyActionListener value="#{are}" target="#{mbMantemArea.area}" update="template_content:form"/>
-                    </p:commandButton> 
+                    <p:commandButton action="#{mbMantemArea.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false">
+                        <f:setPropertyActionListener value="#{are}" target="#{mbMantemArea.area}"/>
+                    </p:commandButton>
                     
-    				<p:commandButton icon="ui-icon-trash" actionListener="#{mbMantemArea.excluir(are)}" process="@form" 
-    				                 title="#{messages.CAD_EXCLUIR}"
-    				                 update="template_content:form:tabela">
+    				<p:commandButton icon="ui-icon-trash"  process="@form" 
+    				                 title="#{messages.CAD_EXCLUIR}">
         				<p:confirm header="Confirmação" message="Deseja realmente excluir este registro?" icon="ui-icon-alert"/>
+        				<f:ajax event="click" execute="@form" listener="#{mbMantemArea.excluir(are)}" render="@form" />
     				</p:commandButton>
  
     				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

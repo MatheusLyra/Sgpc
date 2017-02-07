@@ -17,10 +17,10 @@
        
        <ui:composition template="./templates/template_base.xhtml">
        <ui:define name="page_content"> 
-       <h:form id="form" >
+       <h:form id="form" prependId="false">
        <p:panel header="CADASTRAR USUÁRIO">
 
-         <h:panelGrid columns="2">
+         <h:panelGrid columns="2" id="panelGr">
             <h:outputLabel for="nome" value="#{messages.LOGIN_USERNAME}" styleClass="crud_labels" />
             <p:inputText id="nome" label="nome" value="#{mbMantemUsuario.usuario.userName}" maxlength="14" size="40"  disabled="#{mbMantemUsuario.modoEdicao}"/>
             
@@ -49,11 +49,18 @@
             
           </h:panelGrid>
 
-            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" action="#{mbMantemUsuario.cadastrar()}" update="template_content:form" ajax="false" icon="ui-icon-check"/>
+            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" 
+            				 ajax="true" icon="ui-icon-check">
+            	<f:ajax event="click" execute="@form" listener="#{mbMantemUsuario.cadastrar()}" render="@form" />
+            </p:commandButton>
           
-		    <p:commandButton ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" action="#{mbMantemUsuario.limpar}" update="campo_senha campo_confirma_senha username email" icon="ui-icon-cancel"/>             
+		    <p:commandButton ajax="true" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" 
+		    				 icon="ui-icon-cancel">
+		    	<f:ajax event="click" execute="@form" listener="#{mbMantemUsuario.limpar}" render="panelGr" />
+		    </p:commandButton>             
  
-            <p:dataTable id="tabela" value="#{mbMantemUsuario.usuarios}" var="usu" emptyMessage="Nenhum registro incluido." paginator="true" rows="10">
+            <p:dataTable id="tabela" value="#{mbMantemUsuario.usuarios}" var="usu" tableStyle="table-layout: auto;"
+            			 emptyMessage="Nenhum registro incluido." paginator="true" rows="10">
                 <f:facet name="header">  
                     Lista de Usuários 
                 </f:facet>
@@ -70,13 +77,14 @@
                    <h:outputText value="#{usu.tipoUsuario}" />
                 </p:column>  
                 <p:column headerText="Ações" style="text-align: center">
-                    <p:commandButton action="#{mbMantemUsuario.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"  >
-                        <f:setPropertyActionListener value="#{usu}" target="#{mbMantemUsuario.usuario}" update="template_content:form" />
+                    <p:commandButton action="#{mbMantemUsuario.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false">
+                        <f:setPropertyActionListener value="#{usu}" target="#{mbMantemUsuario.usuario}" />
                     </p:commandButton>   
 
  
-    				<p:commandButton icon="ui-icon-trash" actionListener="#{mbMantemUsuario.excluir(usu)}" process="@form" update="template_content:form:tabela" title="#{messages.CAD_EXCLUIR}">
+    				<p:commandButton icon="ui-icon-trash" process="@form" title="#{messages.CAD_EXCLUIR}">
         				<p:confirm header="Confirmação" message="Deseja realmente excluir este registro?" icon="ui-icon-alert" />
+        				<f:ajax event="click" execute="@form" listener="#{mbMantemUsuario.excluir(usu)}" render="@form" />
     				</p:commandButton>
  
     				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

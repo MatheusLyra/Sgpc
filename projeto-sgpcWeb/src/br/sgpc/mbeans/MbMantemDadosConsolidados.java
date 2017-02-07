@@ -124,6 +124,7 @@ public class MbMantemDadosConsolidados extends Funcoes implements Serializable {
 	
 	public void editar(){
 		modoEdicao = true;
+
 		if (dadosConsolidados.getFlgUrgente().equals(1)) {
 			flgUrgente = true;
 		}else {

@@ -17,10 +17,10 @@
        
        <ui:composition template="./templates/template_base.xhtml">
        <ui:define name="page_content"> 
-       <h:form id="form" >
+       <h:form id="form" prependId="false">
        <p:panel header="CADASTRAR NOTIFICAÇÃO">
 
-         <h:panelGrid columns="2">
+         <h:panelGrid columns="2" id="panelGr">
 			
 			<p:outputLabel value="Para Quem" styleClass="crud_labels" />
 			<p:selectOneMenu id="usuario" value="#{mbMantemNotificacao.notificacao.usuario}" converter="usuarioConverter" style="width:200px">
@@ -37,12 +37,17 @@
       
          </h:panelGrid>
 
-            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" action="#{mbMantemNotificacao.cadastrar()}" update="template_content:form" ajax="false" icon="ui-icon-check"/>
+            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" 
+            				 ajax="true" icon="ui-icon-check">
+            	<f:ajax event="click" execute="@form" listener="#{mbMantemNotificacao.cadastrar()}" render="@form" />
+            </p:commandButton>
           
-		    <p:commandButton ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" action="#{mbMantemNotificacao.limpar}" update="descricao" icon="ui-icon-cancel"/>             
+		    <p:commandButton ajax="true" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" icon="ui-icon-cancel">
+		    	<f:ajax event="click" execute="@form" listener="#{mbMantemNotificacao.limpar}" render="panelGr" />
+		    </p:commandButton>             
  
             <p:dataTable id="tabela" value="#{mbMantemNotificacao.listaNotificacao}" var="noti" 
-            emptyMessage="Nenhum registro incluido." 
+            emptyMessage="Nenhum registro incluido."
             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"            
             paginator="true" rows="10">
                 <f:facet name="header">  
@@ -76,12 +81,13 @@
                                  
                 <p:column headerText="Ações" style="text-align: center" exportable="false">
                     <p:commandButton action="#{mbMantemNotificacao.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"  >
-                        <f:setPropertyActionListener value="#{noti}" target="#{mbMantemNotificacao.notificacao}" update="template_content:form" />
+                        <f:setPropertyActionListener value="#{noti}" target="#{mbMantemNotificacao.notificacao}" />
                     </p:commandButton>   
 
  
-    				<p:commandButton icon="ui-icon-trash" actionListener="#{mbMantemNotificacao.excluir(noti)}" process="@form" update="template_content:form:tabela" title="#{messages.CAD_EXCLUIR}">
+    				<p:commandButton icon="ui-icon-trash" process="@form" title="#{messages.CAD_EXCLUIR}">
         				<p:confirm header="Confirmação" message="Deseja realmente excluir este registro?" icon="ui-icon-alert" />
+        				<f:ajax event="click" execute="@form" listener="#{mbMantemNotificacao.excluir(noti)}" render="@form" />
     				</p:commandButton>
  
     				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

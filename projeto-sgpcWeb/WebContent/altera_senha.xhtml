@@ -18,7 +18,7 @@
  
       <ui:composition template="templates/template_base.xhtml">
         <ui:define name="page_content">
-          <h:form>
+          <h:form prependId="false">
            <!-- <p:growl id="growl" showDetail="true" sticky="true"/> -->
            <!-- <p:growl id="growl" /> -->        
             
@@ -40,13 +40,15 @@
 					<p:password value="#{mbAlterarSenha.confirmaSenha}" size="45" id="campo_senha_confirma" required="true" requiredMessage="Campo Obrigatório: 'Confirmar Senha'"/>						
 						
 				</p:panelGrid>
-				<p:commandButton ajax="false"
-					value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos"
-					action="#{mbAlterarSenha.AlterarSenha()}" update="form" icon="ui-icon-check"/>
+				<p:commandButton ajax="true" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" icon="ui-icon-check">
+					<f:ajax event="click" execute="@form" listener="#{mbAlterarSenha.AlterarSenha()}" render="@form" />
+				</p:commandButton>	
 	
-				<p:commandButton ajax="false"
-					value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos"
-					action="#{mbAlterarSenha.limparTela()}" update="campo_senha_antiga campo_senha_nova campo_senha_confirma"  icon="ui-icon-cancel"/>
+				<p:commandButton ajax="true"
+					value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" icon="ui-icon-cancel">
+					<f:ajax event="click" execute="@form" listener="#{mbAlterarSenha.limparTela()}" 
+					        render="campo_senha_antiga campo_senha_nova campo_senha_confirma" />
+				</p:commandButton>	
 			</p:panel>	
           </h:form>
         </ui:define>

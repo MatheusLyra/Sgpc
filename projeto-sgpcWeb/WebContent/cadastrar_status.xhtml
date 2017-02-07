@@ -17,7 +17,7 @@
        
        <ui:composition template="./templates/template_base.xhtml">
        <ui:define name="page_content"> 
-       <h:form id="form" >
+       <h:form id="form" prependId="false">
        <p:panel header="CADASTRAR STATUS">
 
          <h:panelGrid columns="2">
@@ -27,12 +27,18 @@
       
           </h:panelGrid>
 
-            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" action="#{mbMantemStatus.cadastrar()}" update="template_content:form" ajax="false" icon="ui-icon-check"/>
+            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" 
+            				 ajax="true" icon="ui-icon-check">
+            	<f:ajax event="click" execute="@form" listener="#{mbMantemStatus.cadastrar()}" render="@form" />
+            </p:commandButton>
           
-		    <p:commandButton ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" action="#{mbMantemStatus.limpar}" update="descricao" icon="ui-icon-cancel"/>             
+		    <p:commandButton ajax="true" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" 
+		    				 icon="ui-icon-cancel">
+		    	<f:ajax event="click" execute="@form" listener="#{mbMantemStatus.limpar}" render="descricao" />
+		    </p:commandButton>             
  
             <p:dataTable id="tabela" value="#{mbMantemStatus.listaStatus}" var="stat" 
-            			 emptyMessage="Nenhum registro incluido." 
+            			 emptyMessage="Nenhum registro incluido." tableStyle="table-layout: auto;"
             			 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
             			 paginator="true" rows="10">
                 <f:facet name="header">  
@@ -46,12 +52,13 @@
     
                 <p:column headerText="Ações" style="text-align: center" exportable="false">
                     <p:commandButton action="#{mbMantemStatus.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"  >
-                        <f:setPropertyActionListener value="#{stat}" target="#{mbMantemStatus.status}" update="template_content:form" />
+                        <f:setPropertyActionListener value="#{stat}" target="#{mbMantemStatus.status}" />
                     </p:commandButton>   
 
  
-    				<p:commandButton icon="ui-icon-trash" actionListener="#{mbMantemStatus.excluir(stat)}" process="@form" update="template_content:form:tabela" title="#{messages.CAD_EXCLUIR}">
+    				<p:commandButton icon="ui-icon-trash" process="@form" title="#{messages.CAD_EXCLUIR}">
         				<p:confirm header="Confirmação" message="Deseja realmente excluir este registro?" icon="ui-icon-alert" />
+        				<f:ajax event="click" execute="@form" listener="#{mbMantemStatus.excluir(stat)}" render="@form" />
     				</p:commandButton>
  
     				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">

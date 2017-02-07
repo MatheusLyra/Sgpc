@@ -17,7 +17,7 @@
        
        <ui:composition template="./templates/template_base.xhtml">
        <ui:define name="page_content"> 
-       <h:form id="form" >
+       <h:form id="form">
 				<p:panel header="RELATÓRIO DE DADOS CONSOLIDADOS">
 					<h:panelGrid columns="6">
 						<h:outputLabel for="numProcesso" value="Número do Processo"
@@ -34,7 +34,6 @@
 							<f:selectItem itemLabel="Opções..." />
 							<f:selectItem itemLabel="Novo Contrato" itemValue="C" />
 							<f:selectItem itemLabel="Aditivo" itemValue="A" />
-							<f:ajax render="@form" />
 						</p:selectOneMenu>
 
 						<h:outputLabel for="numContrato" value="Número do Contrato"
@@ -93,26 +92,33 @@
 							<f:selectItem itemLabel="Opções..." itemValue="-1" />
 							<f:selectItem itemLabel="Sim" itemValue="1" />
 							<f:selectItem itemLabel="Não" itemValue="0" />
-							<f:ajax render="@form" />
 						</p:selectOneMenu>
 
 					</h:panelGrid>
 
 					<br />
-					<p:commandButton id="btnPesquisar"
+					<p:commandButton ajax="true" id="btnPesquisar" type="submit"
 						value="#{messages.COMANDO_PESQUISAR}" styleClass="comandos"
-						action="#{mbRelatorioDadosConsolidados.pesquisar()}"
-						update="tabela" ajax="false" icon="ui-icon-check" />
+					    icon="ui-icon-check">
+					    
+						<f:ajax event="click" 
+					            execute="@form"
+								listener="#{mbRelatorioDadosConsolidados.pesquisar}"
+								render="@form" />
+								
+					</p:commandButton>	
 
-					<p:commandButton ajax="false"
+					<p:commandButton ajax="true"
 						value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos"
 						action="#{mbRelatorioDadosConsolidados.limpar}"
-						update="template_content:form" icon="ui-icon-cancel" />
+						icon="ui-icon-cancel" >
+						<f:ajax execute="@form" render="@form" />
+					</p:commandButton>	
 
 					<p:dataTable id="tabela"
 						value="#{mbRelatorioDadosConsolidados.listaRelatorio}" var="dados"
 						widgetVar="tabela" emptyMessage="Escolha as opções para pesquisa."
-						tableStyle="table-layout: auto;"
+						tableStyle="table-layout: auto;" 
 						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
 						paginator="true" rows="10" paginatorPosition="bottom"
 						rowStyleClass="#{dados[12] eq 1 ? 'flg_urgente' : null}">

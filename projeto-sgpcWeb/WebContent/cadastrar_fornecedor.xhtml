@@ -17,7 +17,7 @@
        
        <ui:composition template="./templates/template_base.xhtml">
        <ui:define name="page_content"> 
-       <h:form id="form" >
+       <h:form id="form" prependId="false">
        <p:panel header="CADASTRAR FORNECEDOR">
 
          <h:panelGrid columns="2">
@@ -26,15 +26,20 @@
             <p:inputText id="descricao" label="Razão Social" value="#{mbMantemFornecedor.fornecedor.descricao}" maxlength="60" size="60" />                    
       
 			<h:outputLabel for="cnpj" value="CNPJ"  styleClass="crud_labels"/>   
-			<p:inputMask mask="99.999.999/9999-99" id="cnpj" value="#{mbMantemFornecedor.cnpj}" size="25" converter="converter.CnpjConverter"  validator="validator.CnpjValidator" />  
+			<p:inputMask mask="99.999.999/9999-99" id="cnpj" value="#{mbMantemFornecedor.cnpj}" size="25" converter="converter.CnpjConverter" validator="validator.CnpjValidator" />  
          </h:panelGrid>
 
-            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" action="#{mbMantemFornecedor.cadastrar()}" update="template_content:form" ajax="false" icon="ui-icon-check"/>
+            <p:commandButton id="btnSalvar" value="#{messages.SENHA_COMANDO_SALVAR}" styleClass="comandos" ajax="true" icon="ui-icon-check">
+            	<f:ajax event="click" execute="@form" listener="#{mbMantemFornecedor.cadastrar()}" render="@form" />
+            </p:commandButton>
           
-		    <p:commandButton ajax="false" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos" action="#{mbMantemFornecedor.limpar}" update="descricao" icon="ui-icon-cancel"/>             
+		    <p:commandButton ajax="true" value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos"
+		     				 icon="ui-icon-cancel">
+		     	<f:ajax event="click" execute="@form" listener="#{mbMantemFornecedor.limpar}" render="@form" />
+		    </p:commandButton>              
  
             <p:dataTable id="tabela" value="#{mbMantemFornecedor.listaFornecedor}" var="forn" 
-            			 emptyMessage="Nenhum registro incluido." 
+            			 emptyMessage="Nenhum registro incluido." tableStyle="table-layout: auto;"
             			 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
             			 paginator="true" rows="10">
                 <f:facet name="header">  
@@ -52,13 +57,15 @@
                 </p:column>
     
                 <p:column headerText="Ações" style="text-align: center" exportable="false">
-                    <p:commandButton action="#{mbMantemFornecedor.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"  >
-                        <f:setPropertyActionListener value="#{forn}" target="#{mbMantemFornecedor.fornecedor}" update="template_content:form" />
-                    </p:commandButton>   
+                    <p:commandButton action="#{mbMantemFornecedor.editar}" icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false">
+                        <f:setPropertyActionListener value="#{forn}" target="#{mbMantemFornecedor.fornecedor}"/>
+                    </p:commandButton>  
 
  
-    				<p:commandButton icon="ui-icon-trash" actionListener="#{mbMantemFornecedor.excluir(forn)}" process="@form" update="template_content:form:tabela" title="#{messages.CAD_EXCLUIR}">
+    				<p:commandButton icon="ui-icon-trash" process="@form" 
+    								 title="#{messages.CAD_EXCLUIR}">
         				<p:confirm header="Confirmação" message="Deseja realmente excluir este registro?" icon="ui-icon-alert" />
+        				<f:ajax event="click" execute="@form" listener="#{mbMantemFornecedor.excluir(forn)}" render="@form" />
     				</p:commandButton>
  
     				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
