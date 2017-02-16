@@ -107,6 +107,11 @@
 								render="@form" />
 								
 					</p:commandButton>	
+					
+					<p:blockUI block="tabela" trigger="btnPesquisar">
+						Carregando<br />
+        				<p:graphicImage name="carregar.gif" library="images"/>
+    				</p:blockUI>				
 
 					<p:commandButton ajax="true"
 						value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos"

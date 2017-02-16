@@ -42,8 +42,9 @@
 				</p:panelGrid>
 				<p:commandButton 
 					value="#{messages.LOGIN_COMANDO_ENTRAR}" styleClass="comandos"
-					action="#{mbLogin.doLogin}" update="form" ajax="false" />
-<!-- problema: mensagem aparece quando actionlistiner porem não faz o login -->
+					action="#{mbLogin.doLogin}" update="form" ajax="true" id="btnEntrar"/>
+					
+    				
 				<p:commandButton ajax="true"
 					value="#{messages.LOGIN_COMANDO_LIMPAR}" styleClass="comandos"
 					action="#{mbLogin.limparTela()}" update="campo_usuario campo_senha" />
