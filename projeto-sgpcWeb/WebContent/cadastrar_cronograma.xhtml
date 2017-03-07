@@ -183,23 +183,26 @@
 								</p:commandButton>
 
 
-								<p:commandButton icon="ui-icon-trash"
-									actionListener="#{mbMantemCronograma.excluir(cronograma)}" process="@form"
-									update="template_content:form:tabela" 
+								<p:commandButton icon="ui-icon-trash" process="@form"
 									title="#{messages.CAD_EXCLUIR}">
 									<p:confirm header="Confirmação"
 										message="Deseja realmente excluir este registro?"
 										icon="ui-icon-alert" />
+									<f:ajax event="click" execute="@form"
+										listener="#{mbMantemCronograma.excluir(cronograma)}"
+										render="@form" />
 								</p:commandButton>
 
 								<p:confirmDialog global="true" showEffect="fade"
 									hideEffect="fade">
 									<p:commandButton value="Sim" type="button"
-										styleClass="ui-confirmdialog-yes" icon="ui-icon-check" ajax="false"
-									update="template_content:form" />
+										styleClass="ui-confirmdialog-yes" icon="ui-icon-check"
+										onclick="$('#form:tabela:globalFilter').val('').keyup(); return false;" />
+
 									<p:commandButton value="Não" type="button"
 										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 								</p:confirmDialog>
+
 							</p:column>
 						</p:dataTable>
 					</h:panelGrid>
