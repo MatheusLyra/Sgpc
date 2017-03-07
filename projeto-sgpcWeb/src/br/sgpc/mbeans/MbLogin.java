@@ -21,52 +21,50 @@ import javax.servlet.http.HttpSession;
 import br.sgpc.dominio.enumerador.StatusEnum;
 
 /**
- * Bean responsável por controlar operações de login, logout e controle de 
+ * Bean responsável por controlar operações de login, logout e controle de
  * sessões de usuários.
  *
  */
-@ManagedBean(name="mbLogin")
+@ManagedBean(name = "mbLogin")
 @SessionScoped
 public class MbLogin extends Funcoes implements Serializable {
 
-  private static final long serialVersionUID = -8462448134504214299L;
-  
-  private static final String LOGIN_SUCESSO = "login_sucesso";
-  public static final String LOGIN_FALHA = "login_falha";
-  public static final String SESSAO_INEXISTENTE = "sessao_invalida";
-  private static final String OUTCOME_LOGOUT = "logout";
-  public static final String USUARIO_SESSAO = "usuario";
-  
-  private Usuario usuario;
-  private ControladorAcesso controladorAcesso;
-  private Usuario usuarioSessaoTipo;
-  
-  @EJB
-  private LoginDLO loginDLO;
-  @EJB
-  private ControleSessaoDLO controleSessaoDLO;
-  @EJB
-  private CarregarUsuarioDLO carregarUsuarioDLO;
-  @EJB
-  private AtivarUsuarioDLO ativarUsuarioDLO;
-  @EJB
-  private DesativarUsuarioDLO desativarUsuarioDLO;
-  
-  
-  @PostConstruct
-  public void inicializar() {
-    usuario = new Usuario();
-    controladorAcesso = new ControladorAcesso();
-    Logger.getLogger(MbLogin.class).log(Level.INFO, 
-            ">>>>>>>>>>>>> Inicializando um bean de login.");
-  }
-  
-  /**
-   * Utilizado para tentativas de login no sistema, confrontando dados fornecidos
-   * pelo usuário com registros de usuários cadastrados.
-   * 
-   * @return Outcome associado a fracasso ou sucesso na tentativa de login.
-   */
+	private static final long serialVersionUID = -8462448134504214299L;
+
+	private static final String LOGIN_SUCESSO = "login_sucesso";
+	public static final String LOGIN_FALHA = "login_falha";
+	public static final String SESSAO_INEXISTENTE = "sessao_invalida";
+	private static final String OUTCOME_LOGOUT = "logout";
+	public static final String USUARIO_SESSAO = "usuario";
+
+	private Usuario usuario;
+	private ControladorAcesso controladorAcesso;
+	private Usuario usuarioSessaoTipo;
+
+	@EJB
+	private LoginDLO loginDLO;
+	@EJB
+	private ControleSessaoDLO controleSessaoDLO;
+	@EJB
+	private CarregarUsuarioDLO carregarUsuarioDLO;
+	@EJB
+	private AtivarUsuarioDLO ativarUsuarioDLO;
+	@EJB
+	private DesativarUsuarioDLO desativarUsuarioDLO;
+
+	@PostConstruct
+	public void inicializar() {
+		usuario = new Usuario();
+		controladorAcesso = new ControladorAcesso();
+		Logger.getLogger(MbLogin.class).log(Level.INFO, ">>>>>>>>>>>>> Inicializando um bean de login.");
+	}
+
+	/**
+	 * Utilizado para tentativas de login no sistema, confrontando dados
+	 * fornecidos pelo usuário com registros de usuários cadastrados.
+	 * 
+	 * @return Outcome associado a fracasso ou sucesso na tentativa de login.
+	 */
 	public String doLogin() {
 
 		if (camposPreenchidos()) {
@@ -76,7 +74,7 @@ public class MbLogin extends Funcoes implements Serializable {
 					// sistema.
 					Usuario usuarioLogado = carregarUsuarioDLO.carregarDados(usuario.getUserName(), usuario.getSenha())
 							.get(0);
-					usuarioLogado.setStatus((byte) StatusEnum.ATIVO.getValue());
+					//usuarioLogado.setStatus((byte) StatusEnum.ATIVO.getValue());
 
 					HttpSession sessao = (HttpSession) FacesContext.getCurrentInstance().getExternalContext()
 							.getSession(true);
@@ -105,11 +103,11 @@ public class MbLogin extends Funcoes implements Serializable {
 		return "";
 	}
 
-  /**
-   * Utilizado para finalizar uma sessão de um usuário no sistema.
-   * 
-   * @return Outcome associado a fracasso ou sucesso na tentativa de logout.
-   */
+	/**
+	 * Utilizado para finalizar uma sessão de um usuário no sistema.
+	 * 
+	 * @return Outcome associado a fracasso ou sucesso na tentativa de logout.
+	 */
 	public String doLogout() {
 		FacesContext context = FacesContext.getCurrentInstance();
 
@@ -128,55 +126,52 @@ public class MbLogin extends Funcoes implements Serializable {
 		return OUTCOME_LOGOUT;
 	}
 
-  /**
-   * Utilizado para verificar se as credenciais necessárias para realização do 
-   * login foram preenchidas.
-   * 
-   * @return  <code>true</code> em caso de dados preenchidos.
-   *          <code>false</code> caso contrário.
-   */
-  private boolean camposPreenchidos() {
-	    return (usuario != null && usuario.getUserName() != null
-	            && !"".equals(usuario.getUserName()) && usuario.getSenha() != null
-	            && !"".equals(usuario.getSenha()));	  
-  }
-  
-  /**
-   * Método utilizado para verificar se um usuário tentando logar na aplicação
-   * já não possui alguma sessão aberta em outro navegador ou outra aba. A 
-   * aplicação está barrando múltiplos acessos simultâneos de um usuário.
-   * 
-   * @return <code>true</code> se já existir uma sessão ativa para o usuário.
-   *         <code>false</code> caso contrário.
-   */
-  private boolean isUsuarioLogado() {
-    return controleSessaoDLO.executar(usuario);
-  }
-  
-  /**
-   * Limpa todos os dados da tela de login.
-   */
-  public void limparTela() {
-    usuario = new Usuario();
-    controladorAcesso = new ControladorAcesso();
-  }
+	/**
+	 * Utilizado para verificar se as credenciais necessárias para realização do
+	 * login foram preenchidas.
+	 * 
+	 * @return <code>true</code> em caso de dados preenchidos.
+	 *         <code>false</code> caso contrário.
+	 */
+	private boolean camposPreenchidos() {
+		return (usuario != null && usuario.getUserName() != null && !"".equals(usuario.getUserName())
+				&& usuario.getSenha() != null && !"".equals(usuario.getSenha()));
+	}
 
-  public Usuario getUsuario() {
-    return usuario;
-  }
+	/**
+	 * Método utilizado para verificar se um usuário tentando logar na aplicação
+	 * já não possui alguma sessão aberta em outro navegador ou outra aba. A
+	 * aplicação está barrando múltiplos acessos simultâneos de um usuário.
+	 * 
+	 * @return <code>true</code> se já existir uma sessão ativa para o usuário.
+	 *         <code>false</code> caso contrário.
+	 */
+	private boolean isUsuarioLogado() {
+		return controleSessaoDLO.executar(usuario);
+	}
 
-  public void setUsuario(Usuario usuario) {
-    this.usuario = usuario;
-  }
+	/**
+	 * Limpa todos os dados da tela de login.
+	 */
+	public void limparTela() {
+		usuario = new Usuario();
+		controladorAcesso = new ControladorAcesso();
+	}
 
-  public ControladorAcesso getControladorAcesso() {
-    return controladorAcesso;
-  }
-  
-	public String tipoSessao() {	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	public ControladorAcesso getControladorAcesso() {
+		return controladorAcesso;
+	}
+
+	public String tipoSessao() {
 		return usuarioSessaoTipo.getTipoUsuario();
 	}
 
-	
-  
 }

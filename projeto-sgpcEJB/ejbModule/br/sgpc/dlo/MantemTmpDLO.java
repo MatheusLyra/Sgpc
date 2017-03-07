@@ -52,4 +52,8 @@ public class MantemTmpDLO extends Funcoes implements Serializable{
 	public List<Tmp> carregarDados(){
 		return this.dao.consultarTmps();
 	}
+	
+	public Tmp obterDados(Integer id){
+		return this.dao.obter(id);
+	}
 }

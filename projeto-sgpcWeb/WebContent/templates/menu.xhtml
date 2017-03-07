@@ -4,18 +4,18 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-<title>#{messages.APLICACAO_TITULO}</title>
+	<title>#{messages.APLICACAO_TITULO}</title>
 
-    <h:outputStylesheet name="estilos.css" library="css" />
+	<h:outputStylesheet name="estilos.css" library="css" />
 	<style type="text/css">
-		.ui-widget {
-		font-size: 95% !important;
-	}
-    </style>     
+.ui-widget {
+	font-size: 95% !important;
+}
+</style>
 </h:head>
 <h:body>
-  <h:form id="form">
-  
+	<h:form id="form">
+
 		<p:menu toggleable="true">
 
 			<p:submenu label="Cadastro">
@@ -39,6 +39,9 @@
 					rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}" />
 				<p:menuitem value="#{messages.TEMPLATE_MENU_DADOSCONSOLIDADOS}"
 					action="/cadastrar_dadosconsolidados.xhtml?faces-redirect=true"
+					rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}" />
+				<p:menuitem value="#{messages.TEMPLATE_MENU_CRONOGRAMA}"
+					action="/cadastrar_cronograma.xhtml?faces-redirect=true"
 					rendered="#{mbLogin.controladorAcesso.permissaoFuncionario}" />
 			</p:submenu>
 
@@ -74,6 +77,6 @@
 
 		</p:menu>
 
-	</h:form>     
+	</h:form>
 </h:body>
 </html>

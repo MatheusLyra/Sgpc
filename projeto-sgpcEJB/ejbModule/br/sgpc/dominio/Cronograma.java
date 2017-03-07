@@ -2,16 +2,19 @@ package br.sgpc.dominio;
 // Generated 23/11/2016 03:44:08 by Hibernate Tools 4.3.1.Final
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
+import javax.persistence.Transient;
 
 @SuppressWarnings("serial")
 @Entity
@@ -30,9 +33,10 @@ public class Cronograma implements java.io.Serializable {
 	@JoinColumn(name = "idEtapa", nullable = false)
 	private Etapa etapa;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "idStatus", nullable = false)
-	private Status status;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "idStatus", nullable = false)
+	@Column(name="status", nullable = false, columnDefinition = "TINYINT(1)")
+	private boolean status; 	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idTMP", nullable = false)
@@ -52,7 +56,13 @@ public class Cronograma implements java.io.Serializable {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "DtFinalizado", length = 10)
 	private Date dtFinalizado;
-
+		
+	@Lob 
+	@Column(name="observacoes", length=512)
+	private String observacoes;
+	
+	@Transient
+	private Integer qtdDiasFinalizados;
 
 	public int getIdCronograma() {
 		return this.idCronograma;
@@ -78,11 +88,11 @@ public class Cronograma implements java.io.Serializable {
 		this.etapa = etapa;
 	}
 
-	public Status getStatus() {
+	public boolean getStatus() {
 		return this.status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(boolean status) {
 		this.status = status;
 	}
 
@@ -125,5 +135,23 @@ public class Cronograma implements java.io.Serializable {
 	public void setDtFinalizado(Date dtFinalizado) {
 		this.dtFinalizado = dtFinalizado;
 	}
+
+	public String getObservacoes() {
+		return observacoes;
+	}
+
+	public void setObservacoes(String observacoes) {
+		this.observacoes = observacoes;
+	}
+
+	public Integer getQtdDiasFinalizados() {
+		return qtdDiasFinalizados;
+	}
+
+	public void setQtdDiasFinalizados(Integer qtdDiasFinalizados) {
+		this.qtdDiasFinalizados = qtdDiasFinalizados;
+	}
+
+
 
 }

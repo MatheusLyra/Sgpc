@@ -51,4 +51,29 @@ public class Tmp implements java.io.Serializable {
 		this.cronogramas = cronogramas;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((idTmp == null) ? 0 : idTmp.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tmp other = (Tmp) obj;
+		if (idTmp == null) {
+			if (other.idTmp != null)
+				return false;
+		} else if (!idTmp.equals(other.idTmp))
+			return false;
+		return true;
+	}
+
 }

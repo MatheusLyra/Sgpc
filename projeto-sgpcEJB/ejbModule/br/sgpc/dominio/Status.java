@@ -24,8 +24,8 @@ public class Status implements java.io.Serializable {
 	@Column(name = "Descricao", length = 60)
 	private String descricao;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "status")
-	private List<Cronograma> cronogramas;
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "status")
+//	private List<Cronograma> cronogramas;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "status")
 	private List<Dadosconsolidados> dadosconsolidadoses;
@@ -47,13 +47,13 @@ public class Status implements java.io.Serializable {
 		this.descricao = descricao;
 	}
 
-	public List<Cronograma> getCronogramas() {
-		return this.cronogramas;
-	}
-
-	public void setCronogramas(List<Cronograma> cronogramas) {
-		this.cronogramas = cronogramas;
-	}
+//	public List<Cronograma> getCronogramas() {
+//		return this.cronogramas;
+//	}
+//
+//	public void setCronogramas(List<Cronograma> cronogramas) {
+//		this.cronogramas = cronogramas;
+//	}
 
 	public List<Dadosconsolidados> getDadosconsolidadoses() {
 		return this.dadosconsolidadoses;

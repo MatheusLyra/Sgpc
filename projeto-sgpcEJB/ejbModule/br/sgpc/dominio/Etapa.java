@@ -51,4 +51,29 @@ public class Etapa implements java.io.Serializable {
 		this.cronogramas = cronogramas;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((idEtapa == null) ? 0 : idEtapa.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Etapa other = (Etapa) obj;
+		if (idEtapa == null) {
+			if (other.idEtapa != null)
+				return false;
+		} else if (!idEtapa.equals(other.idEtapa))
+			return false;
+		return true;
+	}
+
 }
