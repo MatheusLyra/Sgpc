@@ -3,12 +3,15 @@ package br.sgpc.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 
+import br.sgpc.dlo.DadosConsolidadosAuditDLO;
 import br.sgpc.dominio.Dadosconsolidados;
 
 /**
@@ -20,6 +23,10 @@ import br.sgpc.dominio.Dadosconsolidados;
 public class DadosConsolidadosDao implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	
+	@EJB
+	private DadosConsolidadosAuditDLO dadosAuditDLO;	
+
 
 	@PersistenceContext(unitName = "pu")
 	private EntityManager entityManager;
@@ -27,6 +34,7 @@ public class DadosConsolidadosDao implements Serializable{
 	public void salvarDadosConsolidados(Dadosconsolidados dadosConsolidados) throws Exception {
 		try {
 			this.entityManager.persist(dadosConsolidados);
+			this.dadosAuditDLO.incluir(obterUltimoRegistro(), "I");
 		} catch (Exception e) {
 			throw e;
 		}
@@ -35,6 +43,7 @@ public class DadosConsolidadosDao implements Serializable{
 	public void atualizarDadosConsolidados(Dadosconsolidados dadosConsolidados) throws Exception {
 		try {
 			this.entityManager.merge(dadosConsolidados);
+			dadosAuditDLO.incluir(dadosConsolidados, "A");
 			this.entityManager.flush();
 		} catch (Exception e) {
 			throw e;
@@ -48,6 +57,7 @@ public class DadosConsolidadosDao implements Serializable{
 	public void excluirDadosConsolidados(Dadosconsolidados dadosConsolidados) throws Exception {
 		try {
 			this.entityManager.remove(dadosConsolidados);
+			this.dadosAuditDLO.incluir(dadosConsolidados, "E");
 		} catch (Exception e) {
 			throw e;
 		}
@@ -59,4 +69,14 @@ public class DadosConsolidadosDao implements Serializable{
 		return this.entityManager.createQuery(cq).getResultList();
 	}
 
+	public Dadosconsolidados obterUltimoRegistro() {
+		StringBuilder sql = new StringBuilder();
+		sql.append("select * from sgpc.dadosconsolidados ");
+		sql.append("where sgpc.dadosconsolidados.NumProcesso in (select max(NumProcesso) FROM sgpc.dadosconsolidados)");
+		Query q =this.entityManager.createNativeQuery(sql.toString(), Dadosconsolidados.class);
+		Dadosconsolidados dc = (Dadosconsolidados) q.getSingleResult();
+		return dc;
+	}
+	
+	
 }

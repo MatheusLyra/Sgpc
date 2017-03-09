@@ -2,7 +2,6 @@ package br.sgpc.dominio;
 // Generated 23/11/2016 03:44:08 by Hibernate Tools 4.3.1.Final
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

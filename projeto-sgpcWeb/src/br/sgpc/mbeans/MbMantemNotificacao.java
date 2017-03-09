@@ -69,7 +69,6 @@ public class MbMantemNotificacao extends Funcoes implements Serializable{
 	            FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 	    Usuario usuarioSessao = (Usuario) sessao.getAttribute(MbLogin.USUARIO_SESSAO);
 	    notificacao.setDe_quem(usuarioSessao.getUserName());
-	    
 	}
 	
 	public void cadastrar() {
