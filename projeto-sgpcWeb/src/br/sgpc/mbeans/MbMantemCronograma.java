@@ -2,6 +2,7 @@ package br.sgpc.mbeans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -11,7 +12,10 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 
+import org.primefaces.context.RequestContext;
+
 import br.sgpc.dlo.MantemCronogramaDLO;
+import br.sgpc.dlo.MantemDadosConsolidadosDLO;
 import br.sgpc.dlo.MantemEtapaDLO;
 import br.sgpc.dlo.MantemTmpDLO;
 import br.sgpc.dlo.funcoesUteis.Funcoes;
@@ -25,12 +29,15 @@ import br.sgpc.dominio.Tmp;
  */
 @ManagedBean(name = "mbMantemCronograma")
 @ViewScoped
-public class MbMantemCronograma  extends Funcoes implements Serializable{
-	
+public class MbMantemCronograma extends Funcoes implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@EJB
 	private MantemCronogramaDLO mantemCronogramaDLO;
+
+	@EJB
+	private MantemDadosConsolidadosDLO mantemDadosConsolidadosDLO;
 
 	@EJB
 	private MantemEtapaDLO mantemEtapaDLO;
@@ -39,6 +46,8 @@ public class MbMantemCronograma  extends Funcoes implements Serializable{
 	private MantemTmpDLO mantemTmpDLO;
 
 	private Cronograma cronograma;
+
+	private Cronograma cronogramaFimEtapa;
 
 	private Dadosconsolidados dadosConsolidados;
 
@@ -60,43 +69,54 @@ public class MbMantemCronograma  extends Funcoes implements Serializable{
 
 	private boolean editar;
 
+	private String mensagem;
+
 	@PostConstruct
 	public void init() {
 		limpar();
 	}
 
-	private void limpar() {
+	public void limpar() {
 		cronograma = new Cronograma();
+		cronogramaFimEtapa = new Cronograma();
 		dadosConsolidados = new Dadosconsolidados();
 		etapa = new Etapa();
 		listaEtapa = new ArrayList<Etapa>();
 		listaTmp = new ArrayList<Tmp>();
 		habilita = true;
 		totalDias = 0;
+		listaCronograma = new ArrayList<Cronograma>();
 	}
 
 	public void pesquisar() {
-		carregarCronogramas();
-		carregarEtapa();
-		carregarTmp();
+		dadosConsolidados = mantemDadosConsolidadosDLO.obter(numProcesso);
+		if (dadosConsolidados == null) {
+			limpar();
+			msgErro("Número de processo inexistente");
+		} else {
+			carregarCronogramas();
+			carregarEtapa();
+			carregarTmp();
+		}
 	}
 
 	public void salvar() {
-		if (!dataFinalMenorQueIncial()){
+		mensagem = "Selecione uma etapa";
+		if (validaDatas() && cronograma.getEtapa() != null) {
 			if (editar) {
 				try {
 					mantemCronogramaDLO.alterar(cronograma);
-	
+
 				} catch (Exception e) {
 					msgErro("Erro ao alterar dados com a seguinte mensagem: " + e.getMessage());
 				}
 				editar = false;
-				
+
 			} else {
 				try {
 					totalDias = cronograma.getDtFim().getTime() - cronograma.getDtIni().getTime();
-					cronograma.setQtdDiasFim((int) TimeUnit.DAYS.convert(totalDias, TimeUnit.MILLISECONDS));
-	
+					cronograma.setQtdDiasFim((int) TimeUnit.DAYS.convert(totalDias, TimeUnit.MILLISECONDS) + 1);
+
 					mantemCronogramaDLO.cadastrar(cronograma);
 					msgInfo("Registro cadastrado com sucesso!");
 				} catch (Exception e) {
@@ -105,13 +125,37 @@ public class MbMantemCronograma  extends Funcoes implements Serializable{
 			}
 			limpar();
 			pesquisar();
-		}else{
-			msgErro("Data final menor que data inicial.");
+		} else {
+			msgErro(mensagem);
 		}
 	}
-	
-	public boolean dataFinalMenorQueIncial(){
-		return cronograma.getDtFim().compareTo(cronograma.getDtIni()) == 1 ? false : true;
+
+	public boolean validaDatas() {
+		boolean valida = true;
+		Calendar c1 = Calendar.getInstance();
+
+		valida = !cronograma.getDtFim().before(cronograma.getDtIni());
+		mensagem = "Data final menor que data inicial.";
+
+		if (cronograma.getDtIni().before(hoje()) || cronograma.getDtFim().before(hoje())) {
+			valida = false;
+			mensagem = "Data anterior ao dia atual";
+		}
+
+		c1.setTime(cronograma.getDtIni());
+		if ((c1.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) || c1.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			valida = false;
+			mensagem = "Não é permitido período inicial no fim de semana";
+		}
+
+		c1.setTime(cronograma.getDtFim());
+
+		if ((c1.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) || c1.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+			valida = false;
+			mensagem = "Não é permitido período final no fim de semana";
+		}
+
+		return valida;
 	}
 
 	public void excluir(Cronograma cronograma) {
@@ -132,9 +176,28 @@ public class MbMantemCronograma  extends Funcoes implements Serializable{
 	}
 
 	public void finalizarEtapa(Cronograma cronograma) {
+		if (cronograma.getDtFim().compareTo(hoje()) < 0) {
+			cronogramaFimEtapa = cronograma;
+			RequestContext context = RequestContext.getCurrentInstance();
+			context.execute("PF('dlgObservacoes').show();");
+
+		} else {
+			gravarFinalizarEtapa(cronograma);
+		}
+	}
+
+	public void finalizarObsEtapa(Cronograma cronograma) {
+		if (cronograma.getObservacoes().isEmpty()) {
+			msgErro("Campo observação é obrigatório para finalizar etapa após data de fim.");
+		} else {
+			gravarFinalizarEtapa(cronograma);
+		}
+	}
+
+	private void gravarFinalizarEtapa(Cronograma cronograma) {
 		try {
 			cronograma.setStatus(true);
-			cronograma.setDtFinalizado(new Date());
+			cronograma.setDtFinalizado(hoje());
 			mantemCronogramaDLO.alterar(cronograma);
 			msgInfo("Cronograma finalizado com sucesso.");
 
@@ -148,15 +211,22 @@ public class MbMantemCronograma  extends Funcoes implements Serializable{
 	private void carregarCronogramas() {
 		dadosConsolidados.setNumProcesso(numProcesso);
 		cronograma.setDadosconsolidados(dadosConsolidados);
+		try {
+			listaCronograma = mantemCronogramaDLO.carregarDados(cronograma);
 
-		listaCronograma = mantemCronogramaDLO.carregarDados(cronograma);
-
-		for (int i = 0; i < listaCronograma.size(); i++) {
-			if (listaCronograma.get(i).getStatus())
-				listaCronograma.get(i).setQtdDiasFinalizados(
-						(int) TimeUnit.DAYS.convert(listaCronograma.get(i).getDtFinalizado().getTime()
-								- listaCronograma.get(i).getDtIni().getTime(), TimeUnit.MILLISECONDS));
+			for (int i = 0; i < listaCronograma.size(); i++) {
+				if (listaCronograma.get(i).getStatus())
+					listaCronograma.get(i)
+							.setQtdDiasFinalizados(
+									(int) TimeUnit.DAYS.convert(
+											listaCronograma.get(i).getDtFinalizado().getTime()
+													- listaCronograma.get(i).getDtIni().getTime(),
+											TimeUnit.MILLISECONDS));
+			}
+		} catch (Exception e) {
+			msgErro("Erro ao buscar Cronograma: " + e.getMessage());
 		}
+
 	}
 
 	private void carregarEtapa() {
@@ -174,15 +244,30 @@ public class MbMantemCronograma  extends Funcoes implements Serializable{
 		habilita = false;
 	}
 
-	public Date hoje(){
-		return new Date();
+	public Date hoje() {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
 	}
+
 	public Cronograma getCronograma() {
 		return cronograma;
 	}
 
 	public void setCronograma(Cronograma cronograma) {
 		this.cronograma = cronograma;
+	}
+
+	public Cronograma getCronogramaFimEtapa() {
+		return cronogramaFimEtapa;
+	}
+
+	public void setCronogramaFimEtapa(Cronograma cronogramaFimEtapa) {
+		this.cronogramaFimEtapa = cronogramaFimEtapa;
 	}
 
 	public Dadosconsolidados getDadosConsolidados() {

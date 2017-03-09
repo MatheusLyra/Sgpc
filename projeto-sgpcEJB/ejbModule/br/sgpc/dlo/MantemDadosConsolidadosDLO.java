@@ -24,7 +24,6 @@ public class MantemDadosConsolidadosDLO extends Funcoes implements Serializable{
 	@EJB
 	private DadosConsolidadosDao dao;
 
-
 	public void cadastrar(Dadosconsolidados dadosConsolidados) throws Exception {
 		if (!campoVazio(dadosConsolidados.getDescServico()) 
 				|| !campoVazio(dadosConsolidados.getArea().getDescricao())
@@ -32,7 +31,6 @@ public class MantemDadosConsolidadosDLO extends Funcoes implements Serializable{
 				|| !campoVazio(dadosConsolidados.getTipocontrato().getDescricao())
 				|| !campoVazio(dadosConsolidados.getUsuario().getUserName())) {
 			this.dao.salvarDadosConsolidados(dadosConsolidados);
-
 		} else {
 			String msg = "Campo Obrigatório.";
 			throw new Exception(msg);
@@ -46,7 +44,6 @@ public class MantemDadosConsolidadosDLO extends Funcoes implements Serializable{
 				|| !campoVazio(dadosConsolidados.getTipocontrato().getDescricao())
 				|| !campoVazio(dadosConsolidados.getUsuario().getUserName())) {
 			this.dao.atualizarDadosConsolidados(dadosConsolidados);
-
 		} else {
 			String msg = "Campo Obrigatório.";
 			throw new Exception(msg);
@@ -58,6 +55,10 @@ public class MantemDadosConsolidadosDLO extends Funcoes implements Serializable{
 		if (d != null) {
 			this.dao.excluirDadosConsolidados(d);
 		}
+	}
+	
+	public Dadosconsolidados obter(Integer id){
+		return this.dao.obter(id);
 	}
 	
 	public List<Dadosconsolidados> carregarDados(){

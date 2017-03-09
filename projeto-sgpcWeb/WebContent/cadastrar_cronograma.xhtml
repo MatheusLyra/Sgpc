@@ -28,7 +28,8 @@
 							styleClass="crud_labels" />
 						<p:inputText id="processo" label="Num. do Processo:"
 							value="#{mbMantemCronograma.numProcesso}" maxlength="30"
-							size="30" required="true" requiredMessage="#{messages.CRONO_CAMPO_OBRIGATORIO_NUMPROCESSO}"/>
+							size="30" required="true"
+							requiredMessage="#{messages.CRONO_CAMPO_OBRIGATORIO_NUMPROCESSO}" />
 						<p:commandButton id="btnPesquisar"
 							value="#{messages.CRONO_COMANDO_PESQUISAR}" styleClass="comandos"
 							actionListener="#{mbMantemCronograma.pesquisar()}" ajax="false"
@@ -37,46 +38,71 @@
 
 						<h:outputLabel for="" value="Período:" styleClass="crud_labels" />
 						<h:panelGrid columns="3">
-							<p:calendar id="dtInicio" value="#{mbMantemCronograma.cronograma.dtIni}" locale="pt" navigator="true" pattern="dd/MM/yyyy" size="10" required="true" validatorMessage="requerido"
-								disabled="#{mbMantemCronograma.habilita}" disabledWeekends="true" mindate="mbMantemCronograma.hoje" requiredMessage="#{messages.CRONO_CAMPO_OBRIGATORIO_DATAINICIAL}"/>
-							
+							<p:calendar id="dtInicio"
+								value="#{mbMantemCronograma.cronograma.dtIni}" locale="pt"
+								navigator="true" pattern="dd/MM/yyyy" size="10" required="true"
+								validatorMessage="requerido"
+								disabled="#{mbMantemCronograma.habilita}"
+								disabledWeekends="true" mindate="mbMantemCronograma.hoje"
+								requiredMessage="#{messages.CRONO_CAMPO_OBRIGATORIO_DATAINICIAL}" />
+
 							<h:outputLabel value="até" styleClass="crud_labels" />
-	
-							<p:calendar id="dtFinal" value="#{mbMantemCronograma.cronograma.dtFim}" locale="pt" navigator="true" pattern="dd/MM/yyyy" size="10" required="true"
-								disabled="#{mbMantemCronograma.habilita}" disabledWeekends="true" mindate="mbMantemCronograma.hoje" requiredMessage="#{messages.CRONO_CAMPO_OBRIGATORIO_DATAFINAL}"/>
+
+							<p:calendar id="dtFinal"
+								value="#{mbMantemCronograma.cronograma.dtFim}" locale="pt"
+								navigator="true" pattern="dd/MM/yyyy" size="10" required="true"
+								disabled="#{mbMantemCronograma.habilita}"
+								disabledWeekends="true" mindate="mbMantemCronograma.hoje"
+								requiredMessage="#{messages.CRONO_CAMPO_OBRIGATORIO_DATAFINAL}" />
 						</h:panelGrid>
 						<h:panelGroup />
 
-						<h:outputLabel value="Descrição de tempo:" styleClass="crud_labels" />
-						<p:selectOneMenu id="menuTmp" value="#{mbMantemCronograma.cronograma.tmp}" converter="tmpConverter" style="width:150px" disabled="#{mbMantemCronograma.habilita}">
-			                <f:selectItems value="#{mbMantemCronograma.listaTmp}" var="tmp"  itemValue="#{tmp}" itemLabel="#{tmp.descricao}"/>
-			                
-			            </p:selectOneMenu>
-			           
+						<h:outputLabel value="Descrição de tempo:"
+							styleClass="crud_labels" />
+						<p:selectOneMenu id="menuTmp"
+							value="#{mbMantemCronograma.cronograma.tmp}"
+							converter="tmpConverter" style="width:150px"
+							disabled="#{mbMantemCronograma.habilita}">
+							<f:selectItems value="#{mbMantemCronograma.listaTmp}" var="tmp"
+								itemValue="#{tmp}" itemLabel="#{tmp.descricao}" />
+
+						</p:selectOneMenu>
+
 						<!--<h:panelGroup />-->
-						
+
 
 						<p:commandButton id="btnSalvar"
 							value="#{messages.CRONO_COMANDO_SALVAR}" styleClass="comandos"
-							action="#{mbMantemCronograma.salvar()}" disabled="#{mbMantemCronograma.habilita}"
+							action="#{mbMantemCronograma.salvar()}"
+							disabled="#{mbMantemCronograma.habilita}"
 							update="template_content:form" ajax="false" icon="ui-icon-check" />
-						
+
+						<p:commandButton id="btnCancelar"
+							value="Cancelar" styleClass="comandos"
+							action="#{mbMantemCronograma.limpar()}"
+							update="template_content:form" ajax="false" icon="ui-icon-check" />
+
 					</h:panelGrid>
 
 					<h:panelGrid columns="2">
-						
-						<h:panelGrid id="panelEtapa" columns="1" >
-							<h:outputLabel for="lista" value="Etapas:" styleClass="crud_labels" />
 
-							<p:selectOneListbox id="listaEtapa" value="#{mbMantemCronograma.cronograma.etapa}" converter="etapaConverter">
-								<f:selectItems value="#{mbMantemCronograma.listaEtapa}"	var="etapa" itemValue="#{etapa}" itemLabel="#{etapa.descricao}" />
-								<f:ajax immediate="#{mbMantemCronograma.habilitaCampos()}" render="dtInicio"/>
-								<f:ajax render="dtFinal"/>
-								<f:ajax render="menuTmp"/>
-								<f:ajax render="btnSalvar"/>
+						<h:panelGrid id="panelEtapa" columns="1">
+							<h:outputLabel for="lista" value="Etapas:"
+								styleClass="crud_labels" />
+
+							<p:selectOneListbox id="listaEtapa"
+								value="#{mbMantemCronograma.cronograma.etapa}"
+								converter="etapaConverter">
+								<f:selectItems value="#{mbMantemCronograma.listaEtapa}"
+									var="etapa" itemValue="#{etapa}" itemLabel="#{etapa.descricao}" />
+								<f:ajax immediate="#{mbMantemCronograma.habilitaCampos()}"
+									render="dtInicio" />
+								<f:ajax render="dtFinal" />
+								<f:ajax render="menuTmp" />
+								<f:ajax render="btnSalvar" />
 							</p:selectOneListbox>
 						</h:panelGrid>
-							
+
 						<p:dataTable id="tabela"
 							value="#{mbMantemCronograma.listaCronograma}" var="cronograma"
 							emptyMessage="Nenhum registro incluido."
@@ -86,102 +112,70 @@
 			                    Cronogramas
 			                </f:facet>
 							<p:column>
-							
+
 								<p:panel header="#{cronograma.etapa.descricao}">
 									<p:panelGrid columns="6" layout="grid">
-											<p:outputLabel value="Tipo de Tempo: " />
-											<p:outputLabel value="#{cronograma.tmp.descricao}"
-												style="font-weight:bold" />
-											<p:outputLabel value="Data de Início: " />
-											<p:outputLabel value="#{cronograma.dtIni}"
-												style="font-weight:bold">
-												<f:convertDateTime pattern="dd/MM/yyyy" />
-											</p:outputLabel>
-											<p:outputLabel value="Total de dias: " />
-											<p:outputLabel value="#{cronograma.qtdDiasFim}" style="font-weight:bold" />
-										
-											<p:outputLabel value="Status: " />
-											<p:outputLabel value="#{cronograma.status? 'Finalizado' : 'Aguardando Finalização'}"
-												style="font-weight:bold" />
-											<p:outputLabel value="Data de Fim: " />
-											<p:outputLabel value="#{cronograma.dtFim}"
-												style="font-weight:bold">
-												<f:convertDateTime pattern="dd/MM/yyyy" />
-											</p:outputLabel>
-											<p:outputLabel value="Dias finalizados: " />
-											<p:outputLabel value="#{cronograma.qtdDiasFinalizados}" style="font-weight:bold" />
-										
-											<p:outputLabel value="Data de Finalização: " />
-											<p:outputLabel value="#{cronograma.dtFinalizado}"
-												style="font-weight:bold">
-												<f:convertDateTime pattern="dd/MM/yyyy" />
-											</p:outputLabel>
-											<p:outputLabel value="Observações" />
-											<p:row>
-												<p:column colspan="3">
-													<p:outputLabel value="#{cronograma.observacoes}" style="font-weight:bold" />
-												</p:column>
-											</p:row>
+										<p:outputLabel value="Tipo de Tempo: " />
+										<p:outputLabel value="#{cronograma.tmp.descricao}"
+											style="font-weight:bold" />
+										<p:outputLabel value="Data de Início: " />
+										<p:outputLabel value="#{cronograma.dtIni}"
+											style="font-weight:bold">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</p:outputLabel>
+										<p:outputLabel value="Total de dias: " />
+										<p:outputLabel value="#{cronograma.qtdDiasFim}"
+											style="font-weight:bold" />
+
+										<p:outputLabel value="Status: " />
+										<p:outputLabel
+											value="#{cronograma.status? 'Finalizado' : 'Aguardando Finalização'}"
+											style="font-weight:bold" />
+										<p:outputLabel value="Data de Fim: " />
+										<p:outputLabel value="#{cronograma.dtFim}"
+											style="font-weight:bold">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</p:outputLabel>
+										<p:outputLabel value="Dias finalizados: " />
+										<p:outputLabel value="#{cronograma.qtdDiasFinalizados}"
+											style="font-weight:bold" />
+
+
+										<p:outputLabel value="Data de Finalização: " />
+										<p:outputLabel value="#{cronograma.dtFinalizado}"
+											style="font-weight:bold">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</p:outputLabel>
+
+										<p:outputLabel value="Observações" />
+										<p:outputLabel value="#{cronograma.observacoes}"
+											style="font-weight:bold" />
+
 									</p:panelGrid>
 								</p:panel>
-
-								
-
-							</p:column>
-							
-							<p:column headerText="Etapa" visible="false"
-								style="text-align: center"
-								filterBy="#{cronograma.etapa.descricao}">
-								<h:outputText value="#{cronograma.etapa.descricao}" />
 							</p:column>
 
-							<p:column headerText="Criação no sistema" visible="false"
-								style="text-align: center" filterBy="#{cronograma.dtIni}">
-								<h:outputText value="#{cronograma.dtIni}" />
-							</p:column>
-
-							<p:column headerText="Qtd. de dias" visible="false"
-								style="text-align: center" filterBy="#{cronograma.qtdDiasFim}">
-								<h:outputText value="#{cronograma.qtdDiasFim}" />
-							</p:column>
-
-							<p:column headerText="Desc. do tempo" visible="false"
-								style="text-align: center"
-								filterBy="#{cronograma.tmp.descricao}">
-								<h:outputText value="#{cronograma.tmp.descricao}" />
-							</p:column>
-
-							<p:column headerText="Status" visible="false"
-								style="text-align: center" filterBy="#{cronograma.status}">
-								<h:outputText value="#{cronograma.status? 'Aguardando Finalização' : 'Finalizado'}" />
-							</p:column>
-							<p:column headerText="Data final" visible="false"
-								style="text-align: center" filterBy="#{cronograma.dtFim}">
-								<h:outputText value="#{cronograma.dtFim}" />
-							</p:column>
-							<p:column headerText="Dias restantes" visible="false"
-								style="text-align: center" filterBy="#{cronograma.qtdDiasFim}">
-								<h:outputText value="#{cronograma.qtdDiasFim}" />
-							</p:column>
 
 							<p:column headerText="Ações" style="text-align: center"
 								exportable="false" width="100">
-								
-								<p:commandButton title="#{messages.CRONO_COMANDO_FINALIZAR_ETAPA}"
+
+								<p:commandButton
+									title="#{messages.CRONO_COMANDO_FINALIZAR_ETAPA}"
 									styleClass="comandos"
-									actionListener="#{mbMantemCronograma.finalizarEtapa(cronograma)}" process="@form"
-									update="template_content:form:tabela" icon="ui-icon-check" >
+									actionListener="#{mbMantemCronograma.finalizarEtapa(cronograma)}"
+									process="@form"
+									update="template_content:form:tabela template_content:frmDlg"
+									icon="ui-icon-check">
 									<p:confirm header="Confirmação"
 										message="Deseja realmente finalizar este registro? Não poderá ser desfeito."
 										icon="ui-icon-alert" />
 								</p:commandButton>
-								
-								<p:commandButton actionListener="#{mbMantemCronograma.editar(cronograma)}"
-									icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}" ajax="false"
-									update="template_content:form">
-								
-								</p:commandButton>
 
+								<p:commandButton
+									actionListener="#{mbMantemCronograma.editar(cronograma)}"
+									icon="ui-icon-pencil" title="#{messages.CAD_EDITAR}"
+									ajax="false" update="template_content:form">
+								</p:commandButton>
 
 								<p:commandButton icon="ui-icon-trash" process="@form"
 									title="#{messages.CAD_EXCLUIR}">
@@ -209,7 +203,21 @@
 				</p:panel>
 
 			</h:form>
-
+			<h:form id="frmDlg">
+				<p:dialog id="dlgObs" header="Observações"
+					widgetVar="dlgObservacoes" showEffect="pop">
+					<p:panelGrid columns="1" layout="grid">
+						<p:inputTextarea
+							value="#{mbMantemCronograma.cronogramaFimEtapa.observacoes}" />
+						<p:commandButton title="#{messages.CRONO_COMANDO_FINALIZAR_ETAPA}"
+							value="Finalizar Etapa" styleClass="comandos"
+							actionListener="#{mbMantemCronograma.finalizarObsEtapa(mbMantemCronograma.cronogramaFimEtapa)}"
+							process="@form" update="template_content:form:tabela"
+							icon="ui-icon-check" oncomplete="PF('dlgObservacoes').hide();">
+						</p:commandButton>
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
 
 		</ui:define>
 	</ui:composition>
