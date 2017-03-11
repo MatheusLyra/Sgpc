@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>#{messages.APLICACAO_TITULO}</title>
+        
+    </h:head>
+    <h:body style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
+                   background-color:transparent;
+                   background-repeat: no-repeat;
+                   background-size: cover">
+       
+       <ui:composition template="./templates/template_base.xhtml">
+       <ui:define name="page_content"> 
+       <h:form id="form">
+				<p:panel header="RELATÓRIO DE AUDITORIA DO CRONOGRAMA">
+					<h:panelGrid columns="6">
+						<h:outputLabel for="numProcesso" value="Número do Processo"
+							styleClass="crud_labels" />
+						<p:inputText id="numProcesso" label="numProcesso"
+							value="#{mbRelatorioAuditCronograma.numProcesso}"
+							maxlength="27" size="27" />
+
+						<h:outputLabel for="tipoOp" value="Tipo de Operação"
+							styleClass="crud_labels" />
+						<p:selectOneMenu id="tipoOp"
+							value="#{mbRelatorioAuditCronograma.tipoOp}"
+							style="width:150px">
+							<f:selectItem itemLabel="Opções..." />
+							<f:selectItem itemLabel="Inserção" itemValue="I" />
+							<f:selectItem itemLabel="Atualização" itemValue="A" />
+							<f:selectItem itemLabel="Exclusão" itemValue="E" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Analista Auditado"
+							styleClass="crud_labels" />
+						<p:selectOneMenu id="analistaAudit"
+							value="#{mbRelatorioAuditCronograma.usuario}"
+							converter="usuarioConverter" style="width:150px">
+							<f:selectItem itemLabel="Opções..." />
+							<f:selectItems
+								value="#{mbRelatorioAuditCronograma.listaUsuario}" var="usu"
+								itemLabel="#{usu.userName}" itemValue="#{usu}" />
+						</p:selectOneMenu>
+						
+						<h:outputLabel for="" value="Período:" styleClass="crud_labels" />
+						<h:panelGrid columns="3">
+							<p:calendar id="dtInicio"
+								value="#{mbRelatorioAuditCronograma.dtOperacaoIni}" locale="pt"
+								navigator="true" pattern="dd/MM/yyyy" size="10"
+								disabledWeekends="true" mindate="#{mbRelatorioAuditCronograma.hoje()}" />
+
+							<h:outputLabel value="até" styleClass="crud_labels" />
+							<p:calendar id="dtFinal"
+								value="#{mbRelatorioAuditCronograma.dtOperacaoFim}" locale="pt"
+								navigator="true" pattern="dd/MM/yyyy" size="10"
+								disabledWeekends="true" mindate="#{mbRelatorioAuditCronograma.hoje()}" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<br />
+					<p:commandButton ajax="true" id="btnPesquisar" type="submit"
+						value="#{messages.COMANDO_PESQUISAR}" styleClass="comandos"
+					    icon="ui-icon-check">
+					    
+						<f:ajax event="click" 
+					            execute="@form"
+								listener="#{mbRelatorioAuditCronograma.pesquisar}"
+								render="@form" />
+								
+					</p:commandButton>	
+					
+					<p:blockUI block="tabela" trigger="btnPesquisar">
+						Carregando<br />
+        				<p:graphicImage name="carregar.gif" library="images"/>
+    				</p:blockUI>				
+
+					<p:commandButton ajax="true"
+						value="#{messages.SENHA_COMANDO_CANCELAR}" styleClass="comandos"
+						action="#{mbRelatorioAuditCronograma.limpar}"
+						icon="ui-icon-cancel" >
+						<f:ajax execute="@form" render="@form" />
+					</p:commandButton>	
+
+					<p:dataTable id="tabela"
+						value="#{mbRelatorioAuditCronograma.listaRelatorio}" var="dados"
+						widgetVar="tabela" emptyMessage="Escolha as opções para pesquisa."
+						tableStyle="table-layout: auto;" 
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+						paginator="true" rows="10" paginatorPosition="bottom">
+						<f:facet name="header">
+							<h:outputText value="Relatório de Auditoria do Cronograma"
+								style="font-weight:bold;font-size:18px;" />
+						</f:facet>
+						
+			<p:columnGroup type="header">
+            <p:row>
+                <p:column rowspan="2" headerText="Núm. do Processo"/>
+                <p:column colspan="1" headerText=""/>
+                <p:column colspan="2" headerText="Data"/>
+                <p:column colspan="6" headerText="" />
+                <p:column colspan="3" headerText="Dados de Auditoria" />
+            </p:row>
+            <p:row>
+               <p:column headerText="Cód. Versão"/>
+               <p:column headerText="Início"/>
+               <p:column headerText="Fim"/>
+               <p:column headerText="Total de dias"/>
+			   <p:column headerText="Data de Finalização" />
+			   <p:column headerText="Status"/>
+			   <p:column headerText="Etapa"/>
+			   <p:column headerText="Tmp (Tempo)"/>
+			   <p:column headerText="Observações"/>
+			   <p:column headerText="Tipo Operação"/>
+			   <p:column headerText="Data Operação"/>	
+			   <p:column headerText="Analista Auditado"/>			 	 			 
+            </p:row>
+        </p:columnGroup>
+
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[0]}" styleClass="body_rel_datatable" />
+						</p:column>
+
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[1]}" styleClass="body_rel_datatable" />
+						</p:column>
+
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[2]}" styleClass="body_rel_datatable" >
+							    <f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[3]}" styleClass="body_rel_datatable" >
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[4]}" styleClass="body_rel_datatable" />
+						</p:column>
+
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[5]}" styleClass="body_rel_datatable">
+								<f:convertDateTime pattern="dd/MM/yyyy" />  
+							</h:outputText>
+						</p:column>
+
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[6] eq 0 ? 'Aguardando Finalização' : 'Finalizado'}" styleClass="body_rel_datatable" />
+						</p:column>						
+
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[7]}" styleClass="body_rel_datatable"/>
+						</p:column>
+
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[8]}" styleClass="body_rel_datatable"/>
+						</p:column>
+
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[9]}" styleClass="body_rel_datatable" />
+						</p:column>
+						
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{fn:replace(fn:replace(fn:replace(dados[10], 'I', 'Inserção'),'A','Atualização'),'E','Exclusão')}"
+								styleClass="required_labels"/>
+						</p:column>
+												
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[11]}"
+								styleClass="required_labels">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>	
+						</p:column>
+
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[12]}"
+								styleClass="required_labels"/>
+						</p:column>						
+					</p:dataTable>
+					
+					<h3>Exportar Relatório</h3>
+					<p:commandButton value="PRINT" ajax="false" styleClass="btn" image="print" width="30"> 
+						<p:printer target="tabela" />
+					</p:commandButton>	
+									
+					<p:commandButton value="EXCEL" ajax="false" styleClass="btn" image="excel" width="30">  
+              			<p:dataExporter type="xls" encoding="iso-8859-1" target="tabela" fileName="Auditoria_Cronograma"
+              			                postProcessor="#{mbRelatorioAuditCronograma.postProcessXLS}"/>  
+        			</p:commandButton>					
+				</p:panel>						
+
+			</h:form>    
+  
+        
+       </ui:define>
+     </ui:composition>          
+    </h:body>
+</html>

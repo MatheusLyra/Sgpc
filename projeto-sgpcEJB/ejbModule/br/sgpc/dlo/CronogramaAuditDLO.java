@@ -9,6 +9,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import br.sgpc.dao.CronogramaAuditDao;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Cronograma;
 import br.sgpc.dominio.CronogramaAudit;
 import br.sgpc.dominio.Usuario;
@@ -21,7 +22,7 @@ import br.sgpc.dominio.Usuario;
  */
 @Stateless
 @Remote
-public class CronogramaAuditDLO  implements Serializable{
+public class CronogramaAuditDLO extends Funcoes implements Serializable{
  
 	private static final long serialVersionUID = 1L;
 
@@ -52,17 +53,17 @@ public class CronogramaAuditDLO  implements Serializable{
 			cronogramaAudit.setIdTMP(cronograma.getTmp().getIdTmp());	
 		}
 		cronogramaAudit.setObservacoes(cronograma.getObservacoes());
-//		cronogramaAudit.setIdUsuario(getIdUsuario());
+		cronogramaAudit.setIdUsuario(getIdUsuario());
 		cronogramaAudit.setTipoOperacao(tipoOperacao);
 		cronogramaAudit.setDtOperacao(dataAtual);
 		return cronogramaAudit;
 	}
 
-	private Integer getIdUsuario(){
+/*	private Integer getIdUsuario(){
 		HttpSession sessao = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 		Usuario usuarioSessao = (Usuario) sessao.getAttribute("usuario");
 	    
 	    return usuarioSessao.getIdUsuario();
-	}
+	}*/
 	
 }

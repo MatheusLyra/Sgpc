@@ -68,6 +68,9 @@ public class DadosConsolidadosAudit {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "dtOperacao", length = 10)
 	private Date dtOperacao;
+	
+	@Column(name = "idUsuarioAudit")
+	private Integer idUsuarioAudit;
 
 	public int getIdVersao() {
 		return idVersao;
@@ -195,6 +198,14 @@ public class DadosConsolidadosAudit {
 
 	public void setDtOperacao(Date dtOperacao) {
 		this.dtOperacao = dtOperacao;
+	}
+
+	public Integer getIdUsuarioAudit() {
+		return idUsuarioAudit;
+	}
+
+	public void setIdUsuarioAudit(Integer idUsuarioAudit) {
+		this.idUsuarioAudit = idUsuarioAudit;
 	}
 
 }

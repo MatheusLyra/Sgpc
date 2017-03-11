@@ -8,12 +8,13 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import br.sgpc.dao.DadosConsolidadosAuditDao;
+import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.DadosConsolidadosAudit;
 import br.sgpc.dominio.Dadosconsolidados;
 
 @Stateless
 @Remote
-public class DadosConsolidadosAuditDLO implements Serializable{
+public class DadosConsolidadosAuditDLO extends Funcoes implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
@@ -57,6 +58,7 @@ public class DadosConsolidadosAuditDLO implements Serializable{
 		dadosAudit.setFlgUrgente(dadosconsolidados.getFlgUrgente());
 		dadosAudit.setTipoOperacao(tipoOperacao);
 		dadosAudit.setDtOperacao(dataAtual);
+		dadosAudit.setIdUsuarioAudit(getIdUsuario());
 		return dadosAudit;
 	}
 

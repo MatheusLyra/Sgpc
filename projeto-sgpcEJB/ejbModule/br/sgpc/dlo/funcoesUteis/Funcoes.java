@@ -7,6 +7,9 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
+
+import br.sgpc.dominio.Usuario;
 
 /**
 Classe que é utilizada para inserir qualquer rotina util, 
@@ -48,6 +51,13 @@ public class Funcoes {
 			}
 		}
 		return isEmailIdValid;
+	}
+	
+	public Integer getIdUsuario(){
+		HttpSession sessao = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+		Usuario usuarioSessao = (Usuario) sessao.getAttribute("usuario");
+	    
+	    return usuarioSessao.getIdUsuario();
 	}
 	
 	/////////////////MENSAGENS///////////////

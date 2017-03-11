@@ -65,6 +65,15 @@
 					action="/relatorio_dadosconsolidados.xhtml?faces-redirect=true"
 					rendered="#{mbLogin.controladorAcesso.permissaoComum}" />
 			</p:submenu>
+			
+			<p:submenu label="Relatório de Auditoria">
+				<p:menuitem value="#{messages.TEMPLATE_MENU_RELAUDITDADOSCONSOLIDADOS}"
+					action="/relatorio_auditdadosconsolidados.xhtml?faces-redirect=true"
+					rendered="#{mbLogin.controladorAcesso.permissaoAdministrador}" />
+				<p:menuitem value="#{messages.TEMPLATE_MENU_RELAUDITCRONOGRAMA}"
+					action="/relatorio_auditcronograma.xhtml?faces-redirect=true"
+					rendered="#{mbLogin.controladorAcesso.permissaoAdministrador}" />	
+			</p:submenu>			
 
 			<p:submenu>
 				<p:menuitem value="#{messages.TEMPLATE_MENU_PRINCIPAL}"
