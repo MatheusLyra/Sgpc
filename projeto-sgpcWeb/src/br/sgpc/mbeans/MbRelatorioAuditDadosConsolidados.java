@@ -113,64 +113,67 @@ public class MbRelatorioAuditDadosConsolidados implements Serializable{
     	
         cellcabec = cabecalho.getCell(1);
        	cellcabec.setCellValue("");
-       	sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 6));
+       	sheet.addMergedRegion(new CellRangeAddress(1, 1, 1, 7));
     	cellcabec.setCellStyle(cellStyle);
     	
-    	cellcabec = cabecalho.getCell(7);
+    	cellcabec = cabecalho.getCell(8);
        	cellcabec.setCellValue("Proposta");
-       	sheet.addMergedRegion(new CellRangeAddress(1, 1, 7, 8));
+       	sheet.addMergedRegion(new CellRangeAddress(1, 1, 8, 9));
     	cellcabec.setCellStyle(cellStyle);  
     	
-    	cellcabec = cabecalho.getCell(9);
+    	cellcabec = cabecalho.getCell(10);
        	cellcabec.setCellValue("");
-       	sheet.addMergedRegion(new CellRangeAddress(1, 1, 9, 10));
+       	sheet.addMergedRegion(new CellRangeAddress(1, 1, 10, 11));
     	cellcabec.setCellStyle(cellStyle); 
     	
-    	cellcabec = cabecalho.getCell(9);
+    	cellcabec = cabecalho.getCell(12);
        	cellcabec.setCellValue("Dados de Auditoria");
-       	sheet.addMergedRegion(new CellRangeAddress(1, 1, 11, 13));
+       	sheet.addMergedRegion(new CellRangeAddress(1, 1, 12, 14));
     	cellcabec.setCellStyle(cellStyle);    	
 
-        cabecalho = sheet.getRow(2);      	
-       	cellcabec = cabecalho.getCell(1);
+        cabecalho = sheet.getRow(2);  
+        cellcabec = cabecalho.getCell(1);
+       	cellcabec.setCellValue("Cód. Versão");
+    	cellcabec.setCellStyle(cellStyle);  
+       	cellcabec = cabecalho.getCell(2);
        	cellcabec.setCellValue("Tipo de Dados");
     	cellcabec.setCellStyle(cellStyle);       	
-     	cellcabec = cabecalho.getCell(2);
+     	cellcabec = cabecalho.getCell(3);
        	cellcabec.setCellValue("Núm. do Contrato");
     	cellcabec.setCellStyle(cellStyle);      
-        cellcabec = cabecalho.getCell(3);
+        cellcabec = cabecalho.getCell(4);
        	cellcabec.setCellValue("TAC");
     	cellcabec.setCellStyle(cellStyle);       	
-        cellcabec = cabecalho.getCell(4);
+        cellcabec = cabecalho.getCell(5);
        	cellcabec.setCellValue("Fornecedor");
     	cellcabec.setCellStyle(cellStyle);       	
-        cellcabec = cabecalho.getCell(5);
+        cellcabec = cabecalho.getCell(6);
        	cellcabec.setCellValue("Desc. Serviço");
     	cellcabec.setCellStyle(cellStyle);       	
-       	cellcabec = cabecalho.getCell(6);  
+       	cellcabec = cabecalho.getCell(7);  
        	cellcabec.setCellValue("Área Requisitante");
     	cellcabec.setCellStyle(cellStyle);       	
-       	cellcabec = cabecalho.getCell(7);  
+       	cellcabec = cabecalho.getCell(8);  
        	cellcabec.setCellValue("Inicial(R$)");
     	cellcabec.setCellStyle(cellStyle);       	
-       	cellcabec = cabecalho.getCell(8);  
+       	cellcabec = cabecalho.getCell(9);  
        	cellcabec.setCellValue("Final(R$)");
     	cellcabec.setCellStyle(cellStyle);       	   	
-       	cellcabec = cabecalho.getCell(9);  
+       	cellcabec = cabecalho.getCell(10);  
        	cellcabec.setCellValue("Analista Responsável");
     	cellcabec.setCellStyle(cellStyle);       	
-       	cellcabec = cabecalho.getCell(10);  
+       	cellcabec = cabecalho.getCell(11);  
        	cellcabec.setCellValue("Status");
     	cellcabec.setCellStyle(cellStyle); 
     	
     	//----------------
-    	cellcabec = cabecalho.getCell(11);  
+    	cellcabec = cabecalho.getCell(12);  
        	cellcabec.setCellValue("Tipo de Operação");
     	cellcabec.setCellStyle(cellStyle2);       	
-    	cellcabec = cabecalho.getCell(12);  
+    	cellcabec = cabecalho.getCell(13);  
        	cellcabec.setCellValue("Data da Operação");
     	cellcabec.setCellStyle(cellStyle2); 
-    	cellcabec = cabecalho.getCell(13);  
+    	cellcabec = cabecalho.getCell(14);  
        	cellcabec.setCellValue("Usuário Auditado");
     	cellcabec.setCellStyle(cellStyle2);    	      	     	
     	//----------------

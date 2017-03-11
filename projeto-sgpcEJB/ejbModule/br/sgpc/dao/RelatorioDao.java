@@ -96,7 +96,7 @@ public class RelatorioDao  implements Serializable{
 
 		String sql = "Select d.numProcesso, d.tipoDado, d.numContrato, d.tac, f.descricao, d.descServico, " 
 				   + "       a.descricao, d.vlpropostaini, d.vlpropostafim, " 
-				   + "       u.userName, s.descricao, d.flgUrgente, d.tipoOperacao, d.dtOperacao, u2.userName "
+				   + "       u.userName, s.descricao, d.flgUrgente, d.tipoOperacao, d.dtOperacao, u2.userName, d.idVersao "
 				   + "  from dadosconsolidados_audit d "
 				   + "INNER JOIN usuario u on            d.idUsuario      = u.idUsuario "
 				   + "INNER JOIN usuario u2 on           d.idUsuarioAudit = u2.idUsuario "

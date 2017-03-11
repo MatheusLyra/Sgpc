@@ -102,12 +102,13 @@
 			<p:columnGroup type="header">
             <p:row>
                 <p:column rowspan="2" headerText="Núm. do Processo"/>
-                <p:column colspan="6" headerText=""/>
+                <p:column colspan="7" headerText=""/>
                 <p:column colspan="2" headerText="Proposta"/>
                 <p:column colspan="2" headerText="" />
                 <p:column colspan="3" headerText="Dados de Auditoria" />
             </p:row>
             <p:row>
+               <p:column headerText="Cód. Versão"/>
                <p:column headerText="Tipo de Dados"/>
                <p:column headerText="Núm. do Contrato"/>
                <p:column headerText="TAC"/>
@@ -126,6 +127,10 @@
 
 						<p:column styleClass="title_rel_datatable">
 							<h:outputText value="#{dados[0]}" styleClass="body_rel_datatable" />
+						</p:column>
+						
+						<p:column styleClass="title_rel_datatable">
+							<h:outputText value="#{dados[15]}" styleClass="body_rel_datatable" />
 						</p:column>
 
 						<p:column styleClass="title_rel_datatable">
