@@ -2,7 +2,6 @@ package br.sgpc.mbeans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -176,17 +175,7 @@ public class MbRelatorioAuditCronograma  implements Serializable{
        	int i = sheet.getPhysicalNumberOfRows()+2;
     	cabecalho = sheet.createRow(i);
     	cellcabec =   cabecalho.createCell(0);
-    }	
-	
-	public Date hoje() {
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
-		return cal.getTime();
-	}	
+    }		
 	
 	public void limpar(){
 		numProcesso = 0;
