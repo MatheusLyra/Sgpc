@@ -27,8 +27,8 @@
 						<h:outputLabel for="processo" value="Num. do Processo: "
 							styleClass="crud_labels" />
 						<p:inputText id="processo" label="Num. do Processo:"
-							value="#{mbMantemCronograma.numProcesso}" maxlength="30"
-							size="30" required="true"
+							value="#{mbMantemCronograma.numProcesso}" maxlength="20"
+							size="25" required="true"
 							requiredMessage="#{messages.CRONO_CAMPO_OBRIGATORIO_NUMPROCESSO}" />
 						<p:commandButton id="btnPesquisar"
 							value="#{messages.CRONO_COMANDO_PESQUISAR}" styleClass="comandos"
@@ -41,7 +41,6 @@
 							<p:calendar id="dtInicio"
 								value="#{mbMantemCronograma.cronograma.dtIni}" locale="pt"
 								navigator="true" pattern="dd/MM/yyyy" size="10" required="true"
-								validatorMessage="requerido"
 								disabled="#{mbMantemCronograma.habilita}"
 								disabledWeekends="true" mindate="mbMantemCronograma.hoje"
 								requiredMessage="#{messages.CRONO_CAMPO_OBRIGATORIO_DATAINICIAL}" />
@@ -154,7 +153,61 @@
 									</p:panelGrid>
 								</p:panel>
 							</p:column>
+							<p:column visible="false">
+						        <f:facet name="header">N. Proc.</f:facet>
+						        <p:outputLabel value="#{cronograma.dadosconsolidados.numProcesso}"/>
+						    </p:column>
+						    
+ 							<p:column visible="false">
+						        <f:facet name="header">Etapa</f:facet>
+						        <h:outputText value="#{cronograma.etapa.descricao}" />
+						    </p:column> 
+						    
+						    <p:column visible="false">
+						        <f:facet name="header">Tempo</f:facet>
+						        <h:outputText value="#{cronograma.tmp.descricao}" />
+						    </p:column>
+						    
+						    <p:column visible="false">
+						        <f:facet name="header">Início</f:facet>
+						        <p:outputLabel value="#{cronograma.dtIni}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</p:outputLabel>
+						    </p:column>
+						    
+						    <p:column visible="false">
+						        <f:facet name="header">Fim</f:facet>
+						        <p:outputLabel value="#{cronograma.dtFim}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</p:outputLabel>
+						    </p:column> 
 
+							<p:column visible="false">
+						        <f:facet name="header">T. de dias</f:facet>
+						        <p:outputLabel value="#{cronograma.qtdDiasFim}"/>
+						    </p:column>
+						     
+						    <p:column visible="false">
+						        <f:facet name="header">Status</f:facet>
+						        <p:outputLabel value="#{cronograma.status? 'Finalizado' : 'Aguardando Finalização'}"/>
+						    </p:column> 
+						    
+						    <p:column visible="false">
+						        <f:facet name="header">Finalização</f:facet>
+						        <p:outputLabel value="#{cronograma.dtFinalizado}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</p:outputLabel>
+						    </p:column> 
+						    
+						    <p:column visible="false">
+						        <f:facet name="header">Dias finalizados</f:facet>
+						        <p:outputLabel value="#{cronograma.qtdDiasFinalizados}"/>
+						    </p:column>
+						    
+						    <p:column visible="false">
+						        <f:facet name="header">Observações</f:facet>
+						        <p:outputLabel value="#{cronograma.observacoes}"/>
+						    </p:column>
 							<p:column headerText="Ações" style="text-align: center"
 								exportable="false" width="100">
 
@@ -199,75 +252,27 @@
 						</p:dataTable>
 					</h:panelGrid>
 					<h:panelGrid>
-						<p:dataTable id="exportacao" rendered="false" value="#{mbMantemCronograma.listaCronograma}" var="exportacao">
-			                
-			                <p:column visible="false">
-						        <f:facet name="header">Etapa</f:facet>
-						        <h:outputText value="#{exportacao.etapa.descricao}" />
-						    </p:column> 
-						    
-						    <p:column visible="false">
-						        <f:facet name="header">Tempo</f:facet>
-						        <h:outputText value="#{exportacao.tmp.descricao}" />
-						    </p:column>
-						    
-						    <p:column visible="false">
-						        <f:facet name="header">Início</f:facet>
-						        <p:outputLabel value="#{exportacao.dtIni}">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</p:outputLabel>
-						    </p:column>
-						    
-						    <p:column visible="false">
-						        <f:facet name="header">Fim</f:facet>
-						        <p:outputLabel value="#{exportacao.dtFim}">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</p:outputLabel>
-						    </p:column> 
-
-							<p:column visible="false">
-						        <f:facet name="header">T. de dias</f:facet>
-						        <p:outputLabel value="#{exportacao.qtdDiasFim}"/>
-						    </p:column>
-						     
-						    <p:column visible="false">
-						        <f:facet name="header">Status</f:facet>
-						        <p:outputLabel value="#{exportacao.status? 'Finalizado' : 'Aguardando Finalização'}"/>
-						    </p:column> 
-						    
-						    <p:column visible="false">
-						        <f:facet name="header">Finalização</f:facet>
-						        <p:outputLabel value="#{exportacao.dtFinalizado}">
-									<f:convertDateTime pattern="dd/MM/yyyy" />
-								</p:outputLabel>
-						    </p:column> 
-						    
-						    <p:column visible="false">
-						        <f:facet name="header">Dias finalizados</f:facet>
-						        <p:outputLabel value="#{exportacao.qtdDiasFinalizados}"/>
-						    </p:column>
-			            </p:dataTable>
 					
-						<h:outputLabel>Exportar Dados</h:outputLabel>
+						<h3>Exportar Dados</h3>
 						<h:panelGrid columns="4">
 							<p:commandButton value="CSV" ajax="false" styleClass="btn"
 								image="csv" width="30">
-								<p:dataExporter type="csv" encoding="iso-8859-1" target="exportacao"
+								<p:dataExporter type="csv" encoding="iso-8859-1" target="tabela"
 									fileName="Cronograma" />
 							</p:commandButton>
 							<p:commandButton value="EXCEL" ajax="false" styleClass="btn"
 								image="excel" width="30">
-								<p:dataExporter type="xls" encoding="iso-8859-1" target="exportacao"
+								<p:dataExporter type="xls" encoding="iso-8859-1" target="tabela"
 									fileName="Cronograma" />
 							</p:commandButton>
 							<p:commandButton value="XML" ajax="false" styleClass="btn"
 								image="xml" width="30">
-								<p:dataExporter type="xml" encoding="iso-8859-1" target="exportacao"
+								<p:dataExporter type="xml" encoding="iso-8859-1" target="tabela"
 									fileName="Cronograma" />
 							</p:commandButton>
 							<p:commandButton value="PDF" ajax="false" styleClass="btn"
 								image="pdf" width="30">
-								<p:dataExporter type="pdf" encoding="iso-8859-1" target="exportacao"
+								<p:dataExporter type="pdf" encoding="iso-8859-1" target="tabela"
 									fileName="Cronograma" />
 							</p:commandButton>
 						</h:panelGrid>

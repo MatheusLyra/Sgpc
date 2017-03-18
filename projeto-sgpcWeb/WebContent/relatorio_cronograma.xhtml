@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<h:head>
+
+	<title>#{messages.APLICACAO_TITULO}</title>
+
+</h:head>
+<h:body
+	style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
+                   background-color:transparent;
+                   background-repeat: no-repeat;
+                   background-size: cover">
+
+	<ui:composition template="./templates/template_base.xhtml">
+		<ui:define name="page_content">
+			<h:form id="form">
+				<p:panel header="RELATÓRIO DE CRONOGRAMAS">
+
+					<h:panelGrid columns="6">
+						<h:outputLabel value="Num. do Processo" styleClass="crud_labels" />
+						<p:inputText id="processo"
+							value="#{MbRelatorioCronograma.numProcesso}" maxlength="25" size="25"/>
+							
+						<h:outputLabel value="Etapa" styleClass="crud_labels" />
+						<p:selectOneMenu id="menuEtapa"
+							value="#{MbRelatorioCronograma.cronograma.etapa}"
+							converter="etapaConverter" style="width:150px">
+							<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+							<f:selectItems value="#{MbRelatorioCronograma.listaEtapa}"	var="etapa" itemValue="#{etapa}" itemLabel="#{etapa.descricao}" />
+						</p:selectOneMenu> 				
+						
+						<h:outputLabel value="Data Inicial" styleClass="crud_labels" />
+						<p:calendar id="dtInicio"
+							value="#{MbRelatorioCronograma.cronograma.dtIni}" locale="pt"
+							navigator="true" pattern="dd/MM/yyyy" size="10"/>
+						
+						<h:outputLabel value="Tempo" styleClass="crud_labels" />
+						<p:selectOneMenu id="menuTmp"
+							value="#{MbRelatorioCronograma.cronograma.tmp}"
+							converter="tmpConverter" style="width:150px">
+							<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+							<f:selectItems value="#{MbRelatorioCronograma.listaTmp}" var="tmp"
+								itemValue="#{tmp}" itemLabel="#{tmp.descricao}" />
+						</p:selectOneMenu>
+							
+						<h:outputLabel value="Status" styleClass="crud_labels" />
+						<p:selectOneMenu id="menuStatus" value="#{MbRelatorioCronograma.status}" style="width:150px">
+							<f:selectItem itemLabel="" itemValue="-1" />
+							<f:selectItem itemLabel="Aguardando Finalização" itemValue="0" />
+							<f:selectItem itemLabel="Finalizado" itemValue="1" />
+						</p:selectOneMenu>	
+						
+						<h:outputLabel value="Data Final" styleClass="crud_labels" />
+						<p:calendar id="dtFinal"
+							value="#{MbRelatorioCronograma.cronograma.dtFim}" locale="pt"
+							navigator="true" pattern="dd/MM/yyyy" size="10"/>
+						
+						
+					
+					
+						<p:commandButton id="btnPesquisar"
+							value="#{messages.CRONO_COMANDO_PESQUISAR}" styleClass="comandos"
+							actionListener="#{MbRelatorioCronograma.pesquisar()}" ajax="false"
+							icon="ui-icon-check">
+						</p:commandButton>
+	   				
+						<p:commandButton id="btnCancelar" value="Limpar"
+							styleClass="comandos" action="#{MbRelatorioCronograma.cancelar()}"
+							update="template_content:form" ajax="false" icon="ui-icon-cancel" />
+						
+						<p:blockUI block="tabela" trigger="btnPesquisar">
+							Carregando<br />
+	        				<p:graphicImage name="carregar.gif" library="images"/>
+	    				</p:blockUI>
+	    				
+	    				<!-- <h:outputLabel value="Finalizados" styleClass="crud_labels" />
+						<p:selectOneMenu id="menuFinalizado" value="#{MbRelatorioCronograma.finalizado}" style="width:150px">
+							<f:selectItem itemLabel="" itemValue="-1" />
+							<f:selectItem itemLabel="Antes do período" itemValue="0" />
+							<f:selectItem itemLabel="Após o período" itemValue="1" />
+						</p:selectOneMenu>
+						
+						<h:panelGroup />
+						<h:panelGroup />
+						
+						<h:outputLabel value="Data Finalizado" styleClass="crud_labels" />
+						<p:calendar id="dtFinalizacao"
+							value="#{MbRelatorioCronograma.cronograma.dtFim}" locale="pt"
+							navigator="true" pattern="dd/MM/yyyy" size="10"/>-->
+    				</h:panelGrid>	
+    				
+					<p:dataTable id="tabela"
+						value="#{MbRelatorioCronograma.listaCronograma}" var="cronograma"
+						widgetVar="tabela" emptyMessage="Escolha as opções para pesquisa."
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+						paginator="true" rows="10" paginatorPosition="bottom">
+						<f:facet name="header">  
+		                    <h:outputText value="Relatório de Cronogramas"
+							style="font-weight:bold;font-size:18px;" />
+		                </f:facet>
+		                
+		                <p:columnGroup type="header">
+				            <p:row>
+				                <p:column rowspan="2" headerText="Núm. do Processo"/>
+				                <p:column colspan="3" headerText=""/>
+				                <p:column colspan="3" headerText="Datas"/>
+				                <p:column colspan="2" headerText="Dias" />
+				                <p:column colspan="1" headerText="" />
+				            </p:row>
+				            <p:row>
+				            	<p:column headerText="Etapa"/>
+					          	<p:column headerText="Status"/>	
+					            <p:column headerText="Tempo"/>
+					            <p:column headerText="Início"/>
+					            <p:column headerText="Fim"/>
+								<p:column headerText="Finalizado" />
+								<p:column headerText="Totais"/>
+								<p:column headerText="Finalizado"/>
+								<p:column headerText="Observações"/>				 	 			 
+				            </p:row>
+				        </p:columnGroup>
+						
+						<p:column styleClass="title_rel_datatable">
+					        <p:outputLabel value="#{cronograma.dadosconsolidados.numProcesso}" styleClass="body_rel_datatable"/>
+					    </p:column>
+					    
+						<p:column styleClass="title_rel_datatable">
+					        <h:outputText value="#{cronograma.etapa.descricao}" styleClass="body_rel_datatable"/>
+					    </p:column> 
+					    
+					    <p:column styleClass="title_rel_datatable">
+					        <p:outputLabel value="#{cronograma.status? 'Finalizado' : 'Aguardando Finalização'}" styleClass="body_rel_datatable"/>
+					    </p:column> 
+					    
+					    <p:column styleClass="title_rel_datatable">
+					        <h:outputText value="#{cronograma.tmp.descricao}" styleClass="body_rel_datatable"/>
+					    </p:column>
+					    
+					    <p:column styleClass="title_rel_datatable">
+					        <p:outputLabel value="#{cronograma.dtIni}" styleClass="body_rel_datatable">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:outputLabel>
+					    </p:column>
+					    
+					    <p:column styleClass="title_rel_datatable">
+					        <p:outputLabel value="#{cronograma.dtFim}" styleClass="body_rel_datatable">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:outputLabel>
+					    </p:column> 
+
+						<p:column styleClass="title_rel_datatable">
+					        <p:outputLabel value="#{cronograma.dtFinalizado}" styleClass="body_rel_datatable">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:outputLabel>
+					    </p:column> 
+					    
+						<p:column styleClass="title_rel_datatable">
+					        <p:outputLabel value="#{cronograma.qtdDiasFim}" styleClass="body_rel_datatable"/>
+					    </p:column>
+
+					    <p:column styleClass="title_rel_datatable">
+					        <p:outputLabel value="#{cronograma.qtdDiasFinalizados}" styleClass="body_rel_datatable"/>
+					    </p:column>
+					    
+					    <p:column styleClass="title_rel_datatable">
+					        <p:outputLabel value="#{cronograma.observacoes}" styleClass="body_rel_datatable"/>
+					    </p:column>
+					</p:dataTable>	
+							
+					<h3>Exportar Relatório</h3>
+					<h:panelGrid columns="2">
+						<p:commandButton value="PRINT" ajax="false" styleClass="btn" image="print" width="30"> 
+							<p:printer target="tabela" />
+						</p:commandButton>	
+	
+						<p:commandButton value="EXCEL" ajax="false" styleClass="btn" image="excel" width="30">  
+	              			<p:dataExporter type="xls" encoding="iso-8859-1" target="tabela" fileName="RelatorioCronogramas"
+	              			                postProcessor="#{MbRelatorioCronograma.postProcessXLS}"/>  
+	        			</p:commandButton>	
+					</h:panelGrid>
+				</p:panel>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

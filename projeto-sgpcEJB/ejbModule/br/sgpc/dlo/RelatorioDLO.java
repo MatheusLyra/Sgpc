@@ -9,6 +9,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import br.sgpc.dao.RelatorioDao;
+import br.sgpc.dominio.Cronograma;
 
 @Stateless
 @Remote
@@ -30,4 +31,8 @@ public class RelatorioDLO implements Serializable{
 	public List<Object> consultarRelAuditoriaCronograma(int numProcesso, String tipoOperacao, Date dtOperacaoIni, Date dtOperacaoFim, int idUsuarioAuditoria ){
 		return this.dao.consultarRelAuditoriaCronograma(numProcesso, tipoOperacao, dtOperacaoIni, dtOperacaoFim, idUsuarioAuditoria);
 	}	
+	
+	public List<Cronograma> consultarRelAuditoriaCronograma(Cronograma cronograma, int status){
+		return this.dao.consultarRelAuditoriaCronograma(cronograma,status);
+	}
 }

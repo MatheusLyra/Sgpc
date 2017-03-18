@@ -1,6 +1,7 @@
 package br.sgpc.dao;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
+import br.sgpc.dominio.Cronograma;
 
 
 @Stateless
@@ -192,5 +195,64 @@ public class RelatorioDao  implements Serializable{
 		return query.getResultList();		
 }	
 
-	
+	public List<Cronograma> consultarRelAuditoriaCronograma(Cronograma cronograma, int status) {
+		// CriteriaQuery<Cronograma> cq =
+		// this.entityManager.getCriteriaBuilder().createQuery(Cronograma.class);
+		// cq.select(cq.from(Cronograma.class));
+		List<Cronograma> cronogramas = new ArrayList<Cronograma>();
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT c FROM Cronograma c where 1=1 ");
+		
+		if (cronograma.getDadosconsolidados().getNumProcesso() > 0)
+			sql.append(" and c.dadosconsolidados.numProcesso = :numProc ");
+		
+		if (cronograma.getEtapa() != null)
+			sql.append(" and c.etapa = :etapa ");
+		
+		if (cronograma.getTmp() != null)
+			sql.append(" and c.tmp = :tmp ");
+		
+		if (cronograma.getDtIni() != null)
+			sql.append(" and c.dtIni >= :dataInicial ");
+		
+		if (cronograma.getDtFim() != null)
+			sql.append(" and c.dtFim <= :dataFim ");
+		
+		if (status >= 0)
+			sql.append(" and c.status = :status ");
+		
+		sql.append(" ORDER BY c.dadosconsolidados.numProcesso");
+		
+		Query query = this.entityManager.createQuery(sql.toString(), Cronograma.class);
+		
+		if (cronograma.getDadosconsolidados().getNumProcesso() > 0)
+			query.setParameter("numProc", cronograma.getDadosconsolidados().getNumProcesso());
+		
+		if (cronograma.getEtapa() != null)
+			query.setParameter("etapa", cronograma.getEtapa() );
+		
+		if (cronograma.getTmp() != null)
+			query.setParameter("tmp", cronograma.getTmp());
+		
+		if (cronograma.getDtIni() != null)
+			query.setParameter("dataInicial",cronograma.getDtIni());
+		
+		if (cronograma.getDtFim() != null)
+			query.setParameter("dataFim", cronograma.getDtFim());
+		
+		if (status >= 0 && status == 0){
+			query.setParameter("status", false);
+		}
+		else if (status >= 0 && status == 1){
+			query.setParameter("status", true);
+		}
+		
+//		cronogramas = (List<Cronograma>) query;
+//		cronogramas = this.entityManager
+//				.createQuery("SELECT c FROM Cronograma c where c.dadosconsolidados.numProcesso = :numProc ", Cronograma.class)
+//				.setParameter("numProc", cronograma.getDadosconsolidados().getNumProcesso()).getResultList();
+		return  (List<Cronograma>) query.getResultList();
+
+		// return this.entityManager.createQuery(cq).getResultList();
+	}	
 }
