@@ -76,7 +76,13 @@
 				<p:menuitem value="#{messages.TEMPLATE_MENU_RELAUDITCRONOGRAMA}"
 					action="/relatorio_auditcronograma.xhtml?faces-redirect=true"
 					rendered="#{mbLogin.controladorAcesso.permissaoAdministrador}" />	
-			</p:submenu>			
+			</p:submenu>	
+			
+			<p:submenu label="Relatório Gerencial">
+				<p:menuitem value="#{messages.TEMPLATE_MENU_RELGERENCIAL}"
+					action="/relatorio_gerencial.xhtml?faces-redirect=true"
+					rendered="#{mbLogin.controladorAcesso.permissaoAdministrador}" />	
+			</p:submenu>					
 
 			<p:submenu>
 				<p:menuitem value="#{messages.TEMPLATE_MENU_PRINCIPAL}"

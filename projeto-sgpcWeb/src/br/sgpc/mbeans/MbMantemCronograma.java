@@ -115,7 +115,7 @@ public class MbMantemCronograma extends Funcoes implements Serializable {
 			} else {
 				try {
 					totalDias = cronograma.getDtFim().getTime() - cronograma.getDtIni().getTime();
-					cronograma.setQtdDiasFim((int) TimeUnit.DAYS.convert(totalDias, TimeUnit.MILLISECONDS) + 1);
+					cronograma.setQtdDiasFim((int) TimeUnit.DAYS.convert(totalDias, TimeUnit.MILLISECONDS) );//Retirado +1 que estava acrescentando a data
 
 					mantemCronogramaDLO.cadastrar(cronograma);
 					msgInfo("Registro cadastrado com sucesso!");

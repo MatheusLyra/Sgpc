@@ -32,8 +32,8 @@
 							requiredMessage="#{messages.CRONO_CAMPO_OBRIGATORIO_NUMPROCESSO}" />
 						<p:commandButton id="btnPesquisar"
 							value="#{messages.CRONO_COMANDO_PESQUISAR}" styleClass="comandos"
-							actionListener="#{mbMantemCronograma.pesquisar()}" ajax="false"
-							icon="ui-icon-check">
+							 ajax="true" icon="ui-icon-check">
+							<f:ajax event="click" execute="@form" listener="#{mbMantemCronograma.pesquisar()}" render="@form" />
 						</p:commandButton>
 
 						<h:outputLabel for="" value="Período:" styleClass="crud_labels" />
@@ -56,7 +56,7 @@
 						</h:panelGrid>
 						<h:panelGroup />
 
-						<h:outputLabel value="Descrição de tempo:"
+						<h:outputLabel value="Descrição de tmp:"
 							styleClass="crud_labels" />
 						<p:selectOneMenu id="menuTmp"
 							value="#{mbMantemCronograma.cronograma.tmp}"
@@ -72,13 +72,15 @@
 
 						<p:commandButton id="btnSalvar"
 							value="#{messages.CRONO_COMANDO_SALVAR}" styleClass="comandos"
-							action="#{mbMantemCronograma.salvar()}"
 							disabled="#{mbMantemCronograma.habilita}"
-							update="template_content:form" ajax="false" icon="ui-icon-check" />
+							ajax="true" icon="ui-icon-check" >
+							<f:ajax event="click" execute="@form" listener="#{mbMantemCronograma.salvar()}" render="@form" />
+						</p:commandButton>	
 
 						<p:commandButton id="btnCancelar" value="Cancelar"
-							styleClass="comandos" action="#{mbMantemCronograma.limpar()}"
-							update="template_content:form" ajax="false" icon="ui-icon-cancel" />
+							styleClass="comandos" ajax="true" icon="ui-icon-cancel" >
+							<f:ajax event="click" execute="@form" listener="#{mbMantemCronograma.limpar()}" render="@form" />
+						</p:commandButton>	
 
 					</h:panelGrid>
 
@@ -111,7 +113,7 @@
 							<p:column exportable="false">
 								<p:panel header="#{cronograma.etapa.descricao}" >
 									<p:panelGrid columns="6" layout="grid">
-										<p:outputLabel value="Tipo de Tempo: " />
+										<p:outputLabel value="Tipo de Tmp: " />
 										<p:outputLabel value="#{cronograma.tmp.descricao}"
 											style="font-weight:bold" />
 											

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:head>
+        <title>#{messages.APLICACAO_TITULO}</title>
+        
+    </h:head>
+    <h:body style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
+                   background-color:transparent;
+                   background-repeat: no-repeat;
+                   background-size: cover">
+       
+       <ui:composition template="./templates/template_base.xhtml">
+         <ui:define name="page_content"> 
+           <h:form id="form" prependId="false">
+           	<p:panel header="Escolha o Tipo de Gráfico Exibido" style="width:90%">
+              <h:panelGrid columns="2">
+        				<p:outputLabel for="tipo" value="Tipo de relatório" styleClass="crud_labels"/>
+        				<p:selectOneMenu id="tipo" value="#{mbRelatorioGerencial.tipo}"  style="width:150px">
+            					<f:selectItem itemLabel="Tempo por Área" itemValue="A" />
+            					<f:selectItem itemLabel="Tempo por Processo" itemValue="P" />
+            					<f:selectItem itemLabel="Tempo por TMP" itemValue="T" />
+            					<f:ajax render="@form" />
+        				</p:selectOneMenu>	
+              </h:panelGrid>
+             </p:panel> 
+              	          	  
+              
+       		  <h:panelGrid columns="6">	
+ 						<h:outputLabel for="numProcesso" value="Número do Processo" styleClass="crud_labels" />
+						<p:inputText id="numProcesso" label="numProcesso"
+							value="#{mbRelatorioGerencial.numProcesso}" disabled="#{mbRelatorioGerencial.tipo =='A'}"
+							maxlength="27" size="27" /> 
+
+     				    <h:outputLabel value="Área Requisitante" styleClass="crud_labels" />
+						<p:selectOneMenu id="area" disabled="#{mbRelatorioGerencial.tipo != 'A'}"
+							value="#{mbRelatorioGerencial.area}"
+							converter="areaConverter" style="width:150px">
+							<f:selectItem itemLabel="Opções..." itemValue="" noSelectionOption="true"/>
+							<f:selectItems value="#{mbRelatorioGerencial.listaArea}"
+								var="ar" itemLabel="#{ar.descricao}" itemValue="#{ar}" />
+						</p:selectOneMenu> 
+						
+						<h:outputLabel value="Descrição de tmp" styleClass="crud_labels" />
+						<p:selectOneMenu id="menuTmp" value="#{mbRelatorioGerencial.tmp}"
+							converter="tmpConverter" style="width:150px" disabled="#{mbRelatorioGerencial.tipo != 'T'}">
+							<f:selectItem itemLabel="Opções..." itemValue="" noSelectionOption="true"/>
+							<f:selectItems value="#{mbRelatorioGerencial.listaTmp}" var="tmp"
+								itemValue="#{tmp}" itemLabel="#{tmp.descricao}" />
+
+						</p:selectOneMenu>							
+							          		  						
+						<h:outputLabel for="" value="Período:" styleClass="crud_labels" />
+						<h:panelGrid columns="3">
+							<p:calendar id="dtInicio"
+								value="#{mbRelatorioGerencial.dtOperacaoIni}" locale="pt"
+								navigator="true" pattern="dd/MM/yyyy" size="10"
+								disabledWeekends="true" />
+
+							<h:outputLabel value="até" styleClass="crud_labels" />
+							<p:calendar id="dtFinal"
+								value="#{mbRelatorioGerencial.dtOperacaoFim}" locale="pt"
+								navigator="true" pattern="dd/MM/yyyy" size="10"
+								disabledWeekends="true" />
+						</h:panelGrid>
+						
+						
+			  </h:panelGrid>		  
+			  	  
+			  <br />
+			  
+			  <p:commandButton ajax="true" id="btnPesquisar" type="submit"
+						value="#{messages.COMANDO_PESQUISAR}" styleClass="comandos"
+					    icon="ui-icon-check">
+			  		<f:ajax event="click" 
+					        execute="@form"
+							listener="#{mbRelatorioGerencial.setFlagToTrue()}"
+							render="@form" />
+			  </p:commandButton>
+			  
+			  <p:commandButton ajax="true"
+						value="#{messages.REL_COMANDO_LIMPAR}" styleClass="comandos"
+						action="#{mbRelatorioGerencial.limpar}"
+						icon="ui-icon-cancel" >
+						<f:ajax execute="@form" render="@form" />
+			   </p:commandButton>	
+								  
+		<br />			  
+			  <p:blockUI block="toUpdate" trigger="btnPesquisar">
+					Carregando<br />
+        			<p:graphicImage name="carregar.gif" library="images"/>
+    		  </p:blockUI>
+
+			  <p:outputPanel id="toUpdate" >
+        		  <p:panel id="myPanel" rendered="#{mbRelatorioGerencial.flag}">
+                	  <p:chart type="bar" model="#{mbRelatorioGerencial.barModel}" style="height:300px;" widgetVar="grafico" />
+        		  </p:panel>
+			  </p:outputPanel>
+			  
+			  
+
+<p:commandButton type="button" value="Exportar" 
+                 icon="ui-icon-extlink" 
+                 onclick="$('#output').empty().append(PF('grafico').exportAsImage());PF('dlg').show();" 
+                 rendered="#{mbRelatorioGerencial.flag}"/>
+
+<p:dialog widgetVar="dlg" 
+          showEffect="fade" 
+          modal="false" 
+          header="Gráfico em uma imagem" 
+          resizable="false">
+    <p:outputPanel id="output" 
+                    
+                   style="width:600px;height:500px"/>
+</p:dialog>		
+									  
+	       </h:form>  
+      	
+     	          
+         </ui:define>
+       </ui:composition>          
+    </h:body>
+</html>       

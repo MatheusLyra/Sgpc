@@ -31,7 +31,7 @@
 						<p:selectOneMenu id="menuEtapa"
 							value="#{MbRelatorioCronograma.cronograma.etapa}"
 							converter="etapaConverter" style="width:150px">
-							<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+							<f:selectItem itemLabel="Opções..." itemValue="" noSelectionOption="true" />
 							<f:selectItems value="#{MbRelatorioCronograma.listaEtapa}"	var="etapa" itemValue="#{etapa}" itemLabel="#{etapa.descricao}" />
 						</p:selectOneMenu> 				
 						
@@ -44,14 +44,14 @@
 						<p:selectOneMenu id="menuTmp"
 							value="#{MbRelatorioCronograma.cronograma.tmp}"
 							converter="tmpConverter" style="width:150px">
-							<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+							<f:selectItem itemLabel="Opções..." itemValue="" noSelectionOption="true" />
 							<f:selectItems value="#{MbRelatorioCronograma.listaTmp}" var="tmp"
 								itemValue="#{tmp}" itemLabel="#{tmp.descricao}" />
 						</p:selectOneMenu>
 							
 						<h:outputLabel value="Status" styleClass="crud_labels" />
 						<p:selectOneMenu id="menuStatus" value="#{MbRelatorioCronograma.status}" style="width:150px">
-							<f:selectItem itemLabel="" itemValue="-1" />
+							<f:selectItem itemLabel="Opções..." itemValue="-1" />
 							<f:selectItem itemLabel="Aguardando Finalização" itemValue="0" />
 							<f:selectItem itemLabel="Finalizado" itemValue="1" />
 						</p:selectOneMenu>	
@@ -60,40 +60,26 @@
 						<p:calendar id="dtFinal"
 							value="#{MbRelatorioCronograma.cronograma.dtFim}" locale="pt"
 							navigator="true" pattern="dd/MM/yyyy" size="10"/>
-						
-						
-					
-					
+	    				
+    				</h:panelGrid>	
+    				
+    				<br />
 						<p:commandButton id="btnPesquisar"
 							value="#{messages.CRONO_COMANDO_PESQUISAR}" styleClass="comandos"
-							actionListener="#{MbRelatorioCronograma.pesquisar()}" ajax="false"
-							icon="ui-icon-check">
+							ajax="true" icon="ui-icon-check">
+							<f:ajax event="click" execute="@form" listener="#{MbRelatorioCronograma.pesquisar()}" render="@form" />
 						</p:commandButton>
 	   				
-						<p:commandButton id="btnCancelar" value="Limpar"
+						<p:commandButton id="btnCancelar" value="#{messages.REL_COMANDO_LIMPAR}"
 							styleClass="comandos" action="#{MbRelatorioCronograma.cancelar()}"
-							update="template_content:form" ajax="false" icon="ui-icon-cancel" />
+						    ajax="true" icon="ui-icon-cancel" >
+							<f:ajax execute="@form"  render="@form" />
+						</p:commandButton>	
 						
 						<p:blockUI block="tabela" trigger="btnPesquisar">
 							Carregando<br />
 	        				<p:graphicImage name="carregar.gif" library="images"/>
-	    				</p:blockUI>
-	    				
-	    				<!-- <h:outputLabel value="Finalizados" styleClass="crud_labels" />
-						<p:selectOneMenu id="menuFinalizado" value="#{MbRelatorioCronograma.finalizado}" style="width:150px">
-							<f:selectItem itemLabel="" itemValue="-1" />
-							<f:selectItem itemLabel="Antes do período" itemValue="0" />
-							<f:selectItem itemLabel="Após o período" itemValue="1" />
-						</p:selectOneMenu>
-						
-						<h:panelGroup />
-						<h:panelGroup />
-						
-						<h:outputLabel value="Data Finalizado" styleClass="crud_labels" />
-						<p:calendar id="dtFinalizacao"
-							value="#{MbRelatorioCronograma.cronograma.dtFim}" locale="pt"
-							navigator="true" pattern="dd/MM/yyyy" size="10"/>-->
-    				</h:panelGrid>	
+	    				</p:blockUI>    				
     				
 					<p:dataTable id="tabela"
 						value="#{MbRelatorioCronograma.listaCronograma}" var="cronograma"

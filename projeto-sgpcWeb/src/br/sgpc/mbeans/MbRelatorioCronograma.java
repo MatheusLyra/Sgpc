@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
@@ -22,7 +20,6 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
-import br.sgpc.dlo.MantemCronogramaDLO;
 import br.sgpc.dlo.MantemDadosConsolidadosDLO;
 import br.sgpc.dlo.MantemEtapaDLO;
 import br.sgpc.dlo.MantemTmpDLO;
