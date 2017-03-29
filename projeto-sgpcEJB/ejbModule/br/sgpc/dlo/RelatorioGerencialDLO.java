@@ -18,16 +18,16 @@ public class RelatorioGerencialDLO implements Serializable{
 	@EJB
 	private RelatorioGerencialDao dao;
 	
-	public List<Object> consultarRelGerencialTmpProcesso(int numProcesso, Date dtOperacaoIni, Date dtOperacaoFim){
-		return this.dao.consultarRelGerencialTmpProcesso(numProcesso, dtOperacaoIni, dtOperacaoFim);
+	public List<Object> consultarRelGerencialTmpProcesso(int numProcesso, Date dtOperacaoIni, Date dtOperacaoFim, int numStatus) throws Exception {
+		return this.dao.consultarRelGerencialTmpProcesso(numProcesso, dtOperacaoIni, dtOperacaoFim, numStatus);
 	}
 	
-	public List<Object> consultarRelGerencialTmpArea(int numArea, Date dtOperacaoIni, Date dtOperacaoFim){
-		return this.dao.consultarRelGerencialTmpArea(numArea, dtOperacaoIni, dtOperacaoFim);
+	public List<Object> consultarRelGerencialTmpArea(int numArea, Date dtOperacaoIni, Date dtOperacaoFim, int numStatus) throws Exception{
+		return this.dao.consultarRelGerencialTmpArea(numArea, dtOperacaoIni, dtOperacaoFim, numStatus);
 	}
 	
-	public List<Object> consultarRelGerencialTmpProcTmp(int numProcesso, int numTmp, Date dtOperacaoIni, Date dtOperacaoFim){
-		return this.dao.consultarRelGerencialTmpProcTmp(numProcesso, numTmp, dtOperacaoIni, dtOperacaoFim);
+	public List<Object> consultarRelGerencialTmpProcTmp(int numProcesso, int numTmp, Date dtOperacaoIni, Date dtOperacaoFim, int numStatus)  throws Exception{
+		return this.dao.consultarRelGerencialTmpProcTmp(numProcesso, numTmp, dtOperacaoIni, dtOperacaoFim, numStatus);
 	}
 
 }

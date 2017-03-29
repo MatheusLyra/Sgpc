@@ -16,10 +16,12 @@ import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
 import br.sgpc.dlo.MantemAreaDLO;
+import br.sgpc.dlo.MantemStatusDLO;
 import br.sgpc.dlo.MantemTmpDLO;
 import br.sgpc.dlo.RelatorioGerencialDLO;
 import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Area;
+import br.sgpc.dominio.Status;
 import br.sgpc.dominio.Tmp;
 
 @ManagedBean(name = "mbRelatorioGerencial")
@@ -37,16 +39,21 @@ public class MbRelatorioGerencial extends Funcoes implements Serializable{
 	@EJB
 	private MantemTmpDLO mantemTmpDLO;
 	
+	@EJB
+	private MantemStatusDLO mantemStatusDLO;	
+	
 	private List<Object> listaRelatorioTmpProcesso;
 	private List<Object> listaRelatorioTmpArea;
 	private List<Object> listaRelatorioTmpProcTmp;
 	private List<Area>   listaArea;
 	private List<Tmp>    listaTmp;
+	private List<Status> listaStatus;
 	
 	private BarChartModel barModel;	
 	private int           numProcesso;
 	private int           numArea;
 	private int           numTmp;
+	private int           numStatus;
 	private String        tipo;
 	private Date          dtOperacaoIni;
 	private Date          dtOperacaoFim;
@@ -54,6 +61,7 @@ public class MbRelatorioGerencial extends Funcoes implements Serializable{
 	
 	private Area area;
 	private Tmp tmp;
+	private Status status;
 	
     @PostConstruct
     public void inicializar() {
@@ -64,51 +72,60 @@ public class MbRelatorioGerencial extends Funcoes implements Serializable{
     	dtOperacaoFim = null;
     	flag          = false;
     	
-    	listaArea = new ArrayList<Area>();
-    	listaTmp  = new ArrayList<Tmp>();
+    	listaArea   = new ArrayList<Area>();
+    	listaTmp    = new ArrayList<Tmp>();
+    	listaStatus = new ArrayList<Status>();
     	
     	carregarDados();
     }
     
     private void carregarDados(){
-    	listaArea = mantemAreaDLO.carregarDados();
-    	listaTmp  = mantemTmpDLO.carregarDados();
+    	listaArea   = mantemAreaDLO.carregarDados();
+    	listaTmp    = mantemTmpDLO.carregarDados();
+    	listaStatus = mantemStatusDLO.carregarDados(); 
     }
     
  
-    private void criarBarModelTmpProcTmp() {
-        barModel = initBarModelTmpProcTmp();
-         
-        barModel.setTitle("Gráfico de Tempo do Processo por Tmp");
-        barModel.setLegendPosition("ne");
-         
-        Axis xAxis = barModel.getAxis(AxisType.X);
-        xAxis.setLabel("Tmp's");
-         
-        Axis yAxis = barModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Dias");
-        yAxis.setMin(0);
-        Integer maxEstimado   = maxNum(listaRelatorioTmpProcTmp, 1);
-        Integer maxFinalizado = maxNum(listaRelatorioTmpProcTmp, 2);
-        if ( maxEstimado > maxFinalizado ) {
-        	yAxis.setMax(maxEstimado+30);
-        }else{
-        	yAxis.setMax(maxFinalizado+30);
-        }      
-    }  
+	private void criarBarModelTmpProcTmp() {
+		barModel = initBarModelTmpProcTmp();
+		
+		if (listaRelatorioTmpProcTmp.size() > 0) {
+			barModel.setTitle("Gráfico de Tempo do Processo por Tmp");
+			barModel.setLegendPosition("ne");
+
+			Axis xAxis = barModel.getAxis(AxisType.X);
+			xAxis.setLabel("Tmp's");
+
+			Axis yAxis = barModel.getAxis(AxisType.Y);
+			yAxis.setLabel("Dias");
+			yAxis.setMin(0);
+			Integer maxEstimado = maxNum(listaRelatorioTmpProcTmp, 1);
+			Integer maxFinalizado = maxNum(listaRelatorioTmpProcTmp, 2);
+			if (maxEstimado > maxFinalizado) {
+				yAxis.setMax(maxEstimado + 30);
+			} else {
+				yAxis.setMax(maxFinalizado + 30);
+			}
+		} else {
+			limpar();
+		}
+	}  
     
 	private BarChartModel initBarModelTmpProcTmp() {
-
-		BarChartModel model = new BarChartModel();
 		try{
 			numTmp = tmp.getIdTmp();
 		}catch(Exception e){
 			numTmp = 0;
 		}
-
-		listaRelatorioTmpProcTmp = relatorioGerencialDLO.consultarRelGerencialTmpProcTmp(numProcesso, numTmp, dtOperacaoIni,
-				dtOperacaoFim);
-
+		
+		try{
+			listaRelatorioTmpProcTmp = relatorioGerencialDLO.consultarRelGerencialTmpProcTmp(numProcesso, numTmp, dtOperacaoIni,
+				dtOperacaoFim, numStatus);
+		}catch(Exception e){
+			msgErro("Erro ao realizar pesquisar com a seguinte mensagem: " + e.getMessage());
+		}
+		
+		BarChartModel model  = new BarChartModel();		
 		ChartSeries estimado = new ChartSeries();
 		estimado.setLabel("Tempo Estimado");
 		for (int i = 0; i < listaRelatorioTmpProcTmp.size(); i++)
@@ -127,33 +144,39 @@ public class MbRelatorioGerencial extends Funcoes implements Serializable{
 		return model;
 	} 
     
-    private void criarBarModelTmpProcesso() {
-        barModel = initBarModelTmpProcesso();
-         
-        barModel.setTitle("Gráfico de Tempo por Processo");
-        barModel.setLegendPosition("ne");
-         
-        Axis xAxis = barModel.getAxis(AxisType.X);
-        xAxis.setLabel("Áreas");
-         
-        Axis yAxis = barModel.getAxis(AxisType.Y);
-        yAxis.setLabel("Dias");
-        yAxis.setMin(0);
-        Integer maxEstimado   = maxNum(listaRelatorioTmpProcesso, 2);
-        Integer maxFinalizado = maxNum(listaRelatorioTmpProcesso, 3);
-        if ( maxEstimado > maxFinalizado ) {
-        	yAxis.setMax(maxEstimado+30);
-        }else{
-        	yAxis.setMax(maxFinalizado+30);
-        }      
-    }
+	private void criarBarModelTmpProcesso() {
+		barModel = initBarModelTmpProcesso();
+		
+		if (listaRelatorioTmpProcesso.size() > 0) {
+			barModel.setTitle("Gráfico de Tempo por Processo");
+			barModel.setLegendPosition("ne");
+
+			Axis xAxis = barModel.getAxis(AxisType.X);
+			xAxis.setLabel("Áreas");
+
+			Axis yAxis = barModel.getAxis(AxisType.Y);
+			yAxis.setLabel("Dias");
+			yAxis.setMin(0);
+			Integer maxEstimado = maxNum(listaRelatorioTmpProcesso, 2);
+			Integer maxFinalizado = maxNum(listaRelatorioTmpProcesso, 3);
+			if (maxEstimado > maxFinalizado) {
+				yAxis.setMax(maxEstimado + 30);
+			} else {
+				yAxis.setMax(maxFinalizado + 30);
+			}
+		} else {
+			limpar();
+		}
+	}
     
     private BarChartModel initBarModelTmpProcesso() {
-    	
-    	listaRelatorioTmpProcesso = relatorioGerencialDLO.consultarRelGerencialTmpProcesso(numProcesso, dtOperacaoIni, dtOperacaoFim);
-
+    	try{
+    		listaRelatorioTmpProcesso = relatorioGerencialDLO.consultarRelGerencialTmpProcesso(numProcesso, dtOperacaoIni, dtOperacaoFim, numStatus);
+		}catch(Exception e){
+			msgErro("Erro ao realizar pesquisar com a seguinte mensagem: " + e.getMessage());
+		}
+		
         BarChartModel model = new BarChartModel();
- 
         ChartSeries estimado = new ChartSeries();
         estimado.setLabel("Tempo Estimado");
         for (int i = 0; i < listaRelatorioTmpProcesso.size(); i++) 
@@ -177,39 +200,46 @@ public class MbRelatorioGerencial extends Funcoes implements Serializable{
 		} catch (Exception e) {
 			numArea = 0;
 		}
-		
+
 		if (numArea == 0) {
 			msgInfo("Escolha uma área para realizar a pesquisa.");
 			flag = false;
 		} else {
 			barModel = initBarModelTmpArea();
 
-			barModel.setTitle("Gráfico de Tempo do Processo por Área");
-			barModel.setLegendPosition("ne");
+			if (listaRelatorioTmpArea.size() > 0) {
+				barModel.setTitle("Gráfico de Tempo do Processo por Área");
+				barModel.setLegendPosition("ne");
 
-			Axis xAxis = barModel.getAxis(AxisType.X);
-			xAxis.setLabel("Processos");
+				Axis xAxis = barModel.getAxis(AxisType.X);
+				xAxis.setLabel("Processos");
 
-			Axis yAxis = barModel.getAxis(AxisType.Y);
-			yAxis.setLabel("Dias");
-			yAxis.setMin(0);
-	        Integer maxEstimado   = maxNum(listaRelatorioTmpArea, 2);
-	        Integer maxFinalizado = maxNum(listaRelatorioTmpArea, 3);
-	        if ( maxEstimado > maxFinalizado ) {
-	        	yAxis.setMax(maxEstimado+30);
-	        }else{
-	        	yAxis.setMax(maxFinalizado+30);
-	        } 
+				Axis yAxis = barModel.getAxis(AxisType.Y);
+				yAxis.setLabel("Dias");
+				yAxis.setMin(0);
+				Integer maxEstimado = maxNum(listaRelatorioTmpArea, 2);
+				Integer maxFinalizado = maxNum(listaRelatorioTmpArea, 3);
+				if (maxEstimado > maxFinalizado) {
+					yAxis.setMax(maxEstimado + 30);
+				} else {
+					yAxis.setMax(maxFinalizado + 30);
+				}
+			} else {
+				limpar();
+			}
 		}
 	}
     
 	private BarChartModel initBarModelTmpArea() {
 
+		try {
+			listaRelatorioTmpArea = relatorioGerencialDLO.consultarRelGerencialTmpArea(area.getIdArea(), dtOperacaoIni,
+				dtOperacaoFim, numStatus);
+		}catch(Exception e){
+			msgErro("Erro ao realizar pesquisar com a seguinte mensagem: " + e.getMessage());
+		}
+		
 		BarChartModel model = new BarChartModel();
-
-		listaRelatorioTmpArea = relatorioGerencialDLO.consultarRelGerencialTmpArea(area.getIdArea(), dtOperacaoIni,
-				dtOperacaoFim);
-
 		ChartSeries estimado = new ChartSeries();
 		estimado.setLabel("Tempo Estimado");
 		for (int i = 0; i < listaRelatorioTmpArea.size(); i++)
@@ -229,15 +259,21 @@ public class MbRelatorioGerencial extends Funcoes implements Serializable{
 	}
 
     
-    public void pesquisar(){
-    	if (tipo.equals("P")) {
-        	criarBarModelTmpProcesso();			
-		}else if (tipo.equals("A")) {
+	public void pesquisar() {
+		try {
+			numStatus = status.getIdStatus();
+		} catch (Exception e) {
+			numStatus = 0;
+		}
+		
+		if (tipo.equals("P")) {
+			criarBarModelTmpProcesso();
+		} else if (tipo.equals("A")) {
 			criarBarModelTmpArea();
-		}else {
+		} else {
 			criarBarModelTmpProcTmp();
 		}
-    }
+	}
     
     public void setFlagToTrue(){
     	flag = true;
@@ -266,8 +302,24 @@ public class MbRelatorioGerencial extends Funcoes implements Serializable{
     	dtOperacaoFim = null;
     	dtOperacaoIni = null;
     	flag = false;
-    }    
+    }     
     
+	public List<Status> getListaStatus() {
+		return listaStatus;
+	}
+
+	public void setListaStatus(List<Status> listaStatus) {
+		this.listaStatus = listaStatus;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
 	public List<Tmp> getListaTmp() {
 		return listaTmp;
 	}

@@ -41,7 +41,7 @@
 						<p:selectOneMenu id="area" disabled="#{mbRelatorioGerencial.tipo != 'A'}"
 							value="#{mbRelatorioGerencial.area}"
 							converter="areaConverter" style="width:150px">
-							<f:selectItem itemLabel="Opções..." itemValue="" noSelectionOption="true"/>
+							<f:selectItem itemLabel="Opções..."/>
 							<f:selectItems value="#{mbRelatorioGerencial.listaArea}"
 								var="ar" itemLabel="#{ar.descricao}" itemValue="#{ar}" />
 						</p:selectOneMenu> 
@@ -49,7 +49,7 @@
 						<h:outputLabel value="Descrição de tmp" styleClass="crud_labels" />
 						<p:selectOneMenu id="menuTmp" value="#{mbRelatorioGerencial.tmp}"
 							converter="tmpConverter" style="width:150px" disabled="#{mbRelatorioGerencial.tipo != 'T'}">
-							<f:selectItem itemLabel="Opções..." itemValue="" noSelectionOption="true"/>
+							<f:selectItem itemLabel="Opções..." />
 							<f:selectItems value="#{mbRelatorioGerencial.listaTmp}" var="tmp"
 								itemValue="#{tmp}" itemLabel="#{tmp.descricao}" />
 
@@ -68,6 +68,17 @@
 								navigator="true" pattern="dd/MM/yyyy" size="10"
 								disabledWeekends="true" />
 						</h:panelGrid>
+						
+						<h:outputLabel for="status" value="Status"
+							styleClass="crud_labels" />
+						<p:selectOneMenu id="status"
+							value="#{mbRelatorioGerencial.status}"
+							converter="statusConverter" style="width:150px">
+							<f:selectItem itemLabel="Opções..." />
+							<f:selectItems
+								value="#{mbRelatorioGerencial.listaStatus}" var="st"
+								itemLabel="#{st.descricao}" itemValue="#{st}" />
+						</p:selectOneMenu>						
 						
 						
 			  </h:panelGrid>		  

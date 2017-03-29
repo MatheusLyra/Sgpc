@@ -242,10 +242,10 @@ public class MbRelatorioCronograma extends Funcoes implements Serializable {
        	cellcabec.setCellValue("Finalizado");
     	cellcabec.setCellStyle(cellStyle);       	
        	cellcabec = cabecalho.getCell(7);  
-       	cellcabec.setCellValue("Totais");
+       	cellcabec.setCellValue("Estimado");
     	cellcabec.setCellStyle(cellStyle);       	
        	cellcabec = cabecalho.getCell(8);  
-       	cellcabec.setCellValue("Finalizado");
+       	cellcabec.setCellValue("Decorrido");
     	cellcabec.setCellStyle(cellStyle);       	
        	cellcabec = cabecalho.getCell(9);  
        	cellcabec.setCellValue("Observações");
