@@ -68,8 +68,19 @@
 						</p:selectOneMenu>
 
 						<!--<h:panelGroup />-->
+						
+							<h:outputLabel for="" value="Data de Finalização" styleClass="crud_labels"
+									   rendered="#{mbMantemCronograma.configuracao.dtFinalizacaoAut_Cronograma}"/>
+							<p:calendar id="dtFinalizacao"
+										value="#{mbMantemCronograma.dtFinalizacao}" locale="pt"
+										navigator="true" pattern="dd/MM/yyyy" size="10"
+										disabledWeekends="true" style="width:150px"
+										rendered="#{mbMantemCronograma.configuracao.dtFinalizacaoAut_Cronograma}"/>
 
+							
 
+					</h:panelGrid>
+					<br/>
 						<p:commandButton id="btnSalvar"
 							value="#{messages.CRONO_COMANDO_SALVAR}" styleClass="comandos"
 							disabled="#{mbMantemCronograma.habilita}"
@@ -80,9 +91,7 @@
 						<p:commandButton id="btnCancelar" value="Cancelar"
 							styleClass="comandos" ajax="true" icon="ui-icon-cancel" >
 							<f:ajax event="click" execute="@form" listener="#{mbMantemCronograma.limpar()}" render="@form" />
-						</p:commandButton>	
-
-					</h:panelGrid>
+						</p:commandButton>					
 
 					<h:panelGrid columns="2">
 						<h:panelGrid id="panelEtapa" columns="1">
@@ -212,17 +221,18 @@
 						    </p:column>
 							<p:column headerText="Ações" style="text-align: center"
 								exportable="false" width="100">
-
+								
 								<p:commandButton
 									title="#{messages.CRONO_COMANDO_FINALIZAR_ETAPA}"
 									styleClass="comandos"
 									actionListener="#{mbMantemCronograma.finalizarEtapa(cronograma)}"
-									process="@form"
+									process="@form" 
 									update="template_content:form:tabela template_content:frmDlg"
 									icon="ui-icon-check">
 									<p:confirm header="Confirmação"
-										message="Deseja realmente finalizar este registro? Não poderá ser desfeito."
-										icon="ui-icon-alert" />
+										message="#{mbMantemCronograma.configuracao.isDtFinalizacaoAut_Cronograma()?'Deseja realmente finalizar este registro com a data manual de finalização.':'Deseja realmente finalizar este registro? Não poderá ser desfeito'}"
+										icon="ui-icon-alert" />	
+									 		
 								</p:commandButton>
 
 								<p:commandButton
@@ -299,7 +309,7 @@
 						</p:panelGrid>
 					</p:outputPanel>
 				</p:dialog>
-			</h:form>
+			</h:form>		
 
 		</ui:define>
 	</ui:composition>

@@ -14,11 +14,13 @@ import javax.faces.bean.ViewScoped;
 
 import org.primefaces.context.RequestContext;
 
+import br.sgpc.dlo.MantemConfiguracaoDLO;
 import br.sgpc.dlo.MantemCronogramaDLO;
 import br.sgpc.dlo.MantemDadosConsolidadosDLO;
 import br.sgpc.dlo.MantemEtapaDLO;
 import br.sgpc.dlo.MantemTmpDLO;
 import br.sgpc.dlo.funcoesUteis.Funcoes;
+import br.sgpc.dominio.Configuracao;
 import br.sgpc.dominio.Cronograma;
 import br.sgpc.dominio.Dadosconsolidados;
 import br.sgpc.dominio.Etapa;
@@ -44,6 +46,9 @@ public class MbMantemCronograma extends Funcoes implements Serializable {
 
 	@EJB
 	private MantemTmpDLO mantemTmpDLO;
+	
+	@EJB
+	private MantemConfiguracaoDLO mantemConfiguracaoDLO;	
 
 	private Cronograma cronograma;
 
@@ -54,12 +59,16 @@ public class MbMantemCronograma extends Funcoes implements Serializable {
 	private Etapa etapa;
 
 	private Tmp tmp;
+	
+	private Configuracao configuracao;
 
 	private List<Cronograma> listaCronograma;
 
 	private List<Etapa> listaEtapa;
 
 	private List<Tmp> listaTmp;
+	
+	private List<Configuracao> listaConfiguracao;
 
 	private Integer numProcesso;
 
@@ -70,6 +79,10 @@ public class MbMantemCronograma extends Funcoes implements Serializable {
 	private boolean editar;
 
 	private String mensagem;
+	
+	private Date dtFinalizacao;
+	
+	private String msgPersonalizada;
 
 	@PostConstruct
 	public void init() {
@@ -86,7 +99,15 @@ public class MbMantemCronograma extends Funcoes implements Serializable {
 		habilita = true;
 		totalDias = 0;
 		listaCronograma = new ArrayList<Cronograma>();
+		
+		configuracao      = new Configuracao();
+		listaConfiguracao = new ArrayList<Configuracao>();
+		listaConfiguracao = mantemConfiguracaoDLO.carregarDados();
+		configuracao      = listaConfiguracao.get(0);
+		if (configuracao.isDtFinalizacaoAut_Cronograma()) 
+			dtFinalizacao     = hoje();
 	}
+	
 
 	public void pesquisar() {
 		dadosConsolidados = mantemDadosConsolidadosDLO.obter(numProcesso);
@@ -173,16 +194,29 @@ public class MbMantemCronograma extends Funcoes implements Serializable {
 		habilita = false;
 		editar = true;
 		listaEtapa.add(0, cronograma.getEtapa());
+		if (configuracao.isDtFinalizacaoAut_Cronograma())
+			dtFinalizacao = cronograma.getDtFinalizado();
 	}
 
 	public void finalizarEtapa(Cronograma cronograma) {
-		if (cronograma.getDtFim().compareTo(hoje()) < 0) {
-			cronogramaFimEtapa = cronograma;
-			RequestContext context = RequestContext.getCurrentInstance();
-			context.execute("PF('dlgObservacoes').show();");
+		if (configuracao.isDtFinalizacaoAut_Cronograma()) {
+			if (cronograma.getDtFim().compareTo(dtFinalizacao) < 0) {
+				cronogramaFimEtapa = cronograma;
+				RequestContext context = RequestContext.getCurrentInstance();
+				context.execute("PF('dlgObservacoes').show();");
 
+			} else {
+				gravarFinalizarEtapa(cronograma);
+			}
 		} else {
-			gravarFinalizarEtapa(cronograma);
+			if (cronograma.getDtFim().compareTo(hoje()) < 0) {
+				cronogramaFimEtapa = cronograma;
+				RequestContext context = RequestContext.getCurrentInstance();
+				context.execute("PF('dlgObservacoes').show();");
+
+			} else {
+				gravarFinalizarEtapa(cronograma);
+			}
 		}
 	}
 
@@ -197,10 +231,14 @@ public class MbMantemCronograma extends Funcoes implements Serializable {
 	private void gravarFinalizarEtapa(Cronograma cronograma) {
 		try {
 			cronograma.setStatus(true);
-			cronograma.setDtFinalizado(hoje());
+			if (configuracao.isDtFinalizacaoAut_Cronograma()){
+				cronograma.setDtFinalizado(dtFinalizacao);
+			}else{
+				cronograma.setDtFinalizado(hoje());
+			}	
 			mantemCronogramaDLO.alterar(cronograma);
 			msgInfo("Cronograma finalizado com sucesso.");
-
+			
 		} catch (Exception e) {
 			msgErro("Erro ao finalizar cronograma com a seguinte mensagem: " + e.getMessage());
 		}
@@ -252,6 +290,14 @@ public class MbMantemCronograma extends Funcoes implements Serializable {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		return cal.getTime();
+	}
+	
+	public String getMsgPersonalizada() {
+		return msgPersonalizada;
+	}
+
+	public void setMsgPersonalizada(String msgPersonalizada) {
+		this.msgPersonalizada = msgPersonalizada;
 	}
 
 	public Cronograma getCronograma() {
@@ -341,4 +387,21 @@ public class MbMantemCronograma extends Funcoes implements Serializable {
 	public void setEditar(boolean editar) {
 		this.editar = editar;
 	}
+
+	public Configuracao getConfiguracao() {
+		return configuracao;
+	}
+
+	public void setConfiguracao(Configuracao configuracao) {
+		this.configuracao = configuracao;
+	}
+
+	public Date getDtFinalizacao() {
+		return dtFinalizacao;
+	}
+
+	public void setDtFinalizacao(Date dtFinalizacao) {
+		this.dtFinalizacao = dtFinalizacao;
+	}
+	
 }
