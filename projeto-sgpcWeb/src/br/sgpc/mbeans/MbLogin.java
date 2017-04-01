@@ -242,7 +242,7 @@ public class MbLogin extends Funcoes implements Serializable {
 								  String assunto, String msgEmail) {
 			String servSmtp       = "smtp.mail.yahoo.com.br";
 			String remetenteEmail = "sistemasgpc@yahoo.com";
-			String remetenteNome  = "SGPC - Sistema Gerenciador de Processos para Contratação";
+			String remetenteNome  = "SGPC - Sistema de Gerenciamento de Processos para Contratação";
 			try {
 				SimpleEmail email = new SimpleEmail();
 				email.setHostName(servSmtp); // o servidor SMTP para envio do e-mail
