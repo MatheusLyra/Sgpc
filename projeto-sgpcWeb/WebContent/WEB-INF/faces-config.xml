@@ -21,10 +21,10 @@
  <navigation-rule>
    <description>Regra de navegação para operação de login</description>
    <from-view-id>/index.xhtml</from-view-id>
-   <navigation-case>
+   <navigation-case> 
      <from-outcome>login_sucesso</from-outcome>
      <to-view-id>/home.xhtml</to-view-id>
-     <redirect />
+     <redirect />  
    </navigation-case>
  
    <navigation-case>
@@ -32,6 +32,13 @@
      <to-view-id>/index.xhtml</to-view-id>
      <redirect />
    </navigation-case>
+   
+   <navigation-case>
+     <from-outcome>recuperar_senha</from-outcome>
+     <to-view-id>/recuperar_senha.xhtml</to-view-id>
+     <redirect />
+   </navigation-case>
+   
  </navigation-rule>
  
  

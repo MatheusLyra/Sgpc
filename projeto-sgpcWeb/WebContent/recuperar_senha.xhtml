@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title>#{messages.APLICACAO_TITULO}</title>
+
+	<h:outputStylesheet name="estilos.css" library="css" />
+	<style type="text/css">
+		.ui-widget {
+		font-size: 90% !important;
+	}
+    </style>
+</h:head>
+
+<h:body style="background-image:url('../resources/images/summer-background-wallpaper.jpg');
+               background-color:transparent;
+               background-repeat: no-repeat;
+               background-size: cover;">	
+    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />                                        
+ 	<div id="tudo" align="center"> 
+		<h:form id="form">
+			<p:panel header="Recuperar Login"> 		
+				<p:panelGrid columns="2" styleClass="semBorda">
+					
+					<h:outputLabel value="Digite o email cadastrado:" styleClass="crud_labels" />
+					<p:inputText id="email" label="email" value="#{mbLogin.usuario.email}" size="40" />
+					            							
+				</p:panelGrid>
+				
+				    <p:commandButton id="btnEnviar" value="Enviar" styleClass="comandos" 
+            						 ajax="true" icon="ui-icon-check">
+            		<f:ajax event="click" execute="@form" listener="#{mbLogin.recuperarSenha()}" render="@form" />
+            		</p:commandButton>
+            	
+            		<p:commandButton id="btnVoltar" value="Voltar" styleClass="comandos" 
+            						 ajax="true" >
+            			<f:ajax event="click" execute="@form" listener="#{mbLogin.doLogoutRecuperarSenha()}" 
+					        	render="@form" />
+            		</p:commandButton>				 
+            		
+			</p:panel>	
+		</h:form>	
+	</div> 
+</h:body>
+</html>

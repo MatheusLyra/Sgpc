@@ -38,8 +38,11 @@
 						weakLabel="#{messages.LOGIN_SENHA_FRACA}"
 						strongLabel="#{messages.LOGIN_SENHA_FORTE}" id="campo_senha"
 						feedback="false" size="40" />
-						
+				    
+				    <h:outputLabel value="" />
+					<p:commandLink action="#{mbLogin.doRecuperarSenha()}" value="Esqueci minha senha" style="color: blue;"/>	
 				</p:panelGrid>
+				
 				<p:commandButton 
 					value="#{messages.LOGIN_COMANDO_ENTRAR}" styleClass="comandos"
 					action="#{mbLogin.doLogin}" update="form" ajax="true" id="btnEntrar"/>
@@ -48,6 +51,9 @@
 				<p:commandButton ajax="true"
 					value="#{messages.LOGIN_COMANDO_LIMPAR}" styleClass="comandos"
 					action="#{mbLogin.limparTela()}" update="campo_usuario campo_senha" />
+					
+				
+	
 			</p:panel>	
 		</h:form>	
 	</div> 

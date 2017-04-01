@@ -9,7 +9,6 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import br.sgpc.dao.CronogramaDao;
-import br.sgpc.dominio.Area;
 import br.sgpc.dominio.Cronograma;
 
 /**

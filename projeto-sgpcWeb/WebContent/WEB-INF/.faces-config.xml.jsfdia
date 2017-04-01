@@ -8,6 +8,9 @@
     PATH="/home.xhtml" TARGET="rules:#home.xhtml" TITLE="login_sucesso" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT ID="login_falha::#index.xhtml" NAME="output1"
     PATH="/index.xhtml" TARGET="rules:#index.xhtml" TITLE="login_falha" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="recuperar_senha::#recuperar_senha.xhtml"
+    NAME="output2" PATH="/recuperar_senha.xhtml"
+    TARGET="rules:#recuperar_senha.xhtml" TITLE="recuperar_senha" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#*" PATH="/*" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
@@ -25,4 +28,6 @@
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#home.xhtml" PATH="/home.xhtml"
   SHAPE="496,17,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#recuperar_senha.xhtml"
+  PATH="/recuperar_senha.xhtml" SHAPE="512,193,0,0" model-entity="JSFProcessGroup"/>
 </PROCESS>

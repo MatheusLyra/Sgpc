@@ -26,4 +26,8 @@ public class LoginDLO implements Serializable {
 	public boolean executar(Usuario usuario) {
 		return (this.dao.consultarUsuario(usuario.getUserName(), usuario.getSenha()).size() > 0);
 	}
+	
+	public Usuario consultarUsuarioEmail(String email) throws Exception{
+		return this.dao.consultarUsuarioEmail(email);
+	}
 }

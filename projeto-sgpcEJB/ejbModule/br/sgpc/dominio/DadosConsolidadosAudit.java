@@ -3,6 +3,7 @@ package br.sgpc.dominio;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -16,7 +17,7 @@ import javax.persistence.TemporalType;
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "dadosconsolidados_audit")
-public class DadosConsolidadosAudit {
+public class DadosConsolidadosAudit  implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)

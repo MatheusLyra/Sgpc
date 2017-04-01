@@ -5,14 +5,11 @@ import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 
 import br.sgpc.dao.CronogramaAuditDao;
 import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Cronograma;
 import br.sgpc.dominio.CronogramaAudit;
-import br.sgpc.dominio.Usuario;
 
 
 

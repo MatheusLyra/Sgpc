@@ -9,7 +9,6 @@ import br.sgpc.dlo.LoginDLO;
 import br.sgpc.dlo.funcoesUteis.Funcoes;
 import br.sgpc.dominio.Usuario;
 
-import com.sun.istack.internal.logging.Logger;
 import java.io.Serializable;
 import java.util.logging.Level;
 import javax.annotation.PostConstruct;
@@ -18,6 +17,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.SimpleEmail;
+
+import com.sun.istack.internal.logging.Logger;
+
 import br.sgpc.dominio.enumerador.StatusEnum;
 
 /**
@@ -36,10 +41,13 @@ public class MbLogin extends Funcoes implements Serializable {
 	public static final String SESSAO_INEXISTENTE = "sessao_invalida";
 	private static final String OUTCOME_LOGOUT = "logout";
 	public static final String USUARIO_SESSAO = "usuario";
+	private static final String RECUPERAR_SENHA = "recuperar_senha";
 
 	private Usuario usuario;
 	private ControladorAcesso controladorAcesso;
 	private Usuario usuarioSessaoTipo;
+	
+	private static boolean usuRecuperaSenha;
 
 	@EJB
 	private LoginDLO loginDLO;
@@ -57,6 +65,7 @@ public class MbLogin extends Funcoes implements Serializable {
 		usuario = new Usuario();
 		controladorAcesso = new ControladorAcesso();
 		Logger.getLogger(MbLogin.class).log(Level.INFO, ">>>>>>>>>>>>> Inicializando um bean de login.");
+		usuRecuperaSenha = false;
 	}
 
 	/**
@@ -157,6 +166,47 @@ public class MbLogin extends Funcoes implements Serializable {
 		usuario = new Usuario();
 		controladorAcesso = new ControladorAcesso();
 	}
+	
+	public String doRecuperarSenha(){
+		usuRecuperaSenha = true;
+		return RECUPERAR_SENHA;
+	}
+	
+	public void recuperarSenha() {
+		try {
+			if (validarEmail(usuario.getEmail())) {
+				Usuario usu = new Usuario();
+				usu = loginDLO.consultarUsuarioEmail(usuario.getEmail());
+
+				if (!usu.equals(null)) {
+					String msg = "Prezado(a) " + usu.getUserName()+"," 
+					        	+ "\r\n"+ "\r\n"
+					        	+ "Esta é uma notificação automática de recuperação de senha do SGPC." 
+					        	+ "\r\n"+ "\r\n"
+					        	+ "Segue abaixo seus dados de acesso:" 
+					        	+ "\r\n" + "\r\n" 
+					        	+ "  USUÁRIO: " + usu.getUserName()
+					        	+ "\r\n"  
+					        	+ "  SENHA: " + usu.getSenha() 
+					        	+ "\r\n";
+					if (envioEmail(usu.getEmail(), usu.getUserName(), "Recuperação de senha - SGPC", msg)) {
+						msgInfo("Seus dados de acesso foram enviados com sucesso para o email.");
+					} else {
+						msgErro("Erro ao encaminhar os dados.");
+					}
+				} 
+			}else{
+				msgInfo("Formato do email inválido");
+			}		
+		} catch (Exception e) {
+			msgErro("Email não localizado no cadastro de usuários." + e.getMessage());
+		}
+	}
+	
+	public String doLogoutRecuperarSenha() {
+		usuRecuperaSenha = false;
+		return OUTCOME_LOGOUT;
+	}
 
 	public Usuario getUsuario() {
 		return usuario;
@@ -174,4 +224,41 @@ public class MbLogin extends Funcoes implements Serializable {
 		return usuarioSessaoTipo.getTipoUsuario();
 	}
 
+	public static boolean isUsuRecuperaSenha() {
+		return usuRecuperaSenha;
+	}
+
+	public static void setUsuRecuperaSenha(boolean usuRecuperaSenha) {
+		MbLogin.usuRecuperaSenha = usuRecuperaSenha;
+	}
+
+	   /**
+		 * Utilizada para envio de email automático para o usuário.
+		 * 
+		 * @return <code>true</code> se o email foi enviado com sucesso.
+		 *         <code>false</code> caso contrário.
+		*/
+		public static boolean envioEmail(String destinatarioEmail, String destinatarioNome, 
+								  String assunto, String msgEmail) {
+			String servSmtp       = "smtp.mail.yahoo.com.br";
+			String remetenteEmail = "sistemasgpc@yahoo.com";
+			String remetenteNome  = "SGPC - Sistema Gerenciador de Processos para Contratação";
+			try {
+				SimpleEmail email = new SimpleEmail();
+				email.setHostName(servSmtp); // o servidor SMTP para envio do e-mail
+				email.setSmtpPort(587);
+				email.setAuthenticator(new DefaultAuthenticator(remetenteEmail, "matandsanmac"));
+				email.setStartTLSEnabled(true);
+				email.addTo(destinatarioEmail, destinatarioNome); // destinatário
+				email.setFrom(remetenteEmail, remetenteNome); // remetente
+				email.setSubject(assunto); // assunto do e-mail
+				email.setMsg(msgEmail); // conteudo do e-mail
+				
+				email.send(); // envia o e-mail
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		}
+		
 }

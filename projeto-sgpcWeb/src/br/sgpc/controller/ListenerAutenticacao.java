@@ -25,7 +25,7 @@ public class ListenerAutenticacao implements PhaseListener {
 	private static final String PAGINA_LOGIN = "index.xhtml";
 
 	public void afterPhase(PhaseEvent event) {
-
+		
 		FacesContext contexto = event.getFacesContext();
 		String pagina = contexto.getViewRoot().getViewId();
 
@@ -37,8 +37,10 @@ public class ListenerAutenticacao implements PhaseListener {
 			Object usuario = sessao.getAttribute(MbLogin.USUARIO_SESSAO);
 
 			if (usuario == null) {
-				NavigationHandler navHandler = contexto.getApplication().getNavigationHandler();
-				navHandler.handleNavigation(contexto, null, MbLogin.SESSAO_INEXISTENTE);
+				if(!MbLogin.isUsuRecuperaSenha()){
+					NavigationHandler navHandler = contexto.getApplication().getNavigationHandler();
+					navHandler.handleNavigation(contexto, null, MbLogin.SESSAO_INEXISTENTE);
+				}
 			}
 		}
 	}

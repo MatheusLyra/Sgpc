@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaQuery;
 
@@ -70,6 +71,20 @@ public class UsuarioDao implements Serializable {
 		CriteriaQuery<Usuario> cq = this.entityManager.getCriteriaBuilder().createQuery(Usuario.class);
 		cq.select(cq.from(Usuario.class));
 		return this.entityManager.createQuery(cq).getResultList();
+	}
+	
+	public Usuario consultarUsuarioEmail(String email) throws Exception {
+		Usuario usuario = new Usuario();
+
+		try {
+			usuario = this.entityManager
+					.createQuery("select usu from Usuario usu where Trim(UPPER(usu.email)) like ?1", Usuario.class)
+					.setParameter(1, email.toUpperCase().trim()).getSingleResult();
+
+		} catch (NoResultException e) {
+			throw e;
+		}
+		return usuario;
 	}
 
 }
